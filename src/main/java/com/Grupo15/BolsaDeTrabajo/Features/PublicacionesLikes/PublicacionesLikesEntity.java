@@ -8,37 +8,22 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "publicacion_likes")
 public class PublicacionesLikesEntity {
 
-    @Entity
-    @Table(name = "publicacion_likes")
-    @Data
-    @NoArgsConstructor
-    public class PublicacionLike {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @EmbeddedId
-        private PublicacionLikeId id;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UsersEntity usuario;
 
-        @ManyToOne
-        @MapsId("usuarioId")
-        private UsersEntity usuario;
+    @ManyToOne
+    @JoinColumn(name = "publicacion_id")
+    private PublicacionesEntity publicacion;
 
-        @ManyToOne
-        @MapsId("publicacionId")
-        private PublicacionesEntity publicacion;
-
-        private Timestamp createdAt;
-    }
-
-    @Embeddable
-    @Data
-    @NoArgsConstructor
-    public class PublicacionLikeId implements Serializable {
-        private Long usuarioId;
-        private Long publicacionId;
-    }
-
+    private Timestamp createdAt;
 }

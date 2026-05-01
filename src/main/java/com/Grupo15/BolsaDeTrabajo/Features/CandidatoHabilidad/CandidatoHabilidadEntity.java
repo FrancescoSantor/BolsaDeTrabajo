@@ -7,39 +7,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-
+@Entity
+@Table(name = "candidato_habilidad")
 public class CandidatoHabilidadEntity {
 
-    @Entity
-    @Table(name = "candidato_habilidad")
-    @Data
-    @NoArgsConstructor
-    public class CandidatoHabilidad {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @EmbeddedId
-        private CandidatoHabilidadId id;
-
-        @ManyToOne
-        @MapsId("candidatoId")
-        @JoinColumn(name = "candidato_id")
-        private CandidatosEntity candidato;
-
-        @ManyToOne
-        @MapsId("habilidadId")
-        @JoinColumn(name = "habilidad_id")
-        //private HabilidadEntity.Habilidad habilidad;
-        private HabilidadEntity habilidad;
+    //RELACION CON CANDIDATO
+    @ManyToOne
+    @JoinColumn(name = "candidato_id")
+    private CandidatosEntity candidato;
 
 
-        private String nivel;
-    }
+    //RELACION CON HABILIDAD
+    @ManyToOne
+    @JoinColumn(name = "habilidad_id")
+    private HabilidadEntity habilidad;
 
-    @Embeddable
-    @Data
-    @NoArgsConstructor
-    public class CandidatoHabilidadId implements Serializable {
-        private Long candidatoId;
-        private Long habilidadId;
-    }
 
+    //ENUM DE NIVEL
+    private String nivel;
 }
+

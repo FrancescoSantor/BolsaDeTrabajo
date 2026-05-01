@@ -3,28 +3,23 @@ package com.Grupo15.BolsaDeTrabajo.Features.Roles;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "roles")
 public class RolesEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Entity
-    @Table(name = "roles")
-    @Data
-    @NoArgsConstructor
-    public class Rol {
+    //ENUM DE ROL (EMPLEADO/EMPRESA)
+    private String rol;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-
-        private String rol;
-
-        @ManyToOne
-        @JoinColumn(name = "id_usuario")
-        private UsersEntity usuario;
-    }
-
+    //SOLUCION DE RELACION ROL/USUARIO
+    @OneToMany(mappedBy = "rol")
+    private List<UsersEntity> usuario;
 }

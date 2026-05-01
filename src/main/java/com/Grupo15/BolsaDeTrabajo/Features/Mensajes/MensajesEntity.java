@@ -12,8 +12,6 @@ public class MensajesEntity {
 
     @Entity
     @Table(name = "mensajes")
-    @Data
-    @NoArgsConstructor
     public class Mensaje {
 
         @Id
@@ -21,9 +19,11 @@ public class MensajesEntity {
         private Long id;
 
         @ManyToOne
+        @JoinColumn(name = "emisor_id")
         private UsersEntity emisor;
 
         @ManyToOne
+        @JoinColumn(name = "receptor_id")
         private UsersEntity receptor;
 
         @Column(columnDefinition = "TEXT")

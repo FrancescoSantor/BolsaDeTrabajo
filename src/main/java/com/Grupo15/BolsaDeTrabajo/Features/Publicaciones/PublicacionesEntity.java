@@ -1,47 +1,55 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Publicaciones;
 
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaLaboralEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.ComentariosEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PublicacionesLikesEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "publicaciones")
 public class PublicacionesEntity {
 
-    @Entity
-    @Table(name = "publicaciones")
-    @Data
-    @NoArgsConstructor
-    public class Publicacion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private EmpresasEntity empresa;
 
-        @ManyToOne
-        private EmpresasEntity empresa;
+    @ManyToOne
+    @JoinColumn(name = "oferta_id")
+    private OfertaEntity oferta;
 
-        @ManyToOne
-        private OfertaLaboralEntity oferta;
+    //ENUM DE TIPO DE PUBLICACION
+    private String tipo;
+    private String titulo;
 
-        private String tipo;
-        private String titulo;
+    @Column(columnDefinition = "TEXT")
+    private String contenido;
 
-        @Column(columnDefinition = "TEXT")
-        private String contenido;
+    private String imagenUrl;
 
-        private String imagenUrl;
+    private int totalLikes;
+    private int totalComentarios;
 
-        private int totalLikes;
-        private int totalComentarios;
+    private boolean activa;
 
-        private boolean activa;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
-        private Timestamp createdAt;
-        private Timestamp updatedAt;
-    }
+    @OneToMany(mappedBy = "publicacion")
+    private List<PublicacionesLikesEntity> likes;
 
+    @OneToMany(mappedBy = "publicacion")
+    private List<ComentariosEntity> comentarios;
 }
+
+

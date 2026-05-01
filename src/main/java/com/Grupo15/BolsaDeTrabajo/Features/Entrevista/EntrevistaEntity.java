@@ -9,35 +9,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "entrevista")
 public class EntrevistaEntity {
 
-    @Entity
-    @Table(name = "entrevista")
-    @Data
-    @NoArgsConstructor
-    public class Entrevista {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @OneToOne
+    @JoinColumn(name = "postulacion_id")
+    private PostulacionEntity postulacion;
 
-        @OneToOne
-        @JoinColumn(name = "postulacion_id")
-        private PostulacionEntity.Postulacion postulacion;
+    private LocalDateTime fecha;
 
-        private LocalDateTime fechaHora;
+    //ENUM DE TIPO (VIRTUAL/PRECENCIAL/ETC)
+    private String tipo;
 
-        private String tipo;
-        private String linkReunion;
+    //NO NECESARIO SI ES PRESCENCIAL
+    private String linkReunion;
 
-        @Column(columnDefinition = "TEXT")
-        private String notasEmpresa;
+    @Column(columnDefinition = "TEXT")
+    private String notasEmpresa;
 
-        @Column(columnDefinition = "TEXT")
-        private String feedbackCandidato;
+    @Column(columnDefinition = "TEXT")
+    private String feedbackCandidato;
 
-        private String estado;
-    }
-
+    //ENUM DE ESTADO
+    private String estado;
 }

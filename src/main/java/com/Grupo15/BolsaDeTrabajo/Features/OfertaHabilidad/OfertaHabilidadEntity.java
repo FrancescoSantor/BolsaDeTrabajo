@@ -1,46 +1,37 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.HabilidadEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaLaboralEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "oferta_habilidad")
 public class OfertaHabilidadEntity {
 
-    @Entity
-    @Table(name = "oferta_habilidad")
-    @Data
-    @NoArgsConstructor
-    public class OfertaHabilidad {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-        @EmbeddedId
-        private OfertaHabilidadId id;
+        //Solucion de la tabla ofertas
 
         @ManyToOne
-        @MapsId("ofertaId")
         @JoinColumn(name = "oferta_id")
-        private OfertaLaboralEntity oferta;
+        private OfertaEntity oferta;
+
+        //Solucion de la tabla habilidades
 
         @ManyToOne
-        @MapsId("habilidadId")
         @JoinColumn(name = "habilidad_id")
-        private HabilidadEntity habilidad;
+        private HabilidadEntity habilidades;
 
         private boolean requerida;
     }
 
-    @Embeddable
-    @Data
-    @NoArgsConstructor
-    public class OfertaHabilidadId implements Serializable {
-        private Long ofertaId;
-        private Long habilidadId;
-    }
 
-}
+
+

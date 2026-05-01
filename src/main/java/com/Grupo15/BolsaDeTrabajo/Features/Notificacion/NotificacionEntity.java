@@ -7,27 +7,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "notificacion")
 public class NotificacionEntity {
 
-    @Entity
-    @Table(name = "notificacion")
-    @Data
-    @NoArgsConstructor
-    public class Notificacion {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    //Agregado de relacion con usuario
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UsersEntity usuario;
 
-        @ManyToOne
-        private UsersEntity usuario;
+    //ENUM TIPO DE NOTIFICACION
+    private String tipo;
+    private String mensaje;
+    private boolean leida;
 
-        private String tipo;
-        private String mensaje;
-        private boolean leida;
-
-        private Timestamp createdAt;
-    }
-
+    private Timestamp createdAt;
 }
+
+

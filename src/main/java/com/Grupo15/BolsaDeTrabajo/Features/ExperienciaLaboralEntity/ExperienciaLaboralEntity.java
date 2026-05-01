@@ -11,39 +11,32 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 
-
+@Entity
+@Table(name = "experiencia_laboral")
 public class ExperienciaLaboralEntity {
 
-    @Entity
-    @Table(name = "experiencia_laboral")
-    @Data
-    @NoArgsConstructor
-    public class ExperienciaLaboral {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @ManyToOne
+    @JoinColumn(name = "candidato_id")
+    private CandidatosEntity candidato;
 
-        @ManyToOne
-        @JoinColumn(name = "candidato_id")
-        private CandidatosEntity.PerfilCandidato candidato;
+    //CONEXION CON EMPRESA??
+    private String empresa;
+    //ENUM DE CARGO
+    private String cargo;
 
-        private String empresa;
-        private String cargo;
+    private Date fechaInicio;
+    private Date fechaFin;
 
-        private Date fechaInicio;
-        private Date fechaFin;
+    private boolean trabajoActual;
 
-        private boolean trabajoActual;
+    @Column(columnDefinition = "TEXT")
+    private String descripcion;
 
-        @Column(columnDefinition = "TEXT")
-        private String descripcion;
-
-        @ManyToOne
-        @JoinColumn(name = "id_empresa")
-        private EmpresasEntity empresaRef;
-    }
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private EmpresasEntity empresaRef;
 }

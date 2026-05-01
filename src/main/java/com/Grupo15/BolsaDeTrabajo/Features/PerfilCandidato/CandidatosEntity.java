@@ -1,6 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CandidatoHabilidad.CandidatoHabilidadEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.ExperienciaLaboralEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Guardados.GuardadosEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulacionEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
@@ -10,36 +13,45 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "perfil_candidato")
 public class CandidatosEntity {
 
-    @Entity
-    @Table(name = "perfil_candidato")
-    @Data
-    @NoArgsConstructor
-    public class PerfilCandidato {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private UsersEntity usuario;
 
-        @OneToOne
-        @JoinColumn(name = "usuario_id")
-        private UsersEntity usuario;
+    //ENUM DE TITULO(EJ INGENIERO TECNICO LICENCIADO)
+    private String tituloProfesional;
 
-        private String tituloProfesional;
+    @Column(columnDefinition = "TEXT")
+    private String resumen;
 
-        @Column(columnDefinition = "TEXT")
-        private String resumen;
+    private String cvUrl;
+    private String linkedinUrl;
+    private String fotoUrl;
 
-        private String cvUrl;
-        private String linkedinUrl;
-        private String fotoUrl;
+    private Timestamp updatedAt;
 
-        private Timestamp updatedAt;
+    @OneToMany(mappedBy = "candidato")
+    private List<ExperienciaLaboralEntity> experiencias;
 
-        @OneToMany(mappedBy = "candidato")
-        private List<ExperienciaLaboralEntity> experiencias;
-    }
+    @OneToMany(mappedBy = "candidato")
+    private List<PostulacionEntity> postulaciones;
 
+    //relacion de candidatoHabilidad
+    @OneToMany(mappedBy = "candidato")
+    private List<CandidatoHabilidadEntity> candidatoHabilidad;
+
+    @OneToMany(mappedBy = "candidato")
+    private List<ExperienciaLaboralEntity> experienciaLaboral;
+
+    @OneToMany(mappedBy = "candidato")
+    private List<GuardadosEntity> guardados;
 }
+
+

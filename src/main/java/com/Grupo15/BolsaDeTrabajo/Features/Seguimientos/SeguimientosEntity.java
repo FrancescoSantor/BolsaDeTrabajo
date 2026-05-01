@@ -11,34 +11,21 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 
+@Entity
+@Table(name = "seguimientos")
 public class SeguimientosEntity {
 
-    @Entity
-    @Table(name = "seguimientos")
-    @Data
-    @NoArgsConstructor
-    public class Seguimiento {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @EmbeddedId
-        private SeguimientoId id;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UsersEntity usuario;
 
-        @ManyToOne
-        @MapsId("usuarioId")
-        private UsersEntity usuario;
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private EmpresasEntity empresa;
 
-        @ManyToOne
-        @MapsId("empresaId")
-        private EmpresasEntity empresa;
-
-        private Timestamp createdAt;
-    }
-
-    @Embeddable
-    @Data
-    @NoArgsConstructor
-    public class SeguimientoId implements Serializable {
-        private Long usuarioId;
-        private Long empresaId;
-    }
-
+    private Timestamp createdAt;
 }
