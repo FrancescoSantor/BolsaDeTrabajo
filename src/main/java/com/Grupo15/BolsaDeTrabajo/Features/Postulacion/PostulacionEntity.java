@@ -6,8 +6,6 @@ import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
-import org.springframework.data.annotation.Id;
-
 @Entity
 @Table(name = "postulacion")
 public class PostulacionEntity {

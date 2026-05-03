@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "entrevista")

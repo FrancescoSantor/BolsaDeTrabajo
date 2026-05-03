@@ -4,7 +4,6 @@ import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "publicacion_comentarios")

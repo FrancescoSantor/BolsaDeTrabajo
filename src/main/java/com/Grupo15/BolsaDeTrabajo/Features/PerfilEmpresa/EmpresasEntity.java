@@ -3,11 +3,11 @@ package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.ExperienciaLaboralEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulacionEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.SeguimientosEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.util.List;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "perfil_empresa")
@@ -44,7 +44,7 @@ public class EmpresasEntity {
     private ExperienciaLaboralEntity experienciaLaboral;
 
     @OneToMany(mappedBy = "empresa")
-    private List<PostulacionEntity> publicaciones;
+    private List<PublicacionesEntity> publicaciones;
 
     @OneToMany(mappedBy = "empresa")
     private List<SeguimientosEntity> seguimientos;

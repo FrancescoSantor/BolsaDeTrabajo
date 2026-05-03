@@ -9,8 +9,6 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-
 @Entity
 @Table(name = "oferta_laboral")
 public class OfertaEntity {

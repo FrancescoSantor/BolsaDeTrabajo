@@ -7,10 +7,9 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "rol")
 public class RolesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

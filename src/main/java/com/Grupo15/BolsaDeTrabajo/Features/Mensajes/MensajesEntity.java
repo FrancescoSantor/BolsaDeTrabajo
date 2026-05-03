@@ -5,14 +5,11 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
-
+@Entity
+@Table(name = "mensajes")
 public class MensajesEntity {
 
-    @Entity
-    @Table(name = "mensajes")
-    public class Mensaje {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +30,3 @@ public class MensajesEntity {
 
         private Timestamp createdAt;
     }
-
-}

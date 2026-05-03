@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "notificacion")
