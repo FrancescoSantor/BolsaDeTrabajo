@@ -41,7 +41,7 @@ public class EmpresasEntity {
 
     @ManyToOne
     @JoinColumn(name = "experiencia_id")
-    private ExperienciaLaboralEntity experienciaLaboral;
+    private ExperienciaLaboralEntity experienciaLaboral;   // dudas al respecto.
 
     @OneToMany(mappedBy = "empresa")
     private List<PublicacionesEntity> publicaciones;

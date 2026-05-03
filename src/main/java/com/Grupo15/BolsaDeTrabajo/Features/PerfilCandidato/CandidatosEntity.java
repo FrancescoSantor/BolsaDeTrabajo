@@ -37,9 +37,6 @@ public class CandidatosEntity {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "candidato")
-    private List<ExperienciaLaboralEntity> experiencias;
-
-    @OneToMany(mappedBy = "candidato")
     private List<PostulacionEntity> postulaciones;
 
     //relacion de candidatoHabilidad

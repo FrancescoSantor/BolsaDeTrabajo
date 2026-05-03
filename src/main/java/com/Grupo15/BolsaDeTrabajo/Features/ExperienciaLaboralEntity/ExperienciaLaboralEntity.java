@@ -20,7 +20,7 @@ public class ExperienciaLaboralEntity {
 
     @ManyToOne
     @JoinColumn(name = "candidato_id")
-    private CandidatosEntity candidato;
+    private CandidatosEntity candidato;   // dudas
 
     //CONEXION CON EMPRESA??
     private String empresa;
@@ -37,5 +37,5 @@ public class ExperienciaLaboralEntity {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresasEntity empresaRef;
+    private EmpresasEntity empresaRef;  // dudas
 }

@@ -20,13 +20,13 @@ public class OfertaHabilidadEntity {
         //Solucion de la tabla ofertas
 
         @ManyToOne
-        @JoinColumn(name = "oferta_id")
+        @JoinColumn(name = "oferta_id")     // dudas preguntar profe
         private OfertaEntity oferta;
 
         //Solucion de la tabla habilidades
 
         @ManyToOne
-        @JoinColumn(name = "habilidad_id")
+        @JoinColumn(name = "habilidad_id")     // dudas preguntar profe
         private HabilidadEntity habilidades;
 
         private boolean requerida;

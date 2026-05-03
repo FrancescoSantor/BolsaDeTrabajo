@@ -56,8 +56,7 @@ public class OfertaEntity {
     @OneToMany(mappedBy = "oferta")
     private List<GuardadosEntity> guardados;
 
-    @OneToMany(mappedBy = "oferta")
-    private List<PublicacionesEntity> publicaciones;
+    // habia un onetomany a publicaciones que decidimos sacarlo.
 }
 
 

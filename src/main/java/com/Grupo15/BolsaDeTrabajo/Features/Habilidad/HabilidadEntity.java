@@ -24,10 +24,10 @@ public class HabilidadEntity {
     private String categoria;
 
     @OneToMany(mappedBy = "habilidades")
-    private List<OfertaHabilidadEntity> ofertaHabilidadEntities;
+    private List<OfertaHabilidadEntity> ofertaHabilidadEntities; // tiene sentido que desde aca se pueda llamar ??
 
     @OneToMany(mappedBy = "habilidad")
-    private List<CandidatoHabilidadEntity> candidatoHabilidad;
+    private List<CandidatoHabilidadEntity> candidatoHabilidad;   //   tiene sentido que desde aca se pueda llamar ??
 
 
     }

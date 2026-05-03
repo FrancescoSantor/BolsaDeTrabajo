@@ -40,18 +40,12 @@ public class UsersEntity {
 
     private Timestamp createdAt;
 
-    @OneToOne(mappedBy = "usuario")
-    private CandidatosEntity perfilCandidato;
-
-    @OneToOne(mappedBy = "usuario")
-    private EmpresasEntity perfilEmpresa;
-
     @OneToMany(mappedBy = "usuario")
     private List<NotificacionEntity> notificaciones;
 
     @OneToMany(mappedBy = "emisor")
     private List<MensajesEntity> mensajes_Emitidos;
-
+q
     @OneToMany(mappedBy = "receptor")
     private List<MensajesEntity> mensajes_Recibidos;
 
