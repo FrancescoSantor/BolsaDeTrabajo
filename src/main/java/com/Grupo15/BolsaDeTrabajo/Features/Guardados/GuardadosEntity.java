@@ -7,11 +7,16 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Table(name = "guardados")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GuardadosEntity {
 
     @Id

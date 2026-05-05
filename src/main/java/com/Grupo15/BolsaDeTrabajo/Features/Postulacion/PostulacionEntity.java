@@ -4,10 +4,17 @@ import com.Grupo15.BolsaDeTrabajo.Features.Entrevista.EntrevistaEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "postulacion")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PostulacionEntity {
 
     @Id
@@ -25,6 +32,7 @@ public class PostulacionEntity {
     private OfertaEntity oferta;
 
     //ENUM DE ESTADO DE LA OFERTA
+    @Enumerated(EnumType.STRING)
     private String estado;
 
     @Column(columnDefinition = "TEXT")

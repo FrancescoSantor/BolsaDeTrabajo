@@ -2,13 +2,18 @@ package com.Grupo15.BolsaDeTrabajo.Features.CandidatoHabilidad;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.HabilidadEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 @Entity
 @Table(name = "candidato_habilidad")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CandidatoHabilidadEntity {
 
     @Id
@@ -27,7 +32,5 @@ public class CandidatoHabilidadEntity {
     private HabilidadEntity habilidad;
 
 
-    //ENUM DE NIVEL
-    private String nivel;
 }
 

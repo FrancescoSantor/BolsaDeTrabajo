@@ -8,11 +8,15 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "publicaciones")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PublicacionesEntity {
 
     @Id
@@ -27,8 +31,7 @@ public class PublicacionesEntity {
     @JoinColumn(name = "oferta_id")
     private OfertaEntity oferta;
 
-    //ENUM DE TIPO DE PUBLICACION
-    private String tipo;
+
     private String titulo;
 
     @Column(columnDefinition = "TEXT")

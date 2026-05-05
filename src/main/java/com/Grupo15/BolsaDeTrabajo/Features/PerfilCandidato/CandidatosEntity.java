@@ -9,11 +9,14 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table(name = "perfil_candidato")
+@Table(name = "perfil_candidato")@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CandidatosEntity {
 
     @Id
@@ -25,7 +28,8 @@ public class CandidatosEntity {
     private UsersEntity usuario;
 
     //ENUM DE TITULO(EJ INGENIERO TECNICO LICENCIADO)
-    private String tituloProfesional;
+    @Enumerated(EnumType.STRING)
+    private Title tituloProfesional;
 
     @Column(columnDefinition = "TEXT")
     private String resumen;

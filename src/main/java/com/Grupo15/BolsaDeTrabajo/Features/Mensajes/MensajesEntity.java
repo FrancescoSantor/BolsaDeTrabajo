@@ -3,11 +3,16 @@ package com.Grupo15.BolsaDeTrabajo.Features.Mensajes;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Table(name = "mensajes")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MensajesEntity {
 
 

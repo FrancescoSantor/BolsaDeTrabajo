@@ -6,11 +6,15 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "oferta_habilidad")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OfertaHabilidadEntity {
 
         @Id

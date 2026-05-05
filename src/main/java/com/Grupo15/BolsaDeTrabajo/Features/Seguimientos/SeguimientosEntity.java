@@ -3,15 +3,18 @@ package com.Grupo15.BolsaDeTrabajo.Features.Seguimientos;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.sql.Timestamp;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 
 @Entity
 @Table(name = "seguimientos")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SeguimientosEntity {
 
     @Id

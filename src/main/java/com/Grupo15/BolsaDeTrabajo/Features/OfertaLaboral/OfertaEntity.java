@@ -2,15 +2,22 @@ package com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Guardados.GuardadosEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad.OfertaHabilidadEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulacionEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Table(name = "oferta_laboral")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OfertaEntity {
 
     @Id
@@ -22,7 +29,8 @@ public class OfertaEntity {
     private EmpresasEntity empresa;
 
     //ENUM DE TIPO DE TITULO
-    private String titulo;
+    @Enumerated(EnumType.STRING)
+    private Title titulo;
 
     @Column(columnDefinition = "TEXT")
     private String descripcion;
@@ -30,7 +38,8 @@ public class OfertaEntity {
     private String ubicacion;
 
     //ENUM DE MODALIDAD
-    private String modalidad;
+    @Enumerated(EnumType.STRING)
+    private OfferType modalidad;
 
     //???
     private String tipoContrato;
@@ -41,8 +50,9 @@ public class OfertaEntity {
     private Double salarioMax;
 
     //ENUM DE ESTADO DE LA OFERTA
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String estado;
+    private OfferStatus estado;
 
     private Timestamp fechaPublicacion;
     private Timestamp fechaCierre;

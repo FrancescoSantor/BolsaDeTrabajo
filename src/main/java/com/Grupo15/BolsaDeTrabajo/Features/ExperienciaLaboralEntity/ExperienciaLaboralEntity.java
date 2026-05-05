@@ -6,12 +6,17 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 
 @Entity
 @Table(name = "experiencia_laboral")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ExperienciaLaboralEntity {
 
     @Id
@@ -24,7 +29,7 @@ public class ExperienciaLaboralEntity {
 
     //CONEXION CON EMPRESA??
     private String empresa;
-    //ENUM DE CARGO
+
     private String cargo;
 
     private Date fechaInicio;

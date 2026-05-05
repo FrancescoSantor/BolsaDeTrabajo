@@ -3,10 +3,17 @@ package com.Grupo15.BolsaDeTrabajo.Features.Comentarios;
 import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "publicacion_comentarios")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ComentariosEntity {
 
     @Id

@@ -2,15 +2,21 @@ package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.ExperienciaLaboralEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulacionEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.SeguimientosEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.List;
 
 @Entity
 @Table(name = "perfil_empresa")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class EmpresasEntity {
 
     @Id
@@ -28,7 +34,8 @@ public class EmpresasEntity {
     private String cuit;
 
     //ENUM RUBRO
-    private String rubro;
+    @Enumerated(EnumType.STRING)
+    private Category rubro;
 
     @Column(columnDefinition = "TEXT")
     private String descripcion;

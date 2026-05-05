@@ -3,11 +3,16 @@ package com.Grupo15.BolsaDeTrabajo.Features.Notificacion;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Table(name = "notificacion")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class NotificacionEntity {
 
     @Id
@@ -19,8 +24,10 @@ public class NotificacionEntity {
     @JoinColumn(name = "usuario_id")
     private UsersEntity usuario;
 
-    //ENUM TIPO DE NOTIFICACION
+    /*ENUM TIPO DE NOTIFICACION
+    @Enumerated(EnumType.STRING)
     private String tipo;
+    */
     private String mensaje;
     private boolean leida;
 

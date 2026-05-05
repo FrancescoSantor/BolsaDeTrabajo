@@ -3,8 +3,6 @@ package com.Grupo15.BolsaDeTrabajo.Features.Users;
 import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.ComentariosEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Mensajes.MensajesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Notificacion.NotificacionEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PublicacionesLikesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.SeguimientosEntity;
@@ -12,11 +10,15 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "usuario")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UsersEntity {
 
     @Id
@@ -45,7 +47,7 @@ public class UsersEntity {
 
     @OneToMany(mappedBy = "emisor")
     private List<MensajesEntity> mensajes_Emitidos;
-q
+
     @OneToMany(mappedBy = "receptor")
     private List<MensajesEntity> mensajes_Recibidos;
 
