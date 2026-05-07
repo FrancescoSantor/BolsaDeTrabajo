@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Notificacion;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
@@ -13,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationEntity {
+public class NotificationEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Entrevista;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import jakarta.persistence.*;
 
@@ -14,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InterviewEntity {
+public class InterviewEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,9 @@ public class InterviewEntity {
     @JoinColumn(name = "postulacion_id")
     private PostulationsEntity application;
 
+
     private LocalDateTime date;
+
 
     //ENUM DE TIPO (VIRTUAL/PRECENCIAL/ETC)
     @Enumerated(EnumType.STRING)

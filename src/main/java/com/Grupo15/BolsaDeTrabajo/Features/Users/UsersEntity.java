@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Users;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.CommentsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Mensajes.MessagesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Notificacion.NotificationEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PostLikesEntity;
@@ -19,7 +20,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsersEntity {
+public class UsersEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

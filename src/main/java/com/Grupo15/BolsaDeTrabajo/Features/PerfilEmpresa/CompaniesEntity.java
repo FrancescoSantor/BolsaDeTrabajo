@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.LaboralExperienceEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PostsEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompaniesEntity {
+public class CompaniesEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato;
 
 import com.Grupo15.BolsaDeTrabajo.Features.CandidatoHabilidad.CandidateAbilityEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.LaboralExperienceEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Guardados.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
@@ -17,7 +18,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CandidatesEntity {
+public class CandidatesEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +33,9 @@ public class CandidatesEntity {
     private Title professionalTitle;
 
     @Column(columnDefinition = "TEXT")
+    //resumen
     private String summary;
+
 
     private String cvUrl;
     private String linkedinUrl;

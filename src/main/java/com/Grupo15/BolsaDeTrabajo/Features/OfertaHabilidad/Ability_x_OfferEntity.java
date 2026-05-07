@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.AbilityEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Ability_x_OfferEntity {
+public class Ability_x_OfferEntity extends BaseEntity {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

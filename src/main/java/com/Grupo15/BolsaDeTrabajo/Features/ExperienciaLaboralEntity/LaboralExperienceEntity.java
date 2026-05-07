@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LaboralExperienceEntity {
+public class LaboralExperienceEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
