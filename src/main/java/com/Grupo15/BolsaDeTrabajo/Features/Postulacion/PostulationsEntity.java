@@ -1,8 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Postulacion;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Entrevista.EntrevistaEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Entrevista.InterviewEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostulacionEntity {
+public class PostulationsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,26 +24,26 @@ public class PostulacionEntity {
     //solucion de mapeado a CandidatosEntity
     @ManyToOne
     @JoinColumn(name = "candidato_id")
-    private CandidatosEntity candidato;
+    private CandidatesEntity candidate;
 
     //solucion de mapeado a OfertaEntity
     @ManyToOne
     @JoinColumn(name = "oferta_id")
-    private OfertaEntity oferta;
+    private OfferEntity offer;
 
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
-    private String estado;
+    private String status;
 
     @Column(columnDefinition = "TEXT")
-    private String cartaPresentacion;
+    private String coverLetter;
 
-    private Timestamp fechaPostulacion;
-    private Timestamp fechaActualizacion;
+    private Timestamp postulationDate;
+    private Timestamp updateDate;
 
 
     @OneToOne(mappedBy = "postulacion")
-    private EntrevistaEntity entrevista;
+    private InterviewEntity interview;
 }
 
 

@@ -1,9 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
-import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.ExperienciaLaboralEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.SeguimientosEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.LaboralExperienceEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PostsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.FollowingsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EmpresasEntity {
+public class CompaniesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,34 +25,34 @@ public class EmpresasEntity {
 
     @OneToOne
     @JoinColumn(name = "usuario_id")
-    private UsersEntity usuario;
+    private UsersEntity user;
 
     //??
-    private String razonSocial;
+        private String registeredName;
 
     @Column(unique = true, nullable = false)
     private String cuit;
 
     //ENUM RUBRO
     @Enumerated(EnumType.STRING)
-    private Category rubro;
+    private Category category;
 
     @Column(columnDefinition = "TEXT")
-    private String descripcion;
+    private String description;
 
-    private String sitioWeb;
-    private String ubicacion;
+    private String webSite;
+    private String location;
 
     @OneToMany(mappedBy = "empresa")
-    private List<OfertaEntity> ofertas;
+    private List<OfferEntity> offers;
 
     @ManyToOne
     @JoinColumn(name = "experiencia_id")
-    private ExperienciaLaboralEntity experienciaLaboral;   // dudas al respecto.
+    private LaboralExperienceEntity laboralExperiences;   // dudas al respecto.
 
     @OneToMany(mappedBy = "empresa")
-    private List<PublicacionesEntity> publicaciones;
+    private List<PostsEntity> publications;
 
     @OneToMany(mappedBy = "empresa")
-    private List<SeguimientosEntity> seguimientos;
+    private List<FollowingsEntity> follow_ups;
 }

@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Comentarios;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PostsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ComentariosEntity {
+public class CommentsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +22,14 @@ public class ComentariosEntity {
 
     @ManyToOne
     @JoinColumn(name = "publicacion_id")
-    private PublicacionesEntity publicacion;
+    private PostsEntity post;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UsersEntity usuario;
+    private UsersEntity user;
 
     @Column(columnDefinition = "TEXT")
-    private String contenido;
+    private String content;
 
     private Timestamp createdAt;
 }

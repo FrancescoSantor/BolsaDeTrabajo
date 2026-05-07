@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Seguimientos;
 
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SeguimientosEntity {
+public class FollowingsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +23,11 @@ public class SeguimientosEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UsersEntity usuario;
+    private UsersEntity user;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresasEntity empresa;
+    private CompaniesEntity company;
 
     private Timestamp createdAt;
 }

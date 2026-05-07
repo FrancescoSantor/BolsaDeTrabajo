@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificacionEntity {
+public class NotificationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,14 +22,14 @@ public class NotificacionEntity {
     //Agregado de relacion con usuario
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UsersEntity usuario;
+    private UsersEntity user;
 
     /*ENUM TIPO DE NOTIFICACION
     @Enumerated(EnumType.STRING)
-    private String tipo;
+    private String type;
     */
-    private String mensaje;
-    private boolean leida;
+    private String message;
+    private boolean read;
 
     private Timestamp createdAt;
 }

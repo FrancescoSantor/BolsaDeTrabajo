@@ -1,11 +1,11 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Users;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.ComentariosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Mensajes.MensajesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Notificacion.NotificacionEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PublicacionesLikesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.CommentsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Mensajes.MessagesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Notificacion.NotificationEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PostLikesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.SeguimientosEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.FollowingsEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -24,8 +24,8 @@ public class UsersEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
-    private String apellido;
+    private String name;
+    private String lastName;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -33,7 +33,7 @@ public class UsersEntity {
     @Column(unique = true,nullable = false)
     private String password;
 
-    private boolean activo;
+    private boolean active;
 
     //SOLUCION DE RELACION ROL/USUARIO
     @ManyToOne
@@ -43,20 +43,20 @@ public class UsersEntity {
     private Timestamp createdAt;
 
     @OneToMany(mappedBy = "usuario")
-    private List<NotificacionEntity> notificaciones;
+    private List<NotificationEntity> notifications;
 
     @OneToMany(mappedBy = "emisor")
-    private List<MensajesEntity> mensajes_Emitidos;
+    private List<MessagesEntity> issued_messages; //mensajes emitidos
 
     @OneToMany(mappedBy = "receptor")
-    private List<MensajesEntity> mensajes_Recibidos;
+    private List<MessagesEntity> received_messages;
 
     @OneToMany(mappedBy = "usuario")
-    private List<PublicacionesLikesEntity> Likes;
+    private List<PostLikesEntity> likes;
 
     @OneToMany(mappedBy = "usuario")
-    private List<ComentariosEntity> comentarios;
+    private List<CommentsEntity> comments;
 
     @OneToMany(mappedBy = "usuario")
-    private List<SeguimientosEntity> seguimientos;
+    private List<FollowingsEntity> followings;
 }

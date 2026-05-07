@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Entrevista;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulacionEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EntrevistaEntity {
+public class InterviewEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,24 +22,24 @@ public class EntrevistaEntity {
 
     @OneToOne
     @JoinColumn(name = "postulacion_id")
-    private PostulacionEntity postulacion;
+    private PostulationsEntity application;
 
-    private LocalDateTime fecha;
+    private LocalDateTime date;
 
     //ENUM DE TIPO (VIRTUAL/PRECENCIAL/ETC)
     @Enumerated(EnumType.STRING)
-    private Type tipo;
+    private Type type;
 
     //NO NECESARIO SI ES PRESCENCIAL
-    private String linkReunion;
+    private String linkMeeting;
 
     @Column(columnDefinition = "TEXT")
-    private String notasEmpresa;
+    private String companyNotes;
 
     @Column(columnDefinition = "TEXT")
-    private String feedbackCandidato;
+    private String feedbackCandidate;
 
     //ENUM DE ESTADO
     @Enumerated(EnumType.STRING)
-    private InterviewState estado;
+    private InterviewStatus status;
 }

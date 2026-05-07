@@ -1,11 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Guardados;
 
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 import lombok.*;
@@ -17,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GuardadosEntity {
+public class SavedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +23,11 @@ public class GuardadosEntity {
 
     @ManyToOne
     @JoinColumn(name = "candidato_id")
-    private CandidatosEntity candidato;
+    private CandidatesEntity candidate;
 
     @ManyToOne
     @JoinColumn(name = "oferta_id")
-    private OfertaEntity oferta;
+    private OfferEntity offer;
 
     private Timestamp createdAt;
 }

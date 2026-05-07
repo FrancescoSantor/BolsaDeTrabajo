@@ -2,5 +2,5 @@ package com.Grupo15.BolsaDeTrabajo.Features.Publicaciones;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostRepository extends JpaRepository<PublicacionesEntity,Long> {
+public interface PostRepository extends JpaRepository<PostsEntity,Long> {
 }

@@ -1,13 +1,13 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Entrevista;
 
-public enum InterviewState {
+public enum InterviewStatus {
     ACCEPTED("Accepted"),
     DECLINED("Declined"),
     WAITING("Waiting");
 
     private final String label;
 
-    InterviewState(String label) {
+    InterviewStatus(String label) {
         this.label = label;
     }
 

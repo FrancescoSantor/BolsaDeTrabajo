@@ -1,10 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PublicacionesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PostsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 import lombok.*;
@@ -16,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PublicacionesLikesEntity {
+public class PostLikesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +23,11 @@ public class PublicacionesLikesEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UsersEntity usuario;
+    private UsersEntity user;
 
     @ManyToOne
     @JoinColumn(name = "publicacion_id")
-    private PublicacionesEntity publicacion;
+    private PostsEntity post;
 
     private Timestamp createdAt;
 }

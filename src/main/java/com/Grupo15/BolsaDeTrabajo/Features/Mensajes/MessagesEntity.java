@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MensajesEntity {
+public class MessagesEntity {
 
 
         @Id
@@ -22,16 +22,16 @@ public class MensajesEntity {
 
         @ManyToOne
         @JoinColumn(name = "emisor_id")
-        private UsersEntity emisor;
+        private UsersEntity issuer; //emisor
 
         @ManyToOne
         @JoinColumn(name = "receptor_id")
         private UsersEntity receptor;
 
         @Column(columnDefinition = "TEXT")
-        private String contenido;
+        private String content;
 
-        private boolean leido;
+        private boolean read; //leido
 
         private Timestamp createdAt;
     }

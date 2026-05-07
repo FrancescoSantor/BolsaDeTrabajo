@@ -9,5 +9,8 @@ public enum PostulationState {
     PostulationState(String label) {
         this.label = label;
     }
-    
+
+    public String getLabel() {
+        return label;
+    }
 }

@@ -1,11 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity;
 
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 import lombok.*;
 
@@ -17,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ExperienciaLaboralEntity {
+public class LaboralExperienceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,22 +24,22 @@ public class ExperienciaLaboralEntity {
 
     @ManyToOne
     @JoinColumn(name = "candidato_id")
-    private CandidatosEntity candidato;   // dudas
+    private CandidatesEntity candidate;   // dudas
 
     //CONEXION CON EMPRESA??
-    private String empresa;
+    private String company;
 
-    private String cargo;
+    private String position; //cargo
 
-    private Date fechaInicio;
-    private Date fechaFin;
+    private Date initialDate;
+    private Date endDate;
 
-    private boolean trabajoActual;
+    private boolean currentWork; //trabajo actual
 
     @Column(columnDefinition = "TEXT")
-    private String descripcion;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresasEntity empresaRef;  // dudas
+    private CompaniesEntity companyReferences;  // dudas
 }

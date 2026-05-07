@@ -13,7 +13,7 @@ public enum Category {
     AGRICULTURE("Agriculture"),
     MEDIA("Media"),
     ENERGY("Energy"),
-    TELECOMMUNICATION("Telecomunication"),
+    TELECOMMUNICATION("Telecommunication"),
     SERVICE("Service"),
     LEGAL("Legal"),
     TOURISM("Tourism"),

@@ -2,5 +2,5 @@ package com.Grupo15.BolsaDeTrabajo.Features.Guardados;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SavesRepository extends JpaRepository<GuardadosEntity,Long> {
+public interface SavedRepository extends JpaRepository<SavedEntity,Long> {
 }

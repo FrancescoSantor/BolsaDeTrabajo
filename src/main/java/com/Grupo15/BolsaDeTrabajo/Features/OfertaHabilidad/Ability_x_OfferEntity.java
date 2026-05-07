@@ -1,10 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.HabilidadEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.AbilityEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 
 import lombok.*;
 
@@ -15,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OfertaHabilidadEntity {
+public class Ability_x_OfferEntity {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +23,15 @@ public class OfertaHabilidadEntity {
 
         @ManyToOne
         @JoinColumn(name = "oferta_id")     // dudas preguntar profe
-        private OfertaEntity oferta;
+        private OfferEntity offer;
 
         //Solucion de la tabla habilidades
 
         @ManyToOne
         @JoinColumn(name = "habilidad_id")     // dudas preguntar profe
-        private HabilidadEntity habilidades;
+        private AbilityEntity abilities;
 
-        private boolean requerida;
+        private boolean required;
     }
 
 

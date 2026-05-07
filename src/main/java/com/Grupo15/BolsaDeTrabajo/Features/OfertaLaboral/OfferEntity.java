@@ -1,10 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Guardados.GuardadosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad.OfertaHabilidadEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Guardados.SavedEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad.Ability_x_OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulacionEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OfertaEntity {
+public class OfferEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,45 +26,45 @@ public class OfertaEntity {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresasEntity empresa;
+    private CompaniesEntity company;
 
     //ENUM DE TIPO DE TITULO
     @Enumerated(EnumType.STRING)
-    private Title titulo;
+    private Title title;
 
     @Column(columnDefinition = "TEXT")
-    private String descripcion;
+    private String description;
 
-    private String ubicacion;
+    private String location;
 
     //ENUM DE MODALIDAD
     @Enumerated(EnumType.STRING)
-    private OfferType modalidad;
+    private OfferType modality; //or mode
 
     //???
-    private String tipoContrato;
+    private String contractType;
 
     @Column(nullable = false)
-    private Double salarioMin;
+    private Double minSalary;
     @Column(nullable = false)
-    private Double salarioMax;
+    private Double maxSalary;
 
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OfferStatus estado;
+    private OfferStatus status;
 
-    private Timestamp fechaPublicacion;
-    private Timestamp fechaCierre;
-
-    @OneToMany(mappedBy = "oferta")
-    private List<PostulacionEntity> postulaciones;
+    private Timestamp publicationDate;
+    private Timestamp publicationClosing;
 
     @OneToMany(mappedBy = "oferta")
-    private List<OfertaHabilidadEntity> habilidades;
+    private List<PostulationsEntity> applications;
 
     @OneToMany(mappedBy = "oferta")
-    private List<GuardadosEntity> guardados;
+    private List<Ability_x_OfferEntity> abilities;
+
+    @OneToMany(mappedBy = "oferta")
+    private List<SavedEntity> saved;
 
     // habia un onetomany a publicaciones que decidimos sacarlo.
 }

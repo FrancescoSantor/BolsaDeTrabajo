@@ -1,9 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Publicaciones;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.ComentariosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfertaEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.EmpresasEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PublicacionesLikesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.CommentsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PostLikesEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -17,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PublicacionesEntity {
+public class PostsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,33 +25,33 @@ public class PublicacionesEntity {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private EmpresasEntity empresa;
+    private CompaniesEntity company;
 
     @ManyToOne
     @JoinColumn(name = "oferta_id")
-    private OfertaEntity oferta;
+    private OfferEntity offer;
 
 
-    private String titulo;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    private String contenido;
+    private String content;
 
-    private String imagenUrl;
+    private String urlImage;
 
     private int totalLikes;
-    private int totalComentarios;
+    private int totalComments;
 
-    private boolean activa;
+    private boolean active;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "publicacion")
-    private List<PublicacionesLikesEntity> likes;
+    private List<PostLikesEntity> likes;
 
     @OneToMany(mappedBy = "publicacion")
-    private List<ComentariosEntity> comentarios;
+    private List<CommentsEntity> comments;
 }
 
 

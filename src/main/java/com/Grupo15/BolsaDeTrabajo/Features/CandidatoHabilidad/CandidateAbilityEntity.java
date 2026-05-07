@@ -1,12 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.CandidatoHabilidad;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.HabilidadEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatosEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;
+import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.AbilityEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 @Entity
 @Table(name = "candidato_habilidad")
 @Getter
@@ -14,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CandidatoHabilidadEntity {
+public class CandidateAbilityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +21,13 @@ public class CandidatoHabilidadEntity {
     //RELACION CON CANDIDATO
     @ManyToOne
     @JoinColumn(name = "candidato_id")
-    private CandidatosEntity candidato;
+    private CandidatesEntity candidate;
 
 
     //RELACION CON HABILIDAD
     @ManyToOne
     @JoinColumn(name = "habilidad_id")
-    private HabilidadEntity habilidad;
+    private AbilityEntity ability;
 
 
 }
