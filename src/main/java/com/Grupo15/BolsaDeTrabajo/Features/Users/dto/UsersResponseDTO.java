@@ -1,11 +1,13 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Users.dto;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
+import lombok.Builder;
 import lombok.Data;
-import java.sql.Timestamp;
 import java.util.UUID;
+import java.sql.Timestamp;
 
 @Data
+@Builder
 public class UsersResponseDTO {
     private UUID externalId;
     private String name;

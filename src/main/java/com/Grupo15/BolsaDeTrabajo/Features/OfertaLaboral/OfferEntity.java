@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Guardados.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad.Ability_x_OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;

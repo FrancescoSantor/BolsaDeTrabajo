@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Habilidad.AbilityEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.Grupo15.BolsaDeTrabajo.Features.Commons;
+package com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,6 +10,9 @@ public abstract class BaseEntity {
 
     @Column(name = "external_id", nullable = false, unique = true, updatable = false)
     private UUID externalId;
+
+    //Campo Activo
+    //Fecha decreacio
 
     @PrePersist
     public void generateExternalId() {

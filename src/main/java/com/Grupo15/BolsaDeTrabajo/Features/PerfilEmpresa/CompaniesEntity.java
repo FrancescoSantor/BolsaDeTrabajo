@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.LaboralExperienceEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PostsEntity;
@@ -18,18 +18,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompaniesEntity extends BaseEntity {
+public class CompaniesEntity extends UsersEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /*
     @OneToOne
     @JoinColumn(name = "usuario_id")
     private UsersEntity user;
+     */
 
-    //??
-        private String registeredName;
+    private String registeredName;
 
     @Column(unique = true, nullable = false)
     private String cuit;

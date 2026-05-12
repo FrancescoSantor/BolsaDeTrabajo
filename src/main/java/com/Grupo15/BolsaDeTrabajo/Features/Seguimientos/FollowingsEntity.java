@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Seguimientos;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;

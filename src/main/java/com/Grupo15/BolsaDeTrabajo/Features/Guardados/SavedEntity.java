@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Guardados;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
 import jakarta.persistence.*;

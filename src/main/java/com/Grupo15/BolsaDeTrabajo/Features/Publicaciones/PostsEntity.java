@@ -1,7 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Publicaciones;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.CommentsEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PostLikesEntity;

@@ -8,9 +8,9 @@ import java.util.UUID;
 @Data
 public class CandidatesResponseDTO {
     private UUID externalId;
-    private String userName;          // viene de user.name
-    private String userLastName;      // viene de user.lastName
-    private String userEmail;         // viene de user.email
+    private String name;
+    private String lastName;
+    private String email;
     private Title professionalTitle;
     private String summary;
     private String cvUrl;

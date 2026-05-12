@@ -1,7 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato;
 
 import com.Grupo15.BolsaDeTrabajo.Features.CandidatoHabilidad.CandidateAbilityEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.LaboralExperienceEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Guardados.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
@@ -18,15 +18,18 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CandidatesEntity extends BaseEntity {
+public class CandidatesEntity extends UsersEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /*
     @OneToOne
     @JoinColumn(name = "usuario_id")
     private UsersEntity user;
+    */
+
 
     //ENUM DE TITULO(EJ INGENIERO TECNICO LICENCIADO)
     @Enumerated(EnumType.STRING)

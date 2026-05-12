@@ -1,10 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Roles;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Commons.BaseEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 import lombok.*;
 
