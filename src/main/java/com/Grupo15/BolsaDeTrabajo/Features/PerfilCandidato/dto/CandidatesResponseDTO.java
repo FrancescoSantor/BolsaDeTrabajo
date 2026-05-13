@@ -1,11 +1,13 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.dto;
 
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;
+import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
+@Builder
 public class CandidatesResponseDTO {
     private UUID externalId;
     private String name;
