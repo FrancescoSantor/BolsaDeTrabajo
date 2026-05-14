@@ -34,7 +34,7 @@ public class PostulationsEntity extends BaseEntity {
 
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
-    private String status;
+    private PostulationState status;
 
     @Column(columnDefinition = "TEXT")
     private String coverLetter;
@@ -43,7 +43,7 @@ public class PostulationsEntity extends BaseEntity {
     private Timestamp updateDate;
 
 
-    @OneToOne(mappedBy = "postulacion")
+    @OneToOne(mappedBy = "application")
     private InterviewEntity interview;
 }
 

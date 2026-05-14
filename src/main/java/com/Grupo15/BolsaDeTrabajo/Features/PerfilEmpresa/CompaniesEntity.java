@@ -45,16 +45,16 @@ public class CompaniesEntity extends UsersEntity {
     private String webSite;
     private String location;
 
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "company")
     private List<OfferEntity> offers;
 
     @ManyToOne
     @JoinColumn(name = "experiencia_id")
     private LaboralExperienceEntity laboralExperiences;   // dudas al respecto.
 
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "company")
     private List<PostsEntity> publications;
 
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "company")
     private List<FollowingsEntity> follow_ups;
 }

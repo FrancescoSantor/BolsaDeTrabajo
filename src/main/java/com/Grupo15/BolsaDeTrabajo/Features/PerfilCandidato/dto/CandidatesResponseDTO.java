@@ -6,7 +6,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Data
+
 @Builder
 public class CandidatesResponseDTO {
     private UUID externalId;

@@ -24,13 +24,6 @@ public class CandidatesEntity extends UsersEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private UsersEntity user;
-    */
-
-
     //ENUM DE TITULO(EJ INGENIERO TECNICO LICENCIADO)
     @Enumerated(EnumType.STRING)
     private Title professionalTitle;
@@ -46,17 +39,17 @@ public class CandidatesEntity extends UsersEntity {
 
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "candidato")
+    @OneToMany(mappedBy = "candidate")
     private List<PostulationsEntity> applications;
 
     //relacion de candidatoHabilidad
-    @OneToMany(mappedBy = "candidato")
+    @OneToMany(mappedBy = "candidate")
     private List<CandidateAbilityEntity> abilityCandidates;
 
-    @OneToMany(mappedBy = "candidato")
+    @OneToMany(mappedBy = "candidate")
     private List<LaboralExperienceEntity> laboralExperiences;
 
-    @OneToMany(mappedBy = "candidato")
+    @OneToMany(mappedBy = "candidate")
     private List<SavedEntity> saved;
 }
 

@@ -58,13 +58,13 @@ public class OfferEntity extends BaseEntity {
     private Timestamp publicationDate;
     private Timestamp publicationClosing;
 
-    @OneToMany(mappedBy = "oferta")
+    @OneToMany(mappedBy = "offer")
     private List<PostulationsEntity> applications;
 
-    @OneToMany(mappedBy = "oferta")
+    @OneToMany(mappedBy = "offer")
     private List<Ability_x_OfferEntity> abilities;
 
-    @OneToMany(mappedBy = "oferta")
+    @OneToMany(mappedBy = "offer")
     private List<SavedEntity> saved;
 
     // habia un onetomany a publicaciones que decidimos sacarlo.

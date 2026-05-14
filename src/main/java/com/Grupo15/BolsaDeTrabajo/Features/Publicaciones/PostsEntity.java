@@ -48,10 +48,10 @@ public class PostsEntity extends BaseEntity {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "publicacion")
+    @OneToMany(mappedBy = "post")
     private List<PostLikesEntity> likes;
 
-    @OneToMany(mappedBy = "publicacion")
+    @OneToMany(mappedBy = "post")
     private List<CommentsEntity> comments;
 }
 

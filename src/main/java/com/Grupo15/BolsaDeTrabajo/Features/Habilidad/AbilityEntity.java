@@ -27,10 +27,10 @@ public class AbilityEntity extends BaseEntity {
 
     private String category;
 
-    @OneToMany(mappedBy = "habilidades")
+    @OneToMany(mappedBy = "abilities")
     private List<Ability_x_OfferEntity> ability_x_OfferEntities; // tiene sentido que desde aca se pueda llamar ??
 
-    @OneToMany(mappedBy = "habilidad")
+    @OneToMany(mappedBy = "ability")
     private List<CandidateAbilityEntity> abilityCandidate;   //   tiene sentido que desde aca se pueda llamar ??
 
 

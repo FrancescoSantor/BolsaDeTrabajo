@@ -17,9 +17,6 @@ import lombok.*;
 @Table(name = "usuario")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class UsersEntity extends BaseEntity {
 
@@ -44,22 +41,22 @@ public abstract class UsersEntity extends BaseEntity {
 
     private Timestamp createdAt;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "user")
     private List<NotificationEntity> notifications;
 
-    @OneToMany(mappedBy = "emisor")
+    @OneToMany(mappedBy = "issuer")
     private List<MessagesEntity> issued_messages; //mensajes emitidos
 
     @OneToMany(mappedBy = "receptor")
     private List<MessagesEntity> received_messages;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "user")
     private List<PostLikesEntity> likes;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "user")
     private List<CommentsEntity> comments;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "user")
     private List<FollowingsEntity> followings;
 
 
