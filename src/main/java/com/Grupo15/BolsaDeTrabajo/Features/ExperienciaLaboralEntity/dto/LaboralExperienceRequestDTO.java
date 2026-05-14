@@ -2,7 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.dto;
 
 import java.sql.Date;
 
-public record ExperienceLaboralRequestDTO(
+public record LaboralExperienceRequestDTO(
         Long candidateId,
         String company,
         String position,

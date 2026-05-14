@@ -1,11 +1,12 @@
 package com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.dto;
 
-import lombok.Data;
+import lombok.Builder;
+
 import java.sql.Date;
 import java.util.UUID;
 
-@Data
-public class ExperienceLaboralResponseDTO {
+@Builder
+public class LaboralExperienceResponseDTO {
     private UUID externalId;
     private String candidateName;        // viene de candidate.user.name
     private String candidateLastName;    // viene de candidate.user.lastName

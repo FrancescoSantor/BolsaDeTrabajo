@@ -1,10 +1,11 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Data
+@Builder
 public class PostsResponseDTO {
     private UUID externalId;
     private String companyName;     // viene de company.registeredName

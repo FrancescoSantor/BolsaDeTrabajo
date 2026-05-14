@@ -1,9 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.CandidatoHabilidad.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import java.util.UUID;
 
-@Data
+@Builder
 public class CandidateAbilityResponseDTO {
     private UUID externalId;          // ← reemplaza el Long id
     private String candidateName;

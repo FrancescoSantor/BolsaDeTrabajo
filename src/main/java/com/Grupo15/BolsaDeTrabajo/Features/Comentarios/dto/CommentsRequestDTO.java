@@ -1,8 +1,12 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Comentarios.dto;
 
+import lombok.Builder;
+import lombok.Getter;
 
-public record CommentsRequestDTO(
-        Long postId,
-        Long userId,
-        String content
-) {}
+@Getter
+@Builder
+public class CommentsRequestDTO{
+    Long postId;
+    Long userId;
+    String content;
+}
