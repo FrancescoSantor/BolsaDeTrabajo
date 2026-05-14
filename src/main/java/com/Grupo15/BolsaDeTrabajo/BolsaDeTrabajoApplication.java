@@ -10,5 +10,4 @@ public class BolsaDeTrabajoApplication {
 		SpringApplication.run(BolsaDeTrabajoApplication.class, args);
 	}
 
-
 }
