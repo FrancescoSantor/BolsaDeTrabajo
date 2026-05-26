@@ -1,8 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.OfertaHabilidad.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import java.util.UUID;
 
+@Builder
 @Data
 public class Ability_x_OfferResponseDTO {
     private UUID externalId;

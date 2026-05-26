@@ -3,10 +3,12 @@ package com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.dto;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.Title;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferType;
 import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferStatus;
+import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+@Builder
 @Data
 public class OfferResponseDTO {
     private UUID externalId;

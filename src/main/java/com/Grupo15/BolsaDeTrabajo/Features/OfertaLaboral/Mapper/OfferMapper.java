@@ -1,0 +1,41 @@
+package com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.Mapper;
+
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.dto.OfferRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.dto.OfferResponseDTO;
+
+public class OfferMapper {
+
+    public static OfferResponseDTO toDto(OfferEntity entity) {
+        return OfferResponseDTO.builder()
+                .externalId(entity.getExternalId())
+                .companyName(entity.getCompany().getName())
+                .companyLocation(entity.getCompany().getLocation())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .location(entity.getLocation())
+                .modality(entity.getModality())
+                .minSalary(entity.getMinSalary())
+                .maxSalary(entity.getMaxSalary())
+                .status(entity.getStatus())
+                .publicationDate(entity.getPublicationDate())
+                .publicationClosing(entity.getPublicationClosing())
+                .build();
+    }
+
+    public static OfferEntity toEntity(OfferRequestDTO request) {
+        return OfferEntity.builder()
+                .id(request.companyId())
+                .title(request.title())
+                .description(request.description())
+                .location(request.location())
+                .modality(request.modality())
+                .contractType(request.contractType())
+                .minSalary(request.minSalary())
+                .maxSalary(request.maxSalary())
+                .status(request.status())
+                .publicationDate(request.publicationDate())
+                .publicationClosing(request.publicationClosing())
+                .build();
+    }
+}

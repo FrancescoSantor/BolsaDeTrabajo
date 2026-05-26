@@ -1,10 +1,12 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Notificacion.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
+@Builder
 public class NotificationResponseDTO {
     private UUID externalId;
     private String userName;      // viene de user.name

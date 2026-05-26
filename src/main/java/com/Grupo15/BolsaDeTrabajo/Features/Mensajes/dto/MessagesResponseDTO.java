@@ -1,9 +1,11 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Mensajes.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+@Builder
 @Data
 public class MessagesResponseDTO {
     private UUID externalId;
