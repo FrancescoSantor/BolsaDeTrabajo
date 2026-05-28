@@ -1,10 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
-import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.ExperienciaLaboralEntity.LaboralExperienceEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Publicaciones.PostsEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.FollowingsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.LaboralExperienceEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Post.PostsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Following.FollowingsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,5 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper;
 
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesResponseDTO;

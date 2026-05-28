@@ -1,7 +1,5 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Postulacion.Mapper;
 
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.dto.OfferResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.dto.PostulationsRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.dto.PostulationsResponseDTO;

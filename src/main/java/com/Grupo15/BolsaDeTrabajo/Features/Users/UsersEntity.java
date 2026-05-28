@@ -1,12 +1,12 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Users;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Comentarios.CommentsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Mensajes.MessagesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Notificacion.NotificationEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PublicacionesLikes.PostLikesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Message.MessagesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Notification.NotificationEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PostLikes.PostLikesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Seguimientos.FollowingsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Following.FollowingsEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
