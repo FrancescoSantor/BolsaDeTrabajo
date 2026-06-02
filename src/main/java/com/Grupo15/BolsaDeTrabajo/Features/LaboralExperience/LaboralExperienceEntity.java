@@ -6,6 +6,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import lombok.*;
 
@@ -32,10 +33,9 @@ public class LaboralExperienceEntity extends BaseEntity {
 
     private String position; //cargo
 
-    private Date initialDate;
-    private Date endDate;
+    private LocalDate initialDate;
+    private LocalDate endDate;
 
-    private boolean currentWork; //trabajo actual
 
     @Column(columnDefinition = "TEXT")
     private String description;

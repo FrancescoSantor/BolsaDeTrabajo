@@ -21,7 +21,6 @@ public class LaboralExperienceMapper {
                 .position(laboralExperience.getPosition())
                 .initialDate(laboralExperience.getInitialDate())
                 .endDate(laboralExperience.getEndDate())
-                .currentWork(laboralExperience.isCurrentWork())
                 .description(laboralExperience.getDescription())
                 .companyReferenceName(companyReferenceName)
                 .build();
@@ -33,7 +32,6 @@ public class LaboralExperienceMapper {
                 .position(request.position())
                 .initialDate(request.initialDate())
                 .endDate(request.endDate())
-                .currentWork(request.currentWork())
                 .description(request.description())
                 .build();
     }

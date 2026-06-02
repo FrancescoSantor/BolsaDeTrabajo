@@ -11,7 +11,6 @@ public class Ability_x_OfferEntityMapper {
         return  Ability_x_OfferResponseDTO.builder()
                 .externalId(entity.getExternalId())
                 .offerTitle(String.valueOf(entity.getOffer().getTitle()))
-                .offerLocation(entity.getOffer().getLocation())
                 .abilityName(entity.getAbilities().getName())
                 .abilityCategory(entity.getAbilities().getCategory())
                 .required(entity.isRequired())

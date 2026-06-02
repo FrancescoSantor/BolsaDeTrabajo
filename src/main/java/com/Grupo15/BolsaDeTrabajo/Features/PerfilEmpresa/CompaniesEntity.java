@@ -19,10 +19,6 @@ import java.util.List;
 @Builder
 public class CompaniesEntity extends UsersEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     /*
     @OneToOne
     @JoinColumn(name = "usuario_id")

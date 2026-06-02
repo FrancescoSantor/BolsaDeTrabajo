@@ -8,7 +8,6 @@ import java.util.UUID;
 public class PostLikesResponseDTO {
     private UUID externalId;
     private String userName;      // viene de user.name
-    private String userLastName;  // viene de user.lastName
     private String postTitle;     // viene de post.title
     private Timestamp createdAt;
 }

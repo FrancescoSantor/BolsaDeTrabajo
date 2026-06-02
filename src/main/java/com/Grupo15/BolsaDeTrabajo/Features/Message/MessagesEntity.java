@@ -4,6 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 import lombok.*;
 
@@ -34,5 +35,12 @@ public class MessagesEntity extends BaseEntity{
 
         private boolean read; //leido
 
+
         private Timestamp createdAt;
-    }
+
+        @PrePersist
+        public void CreatedAt (){
+                this.createdAt = Timestamp.from(Instant.now());
+        }
+
+}

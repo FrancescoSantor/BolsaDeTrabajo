@@ -9,11 +9,9 @@ import java.util.UUID;
 public class PostsResponseDTO {
     private UUID externalId;
     private String companyName;     // viene de company.registeredName
-    private String companyLocation; // viene de company.location
     private String offerTitle;      // viene de offer.title
     private String title;
     private String content;
-    private String urlImage;
     private int totalLikes;
     private int totalComments;
     private boolean active;

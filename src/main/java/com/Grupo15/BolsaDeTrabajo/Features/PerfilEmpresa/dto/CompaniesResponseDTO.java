@@ -17,5 +17,4 @@ public class CompaniesResponseDTO {
     private Category category;
     private String description;
     private String webSite;
-    private String location;
 }

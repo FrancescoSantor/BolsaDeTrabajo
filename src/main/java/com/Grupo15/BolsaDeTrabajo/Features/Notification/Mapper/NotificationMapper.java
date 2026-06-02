@@ -10,7 +10,6 @@ public class NotificationMapper {
         return NotificationResponseDTO.builder()
                 .externalId(entity.getExternalId())
                 .userName(entity.getUser().getName())
-                .userLastName(entity.getUser().getLastName())
                 .message(entity.getMessage())
                 .read(entity.isRead())
                 .createdAt(entity.getCreatedAt())

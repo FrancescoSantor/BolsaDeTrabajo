@@ -10,20 +10,17 @@ public class CompanyMapper {
         return CompaniesResponseDTO.builder()
                 .externalId(companiesEntity.getExternalId())
                 .name(companiesEntity.getName())
-                .lastName(companiesEntity.getLastName())
                 .email(companiesEntity.getEmail())
                 .registeredName(companiesEntity.getRegisteredName())
                 .cuit(companiesEntity.getCuit())
                 .category(companiesEntity.getCategory())
                 .description(companiesEntity.getDescription())
                 .webSite(companiesEntity.getWebSite())
-                .location(companiesEntity.getLocation())
                 .build();
     }
 
     public static CompaniesEntity toEntity (CompaniesRequestDTO request){
         return CompaniesEntity.builder()
-                .id(request.userId())
                 .registeredName(request.registeredName())
                 .cuit(request.cuit())
                 .category(request.category())

@@ -15,7 +15,6 @@ public class SavedMapper {
                 .candidateName(entity.getCandidate().getName())
                 .candidateLastName(entity.getCandidate().getLastName())
                 .offerTitle(String.valueOf(entity.getOffer().getTitle()))
-                .offerLocation(entity.getOffer().getLocation())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }

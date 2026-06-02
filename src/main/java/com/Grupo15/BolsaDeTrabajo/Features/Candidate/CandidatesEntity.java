@@ -18,10 +18,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CandidatesEntity extends UsersEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String lastName;
 
     //ENUM DE TITULO(EJ INGENIERO TECNICO LICENCIADO)
     @Enumerated(EnumType.STRING)

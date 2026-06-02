@@ -13,7 +13,6 @@ import java.util.UUID;
 public class OfferResponseDTO {
     private UUID externalId;
     private String companyName;       // viene de company.registeredName
-    private String companyLocation;   // viene de company.location
     private Title title;
     private String description;
     private String location;

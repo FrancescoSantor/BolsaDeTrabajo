@@ -6,13 +6,13 @@ import lombok.Data;
 import java.util.UUID;
 import java.sql.Timestamp;
 
-@Builder
-public class UsersResponseDTO {
-    private UUID externalId;
-    private String name;
-    private String lastName;
-    private String email;
-    private boolean active;
-    private Roles rol;          // viene de rol.rol
-    private Timestamp createdAt;
-}
+//@Builder
+//public class UsersResponseDTO {
+//    private UUID externalId;
+//    private String name;
+//    private String lastName;
+//    private String email;
+//    private boolean active;
+//    private Roles rol;          // viene de rol.rol
+//    private Timestamp createdAt;
+//}

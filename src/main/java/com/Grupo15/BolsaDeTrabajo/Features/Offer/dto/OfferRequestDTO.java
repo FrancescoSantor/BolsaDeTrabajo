@@ -9,7 +9,6 @@ public record OfferRequestDTO(
         Long companyId,
         Title title,
         String description,
-        String location,
         OfferType modality,
         String contractType,
         Double minSalary,

@@ -36,7 +36,7 @@ public class OfferEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String location;
+//    private String location;
 
     //ENUM DE MODALIDAD
     @Enumerated(EnumType.STRING)
