@@ -9,7 +9,6 @@ public class CandidateAbilityMapper {
         return CandidateAbilityResponseDTO.builder()
                 .externalId(candidateAbility.getExternalId())
                 .candidateName(candidateAbility.getCandidate().getName())
-                .candidateLastName(candidateAbility.getCandidate().getLastName())
                 .abilityName(candidateAbility.getAbility().getName())
                 .abilityCategory(candidateAbility.getAbility().getCategory())
                 .build();

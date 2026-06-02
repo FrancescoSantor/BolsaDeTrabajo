@@ -10,14 +10,14 @@ public class CandidateMapper {
         return CandidatesResponseDTO.builder()
                 .externalId(candidatesEntity.getExternalId())
                 .name(candidatesEntity.getName())
-                .lastName(candidatesEntity.getLastName())
+                //.lastName(candidatesEntity.getLastName())
                 .email(candidatesEntity.getEmail())
                 .professionalTitle(candidatesEntity.getProfessionalTitle())
                 .summary(candidatesEntity.getSummary())
                 .cvUrl(candidatesEntity.getCvUrl())
-                .linkedinUrl(candidatesEntity.getLinkedinUrl())
-                .photoUrl(candidatesEntity.getPhotoUrl())
-                .updatedAt(candidatesEntity.getUpdatedAt())
+                //.linkedinUrl(candidatesEntity.getLinkedinUrl())
+                //.photoUrl(candidatesEntity.getPhotoUrl())
+                //.updatedAt(candidatesEntity.getUpdatedAt())
                 .build();
     }
 
@@ -26,8 +26,8 @@ public class CandidateMapper {
                 .professionalTitle(request.professionalTitle())
                 .summary(request.summary())
                 .cvUrl(request.cvUrl())
-                .linkedinUrl(request.linkedinUrl())
-                .photoUrl(request.photoUrl())
+                //.linkedinUrl(request.linkedinUrl())
+                //.photoUrl(request.photoUrl())
                 .build();
         }
 }

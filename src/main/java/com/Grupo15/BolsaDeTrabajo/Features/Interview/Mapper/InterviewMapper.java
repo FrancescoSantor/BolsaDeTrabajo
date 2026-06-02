@@ -18,11 +18,9 @@ public class InterviewMapper {
                 .candidateName(candidateName)
                 .candidateLastName(candidateLastName)
                 .offerTitle(offerTitle)
-                .offerLocation(offerLocation)
                 .date(interview.getDate())
                 .type(interview.getType())
                 .linkMeeting(interview.getLinkMeeting())
-                .feedbackCandidate(interview.getFeedbackCandidate())
                 .status(interview.getStatus())
                 .build();
     }

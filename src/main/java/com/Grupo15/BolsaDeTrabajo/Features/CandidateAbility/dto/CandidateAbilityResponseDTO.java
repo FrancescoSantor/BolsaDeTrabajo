@@ -8,7 +8,6 @@ import java.util.UUID;
 public class CandidateAbilityResponseDTO {
     private UUID externalId;          // ← reemplaza el Long id
     private String candidateName;
-    private String candidateLastName;
     private String abilityName;
     private String abilityCategory;
 }

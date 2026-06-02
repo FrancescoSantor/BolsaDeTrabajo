@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class CommentsRequestDTO{
     Long postId;
-    Long userId;
+    //Long userId;  se puede sacar desde el contexto de que el usuario en si ya esta logeado
     String content;
 }

@@ -13,10 +13,9 @@ public class InterviewResponseDTO {
     private String candidateName;       // viene de application.candidate.user.name
     private String candidateLastName;   // viene de application.candidate.user.lastName
     private String offerTitle;          // viene de application.offer.title
-    private String offerLocation;       // viene de application.offer.location
     private LocalDateTime date;
     private Type type;
     private String linkMeeting;
-    private String feedbackCandidate;
+    //private String feedbackCandidate;
     private InterviewStatus status;
 }

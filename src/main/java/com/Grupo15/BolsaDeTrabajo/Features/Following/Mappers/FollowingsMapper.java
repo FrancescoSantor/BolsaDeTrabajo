@@ -16,9 +16,7 @@ public class FollowingsMapper {
         return FollowingsResponseDTO.builder()
                 .externalId(following.getExternalId())
                 .userName(userName)
-                .userLastName(userLastName)
                 .companyName(companyName)
-                .companyLocation(companyLocation)
                 .createdAt(following.getCreatedAt())
                 .build();
     }

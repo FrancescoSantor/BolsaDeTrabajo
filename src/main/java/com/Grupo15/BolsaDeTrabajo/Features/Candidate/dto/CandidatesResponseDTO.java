@@ -11,12 +11,11 @@ import java.util.UUID;
 public class CandidatesResponseDTO {
     private UUID externalId;
     private String name;
-    private String lastName;
     private String email;
     private Title professionalTitle;
     private String summary;
     private String cvUrl;
-    private String linkedinUrl;
-    private String photoUrl;
-    private Timestamp updatedAt;
+    //private String linkedinUrl;
+    //private String photoUrl;
+    //rivate Timestamp updatedAt;
 }
