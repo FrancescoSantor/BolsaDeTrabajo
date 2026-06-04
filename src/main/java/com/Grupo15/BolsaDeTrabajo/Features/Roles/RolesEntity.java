@@ -1,9 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Roles;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 import lombok.*;
 
@@ -14,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RolesEntity {
+public class RolesEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

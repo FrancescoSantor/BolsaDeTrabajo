@@ -1,8 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Postulacion;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Entrevista.InterviewEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.OfertaLaboral.OfferEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilCandidato.CandidatesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Interview.InterviewEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostulationsEntity {
+public class PostulationsEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class PostulationsEntity {
 
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
-    private String status;
+    private PostulationState status;
 
     @Column(columnDefinition = "TEXT")
     private String coverLetter;
@@ -42,7 +43,7 @@ public class PostulationsEntity {
     private Timestamp updateDate;
 
 
-    @OneToOne(mappedBy = "postulacion")
+    @OneToOne(mappedBy = "application")
     private InterviewEntity interview;
 }
 
