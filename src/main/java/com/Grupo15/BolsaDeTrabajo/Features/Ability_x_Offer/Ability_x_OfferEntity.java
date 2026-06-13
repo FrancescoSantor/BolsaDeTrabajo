@@ -23,14 +23,14 @@ public class Ability_x_OfferEntity extends BaseEntity {
         //Solucion de la tabla ofertas
 
         @ManyToOne
-        @JoinColumn(name = "oferta_id")     // dudas preguntar profe
+        @JoinColumn(name = "offer_id")     // dudas preguntar profe
         private OfferEntity offer;
 
         //Solucion de la tabla habilidades
 
         @ManyToOne
-        @JoinColumn(name = "habilidad_id")     // dudas preguntar profe
-        private AbilityEntity abilities;
+        @JoinColumn(name = "ability_id")     // dudas preguntar profe
+        private AbilityEntity ability;
 
         private boolean required;
     }
