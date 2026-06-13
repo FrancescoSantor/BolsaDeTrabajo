@@ -14,8 +14,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class MessagesEntity extends BaseEntity{
+public class MessageEntity extends BaseEntity{
 
 
         @Id
@@ -34,7 +33,6 @@ public class MessagesEntity extends BaseEntity{
         private String content;
 
         private boolean read; //leido
-
 
         private Timestamp createdAt;
 
