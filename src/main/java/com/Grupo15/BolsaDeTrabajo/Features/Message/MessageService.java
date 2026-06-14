@@ -10,6 +10,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class MessageService {
@@ -29,6 +32,15 @@ public class MessageService {
                 .orElseThrow(() ->
                         new EntityNotFoundException("Receiver not found"));
 
+       /*if (request.content() == null || request.content().isBlank()) {
+            throw new IllegalArgumentException("Message content cannot be empty");
+        }*/ // aca iria mensajeNotFoundExc
+
+        if (request.issuerId().equals(request.receptorId())) {
+            throw new IllegalArgumentException(
+                    "A user cannot send messages to himself");
+        }
+
         MessageEntity message = new MessageEntity();
 
         message.setIssuer(issuer);
@@ -39,6 +51,64 @@ public class MessageService {
         MessageEntity saved = messageRepository.save(message);
 
         return messageMapper.toDto(saved);
+    }
+
+
+    @Transactional
+    public MessageResponseDTO markAsRead(UUID messageId) {
+
+        MessageEntity message = messageRepository.findByExternalId(messageId)
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Message not found"));
+
+        message.setRead(true);
+
+        return messageMapper.toDto(messageRepository.save(message));
+    }
+
+    public List<MessageResponseDTO> getSentMessages(UUID userId) {
+
+        return messageRepository.findByIssuerExternalId(userId)
+                .stream()
+                .map(messageMapper::toDto)
+                .toList();
+    }
+
+    public List<MessageResponseDTO> getReceivedMessages(UUID userId) {
+
+        return messageRepository.findByReceptorExternalId(userId)
+                .stream()
+                .map(messageMapper::toDto)
+                .toList();
+    }
+
+    public MessageResponseDTO getMessageByExternalId(UUID externalId) {
+
+        MessageEntity message = messageRepository.findByExternalId(externalId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Message not found"));
+
+        return messageMapper.toDto(message);
+    }
+
+    public List<MessageResponseDTO> searchMessagesByContent(UUID receptorId, String content) {
+
+        return messageRepository
+                .findByReceptorExternalIdAndContentContainingIgnoreCase(
+                        receptorId,
+                        content)
+                .stream()
+                .map(messageMapper::toDto)
+                .toList();
+    }
+
+    public List<MessageResponseDTO> getUnreadMessages(UUID receptorId) {
+
+        return messageRepository
+                .findByReceptorExternalIdAndReadFalse(receptorId)
+                .stream()
+                .map(messageMapper::toDto)
+                .toList();
     }
 
 
