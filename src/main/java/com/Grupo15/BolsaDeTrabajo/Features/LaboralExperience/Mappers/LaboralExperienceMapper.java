@@ -3,36 +3,22 @@ package com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.Mappers;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.LaboralExperienceEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.dto.LaboralExperienceRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.dto.LaboralExperienceResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class LaboralExperienceMapper {
+@Mapper(componentModel = "spring")
+public interface LaboralExperienceMapper {
 
-    public static LaboralExperienceResponseDTO toResponse (
-            LaboralExperienceEntity laboralExperience,
-            String candidateName,
-            String candidateLastName,
-            String company,
-            String companyReferenceName) {
+    // Navegamos directo desde la relación 'candidate' (que es un CandidatesEntity)
+    @Mapping(source = "candidate.name", target = "candidateName")
+    @Mapping(source = "candidate.lastName", target = "candidateLastName")
+    @Mapping(source = "company", target = "company")
+    // Si no usamos referencias de empresas en el request/entity, este mapping ignorará el campo o podemos dejarlo según la entidad
+    @Mapping(source = "companyReference.registeredName", target = "companyReferenceName")
+    LaboralExperienceResponseDTO toDto(LaboralExperienceEntity entity);
 
-        return LaboralExperienceResponseDTO.builder()
-                .externalId(laboralExperience.getExternalId())
-                .candidateName(candidateName)
-                .candidateLastName(candidateLastName)
-                .company(company)
-                .position(laboralExperience.getPosition())
-                .initialDate(laboralExperience.getInitialDate())
-                .endDate(laboralExperience.getEndDate())
-                .description(laboralExperience.getDescription())
-                .companyReferenceName(companyReferenceName)
-                .build();
-    }
-
-    public static LaboralExperienceEntity toRequest (LaboralExperienceRequestDTO request) {
-        return LaboralExperienceEntity.builder()
-                .company(request.company())
-                .position(request.position())
-                .initialDate(request.initialDate())
-                .endDate(request.endDate())
-                .description(request.description())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "candidate", ignore = true)
+    @Mapping(target = "companyReference", ignore = true)
+    LaboralExperienceEntity toEntity(LaboralExperienceRequestDTO request);
 }
