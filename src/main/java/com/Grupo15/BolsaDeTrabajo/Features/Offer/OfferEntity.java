@@ -40,7 +40,7 @@ public class OfferEntity extends BaseEntity {
 
     //ENUM DE MODALIDAD
     @Enumerated(EnumType.STRING)
-    private OfferType modality; //or mode
+    private Type modality; //or mode
 
     //???
     private String contractType;
@@ -53,7 +53,7 @@ public class OfferEntity extends BaseEntity {
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OfferStatus status;
+    private Status status;
 
     private Timestamp publicationDate;
     private Timestamp publicationClosing;

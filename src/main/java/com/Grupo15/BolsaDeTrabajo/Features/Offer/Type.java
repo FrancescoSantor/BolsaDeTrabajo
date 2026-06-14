@@ -1,13 +1,13 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
-public enum OfferType {
+public enum Type {
     IN_PERSON("In_Person"),
     VIRTUAL("Virtual"),
     BOTH("Both");
 
     private final String label;
 
-    OfferType(String label) {
+    Type(String label) {
         this.label = label;
     }
 

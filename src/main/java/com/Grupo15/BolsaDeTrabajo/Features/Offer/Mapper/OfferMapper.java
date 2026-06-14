@@ -3,36 +3,20 @@ package com.Grupo15.BolsaDeTrabajo.Features.Offer.Mapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class OfferMapper {
+@Mapper(componentModel = "spring")
+public interface OfferMapper {
 
-    public static OfferResponseDTO toDto(OfferEntity entity) {
-        return OfferResponseDTO.builder()
-                .externalId(entity.getExternalId())
-                .companyName(entity.getCompany().getName())
-                .title(entity.getTitle())
-                .description(entity.getDescription())
-                .modality(entity.getModality())
-                .minSalary(entity.getMinSalary())
-                .maxSalary(entity.getMaxSalary())
-                .status(entity.getStatus())
-                .publicationDate(entity.getPublicationDate())
-                .publicationClosing(entity.getPublicationClosing())
-                .build();
-    }
+    // De Entidad a DTO (Trae el externalId heredado de BaseEntity automáticamente)
+    @Mapping(source = "company.name", target = "companyName")
+    OfferResponseDTO toDto(OfferEntity entity);
 
-    public static OfferEntity toEntity(OfferRequestDTO request) {
-        return OfferEntity.builder()
-                .id(request.companyId())
-                .title(request.title())
-                .description(request.description())
-                .modality(request.modality())
-                .contractType(request.contractType())
-                .minSalary(request.minSalary())
-                .maxSalary(request.maxSalary())
-                .status(request.status())
-                .publicationDate(request.publicationDate())
-                .publicationClosing(request.publicationClosing())
-                .build();
-    }
+    // De Request a Entidad Nueva
+    // Ignoramos el ID numérico y la empresa para manejarlos de forma segura en el Service
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "company", ignore = true)
+    OfferEntity toEntity(OfferRequestDTO request);
+
 }

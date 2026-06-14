@@ -1,0 +1,66 @@
+package com.Grupo15.BolsaDeTrabajo.Features.Offer;
+
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/v1/offers") //Aca hay que ver si Definimos bien la ruta
+@RequiredArgsConstructor
+public class OfferController {
+
+    private final OfferService offerService;
+
+    //Creamos oferta
+    @PostMapping
+    public ResponseEntity<OfferResponseDTO> createOffer(@RequestBody OfferRequestDTO requestDto){
+        OfferResponseDTO response = offerService.createOffer(requestDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);//Devuelve un estado 201 CREATED con el objeto JSON
+    }
+
+    //Modificar oferta
+    @PutMapping("/{externalId}")
+    public ResponseEntity<OfferResponseDTO> updateOffer(
+            @PathVariable UUID externalId,
+            @RequestBody OfferRequestDTO requestDto) {
+
+        OfferResponseDTO response = offerService.updateOffer(externalId, requestDto);
+        return ResponseEntity.ok(response); // Devuelve un estado 200 OK con los datos modificados
+    }
+
+    //Eliminar de forma lógica (Cerrar) una oferta
+    @DeleteMapping("/{externalId}")
+    public ResponseEntity<Void> deleteOffer(@PathVariable UUID externalId) {
+        offerService.deleteOffer(externalId);
+        return ResponseEntity.noContent().build(); // Devuelve un estado 244 NO CONTENT
+    }
+
+    //Obtener el detalle de una única oferta por su UUID seguro
+    @GetMapping("/{externalId}")
+    public ResponseEntity<OfferResponseDTO> getOfferById(@PathVariable UUID externalId) {
+        OfferResponseDTO response = offerService.getOfferById(externalId);
+        return ResponseEntity.ok(response); // Devuelve un estado 200 OK con el detalle de la oferta
+    }
+
+    //Listar ofertas
+    @GetMapping
+    public ResponseEntity<Page<OfferResponseDTO>> getOffers(
+            // @PageableDefault configura valores por defecto si el frontend no los envía (Página 0, tamaño de 10 elementos)
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            // Permite recibir un filtro opcional por parámetro en la URL (?title=ENGINEER)
+            @RequestParam(required = false) Title title) {
+
+        // Llama al service pasándole la información de paginación y el filtro de título
+        Page<OfferResponseDTO> response = offerService.getOffers(pageable, title);
+        return ResponseEntity.ok(response); // Devuelve la página completa de resultados con estado 200 OK
+    }
+
+}

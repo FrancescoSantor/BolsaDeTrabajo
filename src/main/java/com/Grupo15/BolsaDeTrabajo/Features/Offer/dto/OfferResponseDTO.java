@@ -1,8 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer.dto;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Title;
-import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferType;
-import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.Type;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.Status;
 import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
@@ -16,11 +16,11 @@ public class OfferResponseDTO {
     private Title title;
     private String description;
     private String location;
-    private OfferType modality;
+    private Type modality;
     private String contractType;
     private Double minSalary;
     private Double maxSalary;
-    private OfferStatus status;
+    private Status status;
     private Timestamp publicationDate;
     private Timestamp publicationClosing;
 }

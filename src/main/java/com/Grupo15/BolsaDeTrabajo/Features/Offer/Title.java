@@ -1,6 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
-public enum TitleOfOffer {
+public enum Title {
     SECONDARY("Secondary"),
     BACHELOR("Bachelor"),
     LICENSED("Licensed"),
@@ -14,7 +14,7 @@ public enum TitleOfOffer {
 
     private final String label;
 
-    TitleOfOffer(String label){
+    Title(String label){
         this.label = label;
     }
 

@@ -1,19 +1,19 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer.dto;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Title;
-import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferType;
-import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.Type;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.Status;
 import java.sql.Timestamp;
 
 public record OfferRequestDTO(
         Long companyId,
         Title title,
         String description,
-        OfferType modality,
+        Type modality,
         String contractType,
         Double minSalary,
         Double maxSalary,
-        OfferStatus status,
+        Status status,
         Timestamp publicationDate,
         Timestamp publicationClosing
 ) {}
