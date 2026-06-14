@@ -13,9 +13,9 @@ public interface OfferRepository extends JpaRepository<OfferEntity,Long> {
     Optional<OfferEntity> findByExternalId(UUID externalId);
 
     // RF16: Trae todas las ofertas filtradas por estado (usamos OfferStatus.OPEN para las activas)
-    Page<OfferEntity> findAllByStatus(Status status, Pageable pageable);
+    Page<OfferEntity> findAllByStatus(OfferStatus offerStatus, Pageable pageable);
 
     // RF17: Filtra por el ENUM de título y que el estado sea OPEN al mismo tiempo
-    Page<OfferEntity> findByTitleAndStatus(Title title, Status status, Pageable pageable);
+    Page<OfferEntity> findByTitleAndStatus(TitleOfOffer titleOfOffer, OfferStatus offerStatus, Pageable pageable);
 }
 

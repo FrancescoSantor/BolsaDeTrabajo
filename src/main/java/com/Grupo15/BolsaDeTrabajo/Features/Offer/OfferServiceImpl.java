@@ -56,7 +56,7 @@ public class OfferServiceImpl implements OfferService {
         entity.setCompany(company);
 
         //RNF12 - Baja lógica: Forzamos el estado inicial de la oferta como abierta
-        entity.setStatus(Status.OPEN); // Nace activa
+        entity.setOfferStatus(OfferStatus.OPEN); // Nace activa
 
         // Persistencia: Guardamos la entidad con todos sus datos en la base de datos
         OfferEntity savedEntity = offerRepository.save(entity);
@@ -73,7 +73,7 @@ public class OfferServiceImpl implements OfferService {
                // .orElseThrow(() -> new ResourceNotFoundException("Oferta laboral no encontrada con el ID seguro: " + externalId));
 
         // RNF12 - Baja lógica: Comprobamos si la oferta no fue cancelada o cerrada previamente
-        if (existingOffer.getStatus() == Status.CLOSE) {
+        if (existingOffer.getOfferStatus() == OfferStatus.CLOSE) {
             //throw new BadRequestException("No se puede modificar una oferta laboral que ha sido dada de baja.");
         }
 
@@ -100,8 +100,8 @@ public class OfferServiceImpl implements OfferService {
         existingOffer.setMaxSalary(requestDto.maxSalary());
 
         // Control opcional del estado: Si nos mandaron un estado nuevo en la petición, lo cambiamos
-        if (requestDto.status() != null) {
-            existingOffer.setStatus(requestDto.status());
+        if (requestDto.offerStatus() != null) {
+            existingOffer.setOfferStatus(requestDto.offerStatus());
         }
 
         //Guardamos la entidad ya modificada en la base de datos
@@ -120,12 +120,12 @@ public class OfferServiceImpl implements OfferService {
                 //.orElseThrow(() -> new ResourceNotFoundException("Oferta laboral no encontrada con el ID seguro: " + externalId));
 
         // Validación: Si ya estaba dada de baja, evitamos procesarla de nuevo
-        if (existingOffer.getStatus() == Status.CLOSE) {
+        if (existingOffer.getOfferStatus() == OfferStatus.CLOSE) {
             //throw new BadRequestException("La oferta laboral ya se encuentra dada de baja (CLOSE).");
         }
 
         // Baja lógica
-        existingOffer.setStatus(Status.CLOSE);
+        existingOffer.setOfferStatus(OfferStatus.CLOSE);
 
         offerRepository.save(existingOffer);
     }
@@ -138,7 +138,7 @@ public class OfferServiceImpl implements OfferService {
                 //.orElseThrow(() -> new ResourceNotFoundException("Oferta laboral no encontrada con el ID seguro: " + externalId));
 
         // Seguridad de negocio (RNF12): Si la oferta está dada de baja lógicamente, protegemos el dato simulando que no existe
-        if (offer.getStatus() == Status.CLOSE) {
+        if (offer.getOfferStatus() == OfferStatus.CLOSE) {
             //throw new ResourceNotFoundException("La oferta laboral solicitada ya no está disponible.");
         }
 
@@ -147,18 +147,18 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     @Transactional(readOnly = true) //Listar Ofertas
-    public Page<OfferResponseDTO> getOffers(Pageable pageable, Title titleEnum) {
+    public Page<OfferResponseDTO> getOffers(Pageable pageable, TitleOfOffer titleOfOfferEnum) {
 
         // Variable local que contendrá la página de entidades resultado de la base de datos
         Page<OfferEntity> offersPage;
 
         // RF17: Evaluamos si el usuario envió un filtro por título específico (Enum)
-        if (titleEnum != null) {
+        if (titleOfOfferEnum != null) {
             // RNF12 y RF17: Buscamos de forma paginada aplicando el filtro de título Y asegurando que el estado sea estrictamente OPEN
-            offersPage = offerRepository.findByTitleAndStatus(titleEnum, Status.OPEN, pageable);
+            offersPage = offerRepository.findByTitleAndStatus(titleOfOfferEnum, OfferStatus.OPEN, pageable);
         } else {
             // RF16: Traemos el listado completo paginado, pero filtrando únicamente que estén activas (status = OPEN)
-            offersPage = offerRepository.findAllByStatus(Status.OPEN, pageable);
+            offersPage = offerRepository.findAllByStatus(OfferStatus.OPEN, pageable);
         }
 
         return offersPage.map(offerMapper::toDto);

@@ -17,6 +17,6 @@ public interface OfferService {
 
     OfferResponseDTO getOfferById(UUID externalId);
 
-    Page<OfferResponseDTO> getOffers(Pageable pageable, Title titleEnum);
+    Page<OfferResponseDTO> getOffers(Pageable pageable, TitleOfOffer titleOfOfferEnum);
 
 }

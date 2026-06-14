@@ -9,14 +9,15 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface OfferMapper {
 
-    // De Entidad a DTO (Trae el externalId heredado de BaseEntity automáticamente)
-    @Mapping(source = "company.name", target = "companyName")
+    @Mapping(source = "company.registeredName", target = "companyName")
     OfferResponseDTO toDto(OfferEntity entity);
 
-    // De Request a Entidad Nueva
-    // Ignoramos el ID numérico y la empresa para manejarlos de forma segura en el Service
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "company", ignore = true)
+    @Mapping(target = "applications", ignore = true)
+    @Mapping(target = "abilities", ignore = true)
+    @Mapping(target = "saved", ignore = true)
     OfferEntity toEntity(OfferRequestDTO request);
 
 }

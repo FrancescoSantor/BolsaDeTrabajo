@@ -1,10 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
-public enum Status {
+public enum OfferStatus {
     OPEN("Open"),
     CLOSE("Close");
     private final String label;
-    Status(String label) {
+    OfferStatus(String label) {
         this.label = label;
     }
 

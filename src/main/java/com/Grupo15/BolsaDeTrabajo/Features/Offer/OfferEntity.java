@@ -25,24 +25,27 @@ public class OfferEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "empresa_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id", nullable = false)
     private CompaniesEntity company;
 
     //ENUM DE TIPO DE TITULO
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Title title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-//    private String location;
+    @Column(nullable = false)
+    private String location;
 
     //ENUM DE MODALIDAD
     @Enumerated(EnumType.STRING)
-    private Type modality; //or mode
+    @Column(nullable = false)
+    private OfferType modality; //or mode
 
-    //???
+    @Column(name = "contract_type", nullable = false)
     private String contractType;
 
     @Column(nullable = false)
@@ -53,9 +56,12 @@ public class OfferEntity extends BaseEntity {
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private OfferStatus offerStatus;
 
+    @Column(nullable = false)
     private Timestamp publicationDate;
+
+    @Column(nullable = false)
     private Timestamp publicationClosing;
 
     @OneToMany(mappedBy = "offer")

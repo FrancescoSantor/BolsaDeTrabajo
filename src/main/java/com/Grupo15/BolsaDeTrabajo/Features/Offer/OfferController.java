@@ -56,10 +56,10 @@ public class OfferController {
             // @PageableDefault configura valores por defecto si el frontend no los envía (Página 0, tamaño de 10 elementos)
             @PageableDefault(page = 0, size = 10) Pageable pageable,
             // Permite recibir un filtro opcional por parámetro en la URL (?title=ENGINEER)
-            @RequestParam(required = false) Title title) {
+            @RequestParam(required = false) TitleOfOffer titleOfOffer) {
 
         // Llama al service pasándole la información de paginación y el filtro de título
-        Page<OfferResponseDTO> response = offerService.getOffers(pageable, title);
+        Page<OfferResponseDTO> response = offerService.getOffers(pageable, titleOfOffer);
         return ResponseEntity.ok(response); // Devuelve la página completa de resultados con estado 200 OK
     }
 
