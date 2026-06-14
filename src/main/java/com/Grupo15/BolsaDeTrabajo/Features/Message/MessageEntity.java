@@ -3,6 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Message;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -14,31 +15,30 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageEntity extends BaseEntity{
+public class MessageEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @ManyToOne
+    @JoinColumn(name = "emisor_id", nullable = false)
+    private UsersEntity issuer; //emisor
 
-        @ManyToOne
-        @JoinColumn(name = "emisor_id")
-        private UsersEntity issuer; //emisor
+    @ManyToOne
+    @JoinColumn(name = "receptor_id", nullable = false)
+    private UsersEntity receptor;
 
-        @ManyToOne
-        @JoinColumn(name = "receptor_id")
-        private UsersEntity receptor;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
-        @Column(columnDefinition = "TEXT")
-        private String content;
+    private boolean read; //leido
 
-        private boolean read; //leido
+    private Timestamp createdAt;
 
-        private Timestamp createdAt;
-
-        @PrePersist
-        public void CreatedAt (){
-                this.createdAt = Timestamp.from(Instant.now());
-        }
+    @PrePersist
+    public void CreatedAt() {
+        this.createdAt = Timestamp.from(Instant.now());
+    }
 
 }

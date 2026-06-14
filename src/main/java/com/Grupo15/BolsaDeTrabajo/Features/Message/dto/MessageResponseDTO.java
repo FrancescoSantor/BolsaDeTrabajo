@@ -6,9 +6,7 @@ import java.util.UUID;
 public record MessageResponseDTO(
      UUID externalId,
      String issuerName,
-     String issuerLastName,
      String receptorName,
-     String receptorLastName,
      String content,
      boolean read,
      Timestamp createdAt){}
