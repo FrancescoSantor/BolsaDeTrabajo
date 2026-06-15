@@ -25,7 +25,7 @@ public class MessageMapper {
     {
         return MessagesEntity.builder()
                 .content(request.content())
-                .isRead(false)
+                .read(false)
                 .createdAt(Timestamp.from(Instant.now()))
                 .build();
     }
