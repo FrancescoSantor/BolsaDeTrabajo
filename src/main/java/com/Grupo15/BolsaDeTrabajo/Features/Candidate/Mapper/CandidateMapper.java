@@ -8,7 +8,7 @@ public class CandidateMapper {
 
     public static CandidatesResponseDTO toDto(CandidatesEntity candidatesEntity) {
         return CandidatesResponseDTO.builder()
-                .externalId(candidatesEntity.getExternalId())
+                .id(candidatesEntity.getId())
                 .name(candidatesEntity.getName())
                 //.lastName(candidatesEntity.getLastName())
                 .email(candidatesEntity.getEmail())

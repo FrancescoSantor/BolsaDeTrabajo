@@ -2,11 +2,11 @@ package com.Grupo15.BolsaDeTrabajo.Features.Users;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Message.MessagesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Message.MessageEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.NotificationEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PostLikes.PostLikesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.FollowingsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -47,10 +47,10 @@ public abstract class UsersEntity extends BaseEntity {
     private List<NotificationEntity> notifications;
 
     @OneToMany(mappedBy = "issuer")
-    private List<MessagesEntity> issued_messages; //mensajes emitidos
+    private List<MessageEntity> issued_messages; //mensajes emitidos
 
     @OneToMany(mappedBy = "receptor")
-    private List<MessagesEntity> received_messages;
+    private List<MessageEntity> received_messages;
 
     @OneToMany(mappedBy = "user")
     private List<PostLikesEntity> likes;

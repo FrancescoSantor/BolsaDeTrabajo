@@ -8,11 +8,11 @@ public class Ability_x_OfferEntityMapper {
 
     public static Ability_x_OfferResponseDTO toDto(Ability_x_OfferEntity entity)
     {
-        return  Ability_x_OfferResponseDTO.builder()
+        return Ability_x_OfferResponseDTO.builder()
                 .externalId(entity.getExternalId())
                 .offerTitle(String.valueOf(entity.getOffer().getTitle()))
-                .abilityName(entity.getAbilities().getName())
-                .abilityCategory(entity.getAbilities().getCategory())
+                .abilityName(entity.getAbility().getName())
+                .abilityCategory(String.valueOf(entity.getAbility().getCategory()))
                 .required(entity.isRequired())
                 .build();
     }
