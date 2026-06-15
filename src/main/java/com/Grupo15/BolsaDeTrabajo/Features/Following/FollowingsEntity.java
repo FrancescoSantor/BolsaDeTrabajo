@@ -29,11 +29,11 @@ public class FollowingsEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private UsersEntity user;
+    private UsersEntity follower;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    private CompaniesEntity company;
+    private UsersEntity followed;
 
     private LocalDateTime createdAt;
 }

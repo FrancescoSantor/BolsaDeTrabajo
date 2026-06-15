@@ -21,34 +21,38 @@ public class FollowingService {
     private final CompanyRepository companyRepository;
 
     public FollowingResponseDTO setFollowToCompany (FollowingsRequestDTO requestDTO) {
-        CandidatesEntity candidate = candidateRepository.findById(requestDTO.userId())
-                .orElseThrow(() -> new RuntimeException("The User has not been found."));
+        CandidatesEntity candidate = candidateRepository.findById(requestDTO.followerId())
+                .orElseThrow(() -> new RuntimeException("The User has not been found.")); //ResourceNotFoundExcepcion
 
-        CompaniesEntity company = companyRepository.findById(requestDTO.companyId())
-                .orElseThrow(() -> new RuntimeException("The Company has not been found."));
+        CompaniesEntity company = companyRepository.findById(requestDTO.followedId())
+                .orElseThrow(() -> new RuntimeException("The Company has not been found.")); //ResourceNotFoundExcepcion
 
-        if(followingRepository.existsByUserIdAndCompanyID(requestDTO.userId(), requestDTO.companyId())) {
-            throw new RuntimeException("You have already follow this Company.");
+        if(requestDTO.followerId().equals(requestDTO.followedId())) {
+            throw new RuntimeException("You can't follow yourself."); //BusinessRuleExcepcion
+        }
+
+        if(followingRepository.existsByUserIdAndCompanyID(requestDTO.followerId(), requestDTO.followedId())) {
+            throw new RuntimeException("You have already follow this Company."); //BusinessRuleExcepcion
         }
 
         FollowingsEntity following = followingMapper.toEntity(requestDTO);
-        following.setUser(candidate);
-        following.setCompany(company);
+        following.setFollower(candidate);
+        following.setFollowed(company);
         following.setState(FollowState.FOLLOWING);
         following.setCreatedAt(LocalDateTime.now());
 
         return followingMapper.toDto(followingRepository.save(following));
     }
 
-    public FollowingResponseDTO unFollowCompany (Long companyId) {
+    public FollowingResponseDTO unfollowCompany (Long companyId) {
         if(!companyRepository.existsById(companyId)) {
-            throw new RuntimeException("The Company doesn´t exists.");
+            throw new RuntimeException("The Company doesn´t exists."); //ResourceNotFoundExcepcion
         }
         FollowingsEntity following = followingRepository.findByCompanyId(companyId)
-                        .orElseThrow(() -> new RuntimeException("You didn´t follow yet."));
+                        .orElseThrow(() -> new RuntimeException("You didn´t follow yet.")); //ResourceNotFoundExcepcion
 
         if(following.getState() == FollowState.NOT_FOLLOWING) {
-            throw new RuntimeException("You can't unfollow a Company that you has not following.");
+            throw new RuntimeException("You can't unfollow a Company that you has not following."); //BusinessRuleExcepcion
         }
         following.setState(FollowState.NOT_FOLLOWING);
 
@@ -56,34 +60,37 @@ public class FollowingService {
     }
 
     public FollowingResponseDTO setFollowToCandidate(FollowingsRequestDTO requestDTO) {
-        CandidatesEntity candidate = candidateRepository.findById(requestDTO.userId())
-                .orElseThrow(() -> new RuntimeException("The User has not been found."));
+        CompaniesEntity company = companyRepository.findById(requestDTO.followerId())
+                .orElseThrow(() -> new RuntimeException("The Company has not been found.")); //ResourceNotFoundExcepcion
 
-        CompaniesEntity company = companyRepository.findById(requestDTO.companyId())
-                .orElseThrow(() -> new RuntimeException("The Company has not been found."));
+        CandidatesEntity candidate = candidateRepository.findById(requestDTO.followedId())
+                .orElseThrow(() -> new RuntimeException("The User has not been found.")); //ResourceNotFoundExcepcion
 
-        if(followingRepository.existsByUserIdAndCompanyID(requestDTO.userId(), requestDTO.companyId())) {
-            throw new RuntimeException("You have already follow this User.");
+        if(requestDTO.followerId().equals(requestDTO.followedId())) {
+            throw new RuntimeException("You can't follow yourself."); //BusinessRuleExcepcion
+        }
+        if(followingRepository.existsByUserIdAndCompanyID(requestDTO.followerId(), requestDTO.followedId())) {
+            throw new RuntimeException("You have already follow this User."); //BusinessRuleExcepcion
         }
 
         FollowingsEntity following = followingMapper.toEntity(requestDTO);
-        following.setUser(candidate);
-        following.setCompany(company);
+        following.setFollower(company);
+        following.setFollowed(candidate);
         following.setState(FollowState.FOLLOWING);
         following.setCreatedAt(LocalDateTime.now());
 
         return followingMapper.toDto(followingRepository.save(following));
     }
 
-    public FollowingResponseDTO unFollowCandidate(Long candidateId) {
+    public FollowingResponseDTO unfollowCandidate(Long candidateId) {
         if(!candidateRepository.existsById(candidateId)) {
-            throw new RuntimeException("The User doesn´t exists.");
+            throw new RuntimeException("The User doesn´t exists."); //ResourceNotFoundExcepcion
         }
         FollowingsEntity following = followingRepository.findByUserId(candidateId)
-                .orElseThrow(() -> new RuntimeException("You didn´t follow yet."));
+                .orElseThrow(() -> new RuntimeException("You didn´t follow yet.")); //ResourceNotFoundExcepcion
 
         if(following.getState() == FollowState.NOT_FOLLOWING) {
-            throw new RuntimeException("You can't unfollow a Company that you has not following.");
+            throw new RuntimeException("You can't unfollow a Company that you has not following."); //BusinessRuleExcepcion
         }
         following.setState(FollowState.NOT_FOLLOWING);
 
