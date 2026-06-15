@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<CompaniesEntity,Long> {
@@ -16,6 +17,8 @@ public interface CompanyRepository extends JpaRepository<CompaniesEntity,Long> {
     boolean existsByCuit(String Cuit);
 
     boolean existsByEmail(String email);
+
+    Optional<CompaniesEntity> findByExternalId(UUID externalId);
 
     Optional<CompaniesEntity> findByCuit(String cuit);
 

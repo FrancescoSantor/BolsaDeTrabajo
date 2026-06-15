@@ -6,6 +6,10 @@ import java.util.UUID;
 
 public record CompaniesRequestDTO(
         String name,
+        String email,
         String cuit,
-        UUID externalID
+        Category category,
+        String description,
+        String webSite,
+        String location
 ) {}
