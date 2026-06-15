@@ -5,15 +5,23 @@ import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper.CompanyMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RoleRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.NewAccountRequest;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -22,7 +30,10 @@ public class CompanyServices {
 
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
-    private final RoleRepository roleRepository;
+    private final RolesRepository rolesRepository;
+    private final CredentialsRepository credentialsRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepositorySecurity;
 
 
     @Transactional
@@ -35,13 +46,21 @@ public class CompanyServices {
             //reboleas excepcion de ya existente
         }
 
+        if (credentialsRepository.existsByUsername(
+                newDTO.username())) {
+
+            throw new RuntimeException(
+                    "El username ya existe");
+        }
+
+
         CompaniesEntity companies = companyMapper.toEntity(newDTO);
         companies.setActive(true);
         companies.setName(newDTO.name());
         companies.setEmail(newDTO.email());
-        companies.setPassword(newDTO.password());
+        //companies.setPassword(newDTO.password());
 
-        RolesEntity rol = roleRepository.findByRol(Roles.COMPANY)
+        RolesEntity rol = rolesRepository.findByRol(Roles.COMPANY)
                 .orElseThrow(
                         //REBOLEAS NOT FOUND EXCEPTION
                 );
@@ -49,6 +68,25 @@ public class CompanyServices {
         companies.setRol(rol);
 
         companyRepository.save(companies);
+
+        RoleEntity securityRole = roleRepositorySecurity
+                .findByRole(Role.ROLE_COMPANY)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        CredentialsEntity credentials =
+                CredentialsEntity.builder()
+                        .username(newDTO.username())
+                        .password(
+                                passwordEncoder.encode(
+                                        newDTO.password()
+                                )
+                        )
+                        .enabled(true)
+                        .usuario(companies)
+                        .roles(Set.of(securityRole))
+                        .build();
+
+        credentialsRepository.save(credentials);
 
         return companyMapper.toDTO(companies);
 

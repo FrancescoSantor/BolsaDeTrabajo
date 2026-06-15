@@ -8,12 +8,19 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exception.Contrasenia
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exception.MailExistenteException;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +29,9 @@ public class CandidateService {
 
     private final CandidateRepository candidateRepository;
     private final RolesRepository rolesRepository;
+    private final CredentialsRepository credentialsRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepositorySecurity;
 
     @Transactional
     public CandidatesResponseDTO creteCandidate(CandidatesRequestDTO candidatesRequestDTO) {
@@ -33,6 +43,13 @@ public class CandidateService {
             throw new RuntimeException("EL mail " + candidatesRequestDTO.email() + " ya existe en el sistema");
         }
 
+        if (credentialsRepository.existsByUsername(
+                candidatesRequestDTO.username())) {
+
+            throw new RuntimeException(
+                    "El username ya existe");
+        }
+
         if (candidatesRequestDTO.password() == null || candidatesRequestDTO.password().length() < 8) {
             throw new ContraseniaInvalidaException("La contraseña debe tener al menos 8 caracteres");
         }
@@ -41,17 +58,15 @@ public class CandidateService {
             throw new RuntimeException("El nombre es obligatorio.");
         }
 
-        RolesEntity candidateRole = rolesRepository.findByNombre("CANDIDATO")
+        RolesEntity candidateRole = rolesRepository.findByNombre("CANDIDATO") // aca habria que usar findByRol que usa luca. y boorar findByNombre del repo.
 
                 .orElseThrow(() -> new RuntimeException("Error del sistema: El rol CANDIDATO no existe configurado en la base de datos."));
-
-        CandidatesEntity candidateEntity = new CandidatesEntity();
 
         CandidatesEntity candidate = new CandidatesEntity();
 
         candidate.setName(candidatesRequestDTO.name());
         candidate.setEmail(candidatesRequestDTO.email());
-        candidate.setPassword(candidatesRequestDTO.password());
+      //  candidate.setPassword(candidatesRequestDTO.password());
         candidate.setActive(true);
         candidate.setRol(candidateRole);
 
@@ -67,6 +82,25 @@ public class CandidateService {
         candidate.setSaved(new ArrayList<>());
 
         CandidatesEntity savedCandidate = candidateRepository.save(candidate);
+
+        RoleEntity securityRole = roleRepositorySecurity
+                .findByRole(Role.ROLE_CANDIDATE)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        CredentialsEntity credentials =
+                CredentialsEntity.builder()
+                        .username(candidatesRequestDTO.username())
+                        .password(
+                                passwordEncoder.encode(
+                                        candidatesRequestDTO.password()
+                                )
+                        )
+                        .enabled(true)
+                        .usuario(savedCandidate)
+                        .roles(Set.of(securityRole))
+                        .build();
+
+        credentialsRepository.save(credentials);
 
         return CandidateMapper.toDto(savedCandidate);
 

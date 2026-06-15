@@ -10,7 +10,7 @@ public record CandidatesRequestDTO(
         String lastName,
         String email,
         String password,
-
+        String username,
         Title professionalTitle,
         String summary,
         String cvUrl,

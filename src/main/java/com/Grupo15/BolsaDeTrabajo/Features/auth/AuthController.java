@@ -1,5 +1,11 @@
 package com.Grupo15.BolsaDeTrabajo.Features.auth;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Service.CandidateService;
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyServices;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.AuthRequest;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.AuthResponse;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.NewAccountRequest;
@@ -8,16 +14,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final CandidateService candidateService;
+    private final CompanyServices companyService;
 
     private final JwtService jwtService;
     @PostMapping("/login")
@@ -27,10 +32,21 @@ public class AuthController {
         String token = jwtService.generateToken(user);
         return ResponseEntity.ok(new AuthResponse(token));
     }
-   /* @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody
-                                                NewAccountRequest newAccountRequest){
-        return new ResponseEntity<>(userService.save(newAccountRequest),
-                HttpStatus.CREATED);
-    }*/
+
+    @PostMapping("/register/candidate")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CandidatesResponseDTO registerCandidate(
+            @RequestBody CandidatesRequestDTO dto) {
+
+        return candidateService.creteCandidate(dto);
+    }
+
+    @PostMapping("/register/company")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompanyResponseDTO registerCompany(
+            @RequestBody CompanyNewDTO dto) {
+
+        return companyService.create_Company(dto);
+    }
 }
+
