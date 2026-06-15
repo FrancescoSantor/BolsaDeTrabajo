@@ -9,6 +9,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.FollowingsEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 import lombok.*;
@@ -25,12 +26,13 @@ public abstract class UsersEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column (nullable = false)
     private String name;
 
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true,nullable = false)
+    @Column(nullable = false)
     private String password;
 
     private boolean active;
@@ -60,7 +62,10 @@ public abstract class UsersEntity extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<FollowingsEntity> followings;
 
-
+    @PrePersist
+    protected void create (){
+        this.createdAt = Timestamp.from(Instant.now());
+    }
 }
 
 
