@@ -10,6 +10,6 @@ public record CompaniesRequestDTO(
         String cuit,
         Category category,
         String description,
-        String webSite,
-        String location
+        String location,
+        String webSite
 ) {}

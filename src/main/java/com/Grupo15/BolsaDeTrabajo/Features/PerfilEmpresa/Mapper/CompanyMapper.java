@@ -1,16 +1,32 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper;
 
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
-import org.mapstruct.Mapper;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesResponseDTO;
 
-@Mapper(componentModel = "spring")
-public interface CompanyMapper {
+public class CompanyMapper {
 
-    CompaniesEntity toEntity (CompanyNewDTO newDTO);
+    public static CompaniesResponseDTO toDto(CompaniesEntity companiesEntity) {
+        return CompaniesResponseDTO.builder()
+                .externalId(companiesEntity.getExternalId())
+                .name(companiesEntity.getName())
+                .email(companiesEntity.getEmail())
+                .registeredName(companiesEntity.getRegisteredName())
+                .cuit(companiesEntity.getCuit())
+                .category(companiesEntity.getCategory())
+                .description(companiesEntity.getDescription())
+                .webSite(companiesEntity.getWebSite())
+                .build();
+    }
 
-    CompanyResponseDTO toDTO (CompaniesEntity entity);
-
-
+    public static CompaniesEntity toEntity (CompaniesRequestDTO request){
+        return CompaniesEntity.builder()
+                .registeredName(request.registeredName())
+                .cuit(request.cuit())
+                .category(request.category())
+                .description(request.description())
+                .webSite(request.webSite())
+                .location(request.location())
+                .build();
+    }
 }
