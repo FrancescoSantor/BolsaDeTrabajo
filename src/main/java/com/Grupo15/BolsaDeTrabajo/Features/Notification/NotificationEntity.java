@@ -30,7 +30,7 @@ public class NotificationEntity extends BaseEntity {
     private String type;
     */
     private String message;
-    private boolean read;
+    private boolean isRead;
 
     private Timestamp createdAt;
 }

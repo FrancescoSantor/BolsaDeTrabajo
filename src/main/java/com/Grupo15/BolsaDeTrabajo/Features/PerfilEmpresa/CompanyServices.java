@@ -1,13 +1,15 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper.CompanyMapper;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RoleRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,16 +37,55 @@ public class CompanyServices {
         companies.setEmail(newDTO.email());
         companies.setPassword(newDTO.password());
 
-        RolesEntity rol = roleRepository.findByRol(Roles.COMPANY)
-                        .orElseThrow(() -> //exception)
-
-
-
+        /*RolesEntity rol = roleRepository.findByRol(Roles.COMPANY)
+                        .orElseThrow(() -> /*exception);
+        */
         companyRepository.save(companies);
 
         return companyMapper.toDTO(companies);
 
     }
+
+
+    public Page<CompanyResponseDTO> ListCompanies (String name, String email, String location, Category category, Pageable pageable){
+
+        Page<CompaniesEntity> companyPage = companyRepository.findByFilters(name,email,category,location,pageable);
+
+        return companyPage.map(companyMapper::toDTO);
+
+    }
+
+
+    public CompanyResponseDTO DeleteCompany(CompaniesRequestDTO requestDTO){
+
+        CompaniesEntity Company = companyRepository.findByCuit(requestDTO.cuit())
+                .orElseThrow(/*REBOLEAS EXCEPCION DE USUARIO NO EXISTENTE*/);
+
+        if(Company
+                .getOffers()
+                .stream()
+                .anyMatch(offerEntity -> offerEntity.getStatus() == OfferStatus.OPEN)){
+
+            /*TIRAS EXCEPCION DE REGLA DE NEGOCIO NO SE PUEDEN ELIMINAR EMPRESA CON OFERTAS ABIERTAS*/
+
+        }
+
+        Company.setActive(false);
+
+        //se dan de baja los post de la empresa
+
+        Company.getPublications().forEach(Post -> Post.setActive(false));
+
+        companyRepository.save(Company);
+
+        return companyMapper.toDTO(Company);
+
+    }
+
+
+
+
+
 
 
 

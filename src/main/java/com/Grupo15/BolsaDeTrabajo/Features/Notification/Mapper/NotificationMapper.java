@@ -19,7 +19,7 @@ public class NotificationMapper {
     {
         return NotificationEntity.builder()
                 .message(request.getMessage())
-                .read(request.isRead())
+                .isRead(request.isRead())
                 .createdAt(request.getCreatedAt())
                 .build();
 

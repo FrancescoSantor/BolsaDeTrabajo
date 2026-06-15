@@ -25,7 +25,6 @@ public class CompaniesEntity extends UsersEntity {
     private UsersEntity user;
      */
 
-
     @Column(unique = true, nullable = false)
     private String cuit;
 
@@ -36,22 +35,22 @@ public class CompaniesEntity extends UsersEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false,unique = true)
     private String webSite;
 
     @Column(nullable = false)
     private String location;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company")
     private List<OfferEntity> offers;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne
 //    @JoinColumn(name = "experiencia_id")
 //    private LaboralExperienceEntity laboralExperiences;   // dudas al respecto.
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company")
     private List<PostsEntity> publications;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company")
     private List<FollowingsEntity> follow_ups;
 }

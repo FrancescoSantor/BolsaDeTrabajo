@@ -7,7 +7,6 @@ public record CompanyNewDTO(
         String name,
         String email,
         String password,
-        Roles rol,
         String cuit,
         Category category,
         String description,
