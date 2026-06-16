@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<PostsEntity,Long> {
 
-    //Para PosrLikes!
-    Optional<PostsEntity> findByExternalId(UUID externalId);
+    boolean existsByCompanyIdAndOfferId(Long companyId, Long offerId);
 
+    Optional<PostsEntity> findByExternalId (UUID externalId);
 }
