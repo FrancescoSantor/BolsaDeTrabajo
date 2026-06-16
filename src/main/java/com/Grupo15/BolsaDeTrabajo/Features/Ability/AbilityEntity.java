@@ -13,9 +13,9 @@ import lombok.*;
 @Table(name = "habilidad")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AbilityEntity extends BaseEntity {
 
     @Id
@@ -25,7 +25,9 @@ public class AbilityEntity extends BaseEntity {
     @Column(unique = true)
     private String name;
 
-    private String category;
+    @Enumerated (EnumType.STRING)
+    @Column (name = "ability_category")
+    private AbilityCategory category;
 
     @OneToMany(mappedBy = "abilities")
     private List<Ability_x_OfferEntity> ability_x_OfferEntities; // tiene sentido que desde aca se pueda llamar ??

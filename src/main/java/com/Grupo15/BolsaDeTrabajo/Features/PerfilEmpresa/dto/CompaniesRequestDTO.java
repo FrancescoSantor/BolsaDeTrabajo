@@ -2,9 +2,11 @@ package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto;
 
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Category;
 
+import java.util.UUID;
+
 public record CompaniesRequestDTO(
-        Long userId,
-        String registeredName,
+        String name,
+        String email,
         String cuit,
         Category category,
         String description,
