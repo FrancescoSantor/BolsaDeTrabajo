@@ -26,17 +26,21 @@ public class NotificationService {
     private final CompanyRepository companyRepository;
 
     public NotificationResponseDTO receiveNotification(NotificationRequestDTO requestDTO) {
-        if(candidateRepository.existsById(requestDTO.userId())){
-            CandidatesEntity candidate = candidateRepository.findById(requestDTO.userId())
+        CandidatesEntity candidate = null;
+        CompaniesEntity company = null;
+
+        if (candidateRepository.existsById(requestDTO.userId())) {
+            candidate = candidateRepository.findById(requestDTO.userId())
                     .orElseThrow(() -> new RuntimeException("The user has not been found."));
+        } else {
+            company = companyRepository.findById(requestDTO.userId()) // ← companyId correcto
+                    .orElseThrow(() -> new RuntimeException("The company has not been found."));
         }
-        CompaniesEntity company = companyRepository.findById(requestDTO.userId())
-                .orElseThrow(() -> new RuntimeException("The user has not been found."));
 
         NotificationEntity notification = notificationMapper.toEntity(requestDTO);
 
         if (requestDTO.message() == null || requestDTO.message().isBlank()) {
-            throw new RuntimeException("The message is blank.");
+            throw new RuntimeException("The message is blank.");  //BusinessRuleException
         }
 
         notification.setMessage(requestDTO.message());
@@ -48,7 +52,7 @@ public class NotificationService {
 
     public NotificationResponseDTO readNotification(UUID externalId) {
         NotificationEntity notification = notificationRepository.findByUUID(externalId)
-                .orElseThrow(() -> new RuntimeException("The notification doesn´t exists."));
+                .orElseThrow(() -> new RuntimeException("The notification doesn´t exists.")); //ResourceNotFoundException
 
         notification.setRead(true);
 
