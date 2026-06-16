@@ -7,6 +7,9 @@ import java.util.Optional;
 
 @Repository
 public interface PostLikeRepository extends JpaRepository<PostLikesEntity,Long> {
+
+    boolean existsByCompanyIdAndOfferId(Long companyId, Long offerId);
+
     // Busca si ya existe un registro exacto de ese usuario para ese post
     Optional<PostLikesEntity> findByUserIdAndPostId(Long userId, Long postId);
 }
