@@ -6,6 +6,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exception.ContraseniaInvalidaException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exception.MailExistenteException;
+import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
@@ -58,7 +59,7 @@ public class CandidateService {
             throw new RuntimeException("El nombre es obligatorio.");
         }
 
-        RolesEntity candidateRole = rolesRepository.findByNombre("CANDIDATO") // aca habria que usar findByRol que usa luca. y boorar findByNombre del repo.
+        RolesEntity candidateRole = rolesRepository.findByRol(Roles.CANDIDATE) // aca habria que usar findByRol que usa luca. y boorar findByNombre del repo.
 
                 .orElseThrow(() -> new RuntimeException("Error del sistema: El rol CANDIDATO no existe configurado en la base de datos."));
 
@@ -70,8 +71,7 @@ public class CandidateService {
         candidate.setActive(true);
         candidate.setRol(candidateRole);
 
-        //candidate.setLastName(candidatesRequestDTO.lastName());
-
+        candidate.setLastName(candidatesRequestDTO.lastName());
         candidate.setProfessionalTitle(candidatesRequestDTO.professionalTitle());
         candidate.setSummary(candidatesRequestDTO.summary());
         candidate.setUpdatedAt(Timestamp.from(Instant.now()));
