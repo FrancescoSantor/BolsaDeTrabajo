@@ -2,6 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Post;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.mapper.CommentsMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
@@ -26,6 +27,7 @@ public class PostService {
 
     private final CompanyRepository companyRepository;
     private final OfferRepository offerRepository;
+    private final CommentsMapper commentsMapper;
 
     public PostResponseDTO create(PostsRequestDTO requestDTO) {
         CompaniesEntity company = companyRepository.findById(requestDTO.companyId())
@@ -42,17 +44,17 @@ public class PostService {
             throw new RuntimeException("The Offer is already ended, so the post cannot be created."); //BusinessRuleException
         }
 
-        if(postRepository.existsByCommpanyIdAndOfferId(requestDTO.companyId(), requestDTO.offerId())) {
+        if(postRepository.existsByCompanyIdAndOfferId(requestDTO.companyId(), requestDTO.offerId())) {
             throw new RuntimeException("The post has already been created."); //ResourceExistsException
         }
         if(requestDTO.title() == null || requestDTO.title().isBlank()) {
-            throw new RuntimeException("The post has no title."); //BusinessRuleException
+            throw new NullPointerException("The post has no title.");
         }
         if(requestDTO.content() == null || requestDTO.content().isBlank()) {
-            throw new RuntimeException("The post has no content."); //BusinessRuleException
+            throw new NullPointerException("The post has no content.");
         }
         if(requestDTO.urlImage() == null || requestDTO.urlImage().isBlank()) {
-            throw new RuntimeException("The post has no Url image."); //BusinessRuleException
+            throw new NullPointerException("The post has no Url image.");
         }
 
         PostsEntity post = postMapper.toEntity(requestDTO);
@@ -81,13 +83,13 @@ public class PostService {
             throw new RuntimeException("The Offer is already ended, so the post cannot be update."); //BusinessRuleException
         }
 
-        if(!title.isBlank()) {
+        if(title != null && !title.isBlank()) {
             post.setTitle(title);
         }
-        if(!content.isBlank()) {
+        if(content != null && !content.isBlank()) {
             post.setContent(content);
         }
-        if(!urlImage.isBlank()) {
+        if(urlImage != null && !urlImage.isBlank()) {
             post.setUrlImage(urlImage);
         }
         post.setUpdatedAt(Timestamp.from(Instant.now()));
@@ -112,12 +114,16 @@ public class PostService {
         return postMapper.toDto(postRepository.save(post));
     }
 
+    /// agregar cuando se haga merge de Comments
+    /*
     public List<CommentsEntity> viewComentsPost (UUID externalId) {
         PostsEntity post = postRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new RuntimeException("The post has not been found.")); //ResourceNotFoundException
 
         return post.getComments().stream()
-                //.map(a -> a.getContent())
+                .map(commentsMapper::toDto)
                 .toList();
     }
+
+     */
 }
