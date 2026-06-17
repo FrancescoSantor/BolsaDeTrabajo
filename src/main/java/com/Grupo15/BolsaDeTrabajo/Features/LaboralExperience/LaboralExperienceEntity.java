@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import lombok.*;
 
@@ -24,21 +25,30 @@ public class LaboralExperienceEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private UUID externalId;
+
+    //CONEXION CON EMPRESA??
+    @Column(nullable = false, length = 100)
+    private String company;
+
+    @Column(nullable = false, length = 100)
+    private String position; //cargo
+
+    @Column(name = "initial_date", nullable = false)
+    private LocalDate initialDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "candidato_id")
     private CandidatesEntity candidate;   // dudas
 
-    //CONEXION CON EMPRESA??
-    private String company;
-
-    private String position; //cargo
-
-    private LocalDate initialDate;
-    private LocalDate endDate;
-
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")

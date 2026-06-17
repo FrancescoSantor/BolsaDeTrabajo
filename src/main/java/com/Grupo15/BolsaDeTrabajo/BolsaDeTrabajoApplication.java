@@ -11,5 +11,4 @@ BolsaDeTrabajoApplication {
 		SpringApplication.run(BolsaDeTrabajoApplication.class, args);
 	}
 
-
 }

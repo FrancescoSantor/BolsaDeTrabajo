@@ -6,6 +6,11 @@ import lombok.Builder;
 @Builder
 public record CandidatesRequestDTO(
         Long userId,
+        String name,
+        String lastName,
+        String email,
+        String password,
+
         Title professionalTitle,
         String summary,
         String cvUrl,
