@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "postulacion")
@@ -46,6 +47,18 @@ public class PostulationsEntity extends BaseEntity {
 
     @OneToOne(mappedBy = "application")
     private InterviewEntity interview;
+
+    @PrePersist
+    protected void onCreate(){
+        this.postulationDate = Timestamp.from(Instant.now());
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updateDate = Timestamp.from(Instant.now());
+    }
+
+
 }
 
 
