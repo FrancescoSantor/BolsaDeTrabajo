@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "publicacion_comentarios")
@@ -33,4 +34,11 @@ public class CommentsEntity extends BaseEntity {
     private String content;
 
     private Timestamp createdAt;
+    @Column(nullable = false)
+    private boolean Active;
+
+    @PrePersist
+    protected void onCreate (){
+        this.createdAt = Timestamp.from(Instant.now());
+    }
 }
