@@ -21,6 +21,7 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
 
     List<MessageEntity> findByReceptorExternalIdAndContentContainingIgnoreCase(UUID receptorId, String content);
 
+    List<MessageEntity> findByIssuerExternalIdAndReceptorExternalId(UUID issuerId, UUID receptorId);
 
 
 }

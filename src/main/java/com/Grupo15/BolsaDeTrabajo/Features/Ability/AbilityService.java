@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AbilityService {
+public class AbilityService implements IAbilityService {
 
     private final AbilityRepository repositoryAbility;
     private final AbilityMapper mapperAbility;

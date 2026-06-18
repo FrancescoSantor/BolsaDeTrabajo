@@ -10,12 +10,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class MessageService {
+public class MessageService implements IMessageService{
 
     private final MessageRepository messageRepository;
     private final UserRepository usersRepository;
@@ -111,5 +113,19 @@ public class MessageService {
                 .toList();
     }
 
+    // no se si funcionara
+    public List<MessageResponseDTO> getChat(UUID userA, UUID userB) {
 
+        return Stream.concat(
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB)
+                                .stream(),
+
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA)
+                                .stream())
+                .sorted(Comparator.comparing(MessageEntity::getCreatedAt))
+                .map(messageMapper::toDto)
+                .toList();
+    }
 }
+
+
