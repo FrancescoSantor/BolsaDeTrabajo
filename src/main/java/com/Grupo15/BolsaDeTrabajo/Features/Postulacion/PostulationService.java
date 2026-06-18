@@ -3,6 +3,9 @@ package com.Grupo15.BolsaDeTrabajo.Features.Postulacion;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.NotDuplicatesException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.Mapper.OfferMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
@@ -32,18 +35,18 @@ public class PostulationService {
     public PostulationResponseDTO CreatePostulation (PostulationNewDTO newDTO){
 
         OfferEntity offer = offerRepository.findByExternalId(newDTO.idOffer())
-                .orElseThrow(/*REBOLEAS EXCEPTION DE NOT FOUND*/);
+                .orElseThrow(() ->new ElementNotFoundException("does not exists the offer that you want to postulate"));
 
         CandidatesEntity candidates = candidateRepository.findByExternalId(newDTO.idCandidate())
-                .orElseThrow(/*REBOLEAS EXCEPTION DE NOT FOUND*/);
+                .orElseThrow(() -> new ElementNotFoundException("does not exists the candidate profile whit this ID"));
 
 
         if(postulationRepository.existsByCandidateAndOffer(candidates,offer)){
-            //TIRAS EXCEPCION DE REGLA DE NEGOCIO O DE NO SE PUEDE REGISTRAR 2 VECES A UNA MISMA OFERTA
+            throw new NotDuplicatesException("the candidate can´t postulate more than 1 time for each offer");
         }
 
         if(offer.getOfferStatus() == OfferStatus.CLOSE){
-            //TIRAS EXCEPCION DE OFERTA YA CERRADA
+            throw new BussinesRulesException("The offer that you want to postulate was closed");
         }
 
         PostulationsEntity postulation = new PostulationsEntity();
@@ -71,14 +74,14 @@ public class PostulationService {
     public PostulationResponseDTO updateStatusPostulation(UUID externalId, PostulationState postulationState){
 
         PostulationsEntity postulation = postulationRepository.findByExternalId(externalId)
-                .orElseThrow(/*REBOLEAS POSTULATION NOT FOUND EXCEPTION*/);
+                .orElseThrow(()->new ElementNotFoundException("The postulation that you want to update does not exists"));
 
         if (postulation.getStatus() != PostulationState.WAITING){
-            //no se permite modificar el estado de la postulacion EXCEPTION
+            throw new BussinesRulesException("You can´t change the status of the offer when it is change already");
         }
 
         if (postulation.getStatus() == postulationState){
-            //REBOLEAS EXCEPCION DE QUE NO SE PUEDE SETTEAR UN ESTADO 2 VECES IGUALES
+            throw new BussinesRulesException("The state was already change");
         }
 
 
@@ -114,14 +117,14 @@ public class PostulationService {
     public void Delete (UUID postulationId){
 
         PostulationsEntity postulation = postulationRepository.findByExternalId(postulationId)
-                .orElseThrow(/*arrojas exception de not found*/);
+                .orElseThrow(() -> new ElementNotFoundException("The postulation that you wants to delete does not exists"));
 
         if (!postulation.isActive()){
-            // tiras exception ya se dio de baja la postulacion
+            throw new BussinesRulesException("The postulation was already deleted");
         }
 
         if (postulation.getStatus() != PostulationState.WAITING){
-            //tiras excepcion de regla de negocio no se puede dar de baja una postulacion ya aceptada o rechazada
+            throw new BussinesRulesException("you cant delete a postulation that have a state distinct of waiting");
         }
 
         postulation.setActive(false);
