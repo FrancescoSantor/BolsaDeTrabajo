@@ -74,7 +74,7 @@ public class CompanyServices {
         if(Company
                 .getOffers()
                 .stream()
-                .anyMatch(offerEntity -> offerEntity.getStatus() == OfferStatus.OPEN)){
+                .anyMatch(offerEntity -> offerEntity.getOfferStatus() == OfferStatus.OPEN)){
 
             /*TIRAS EXCEPCION DE REGLA DE NEGOCIO NO SE PUEDEN ELIMINAR EMPRESA CON OFERTAS ABIERTAS*/
 
