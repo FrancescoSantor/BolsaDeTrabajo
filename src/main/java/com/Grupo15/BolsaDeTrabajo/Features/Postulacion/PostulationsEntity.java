@@ -48,6 +48,9 @@ public class PostulationsEntity extends BaseEntity {
     @OneToOne(mappedBy = "application")
     private InterviewEntity interview;
 
+    @Column(nullable = false)
+    boolean active;
+
     @PrePersist
     protected void onCreate(){
         this.postulationDate = Timestamp.from(Instant.now());

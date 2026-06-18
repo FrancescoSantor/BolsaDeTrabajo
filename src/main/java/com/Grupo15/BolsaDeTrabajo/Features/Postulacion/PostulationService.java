@@ -9,8 +9,13 @@ import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.DTO.PostulationNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.DTO.PostulationResponseDTO;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +51,7 @@ public class PostulationService {
         postulation.setCandidate(candidates);
         postulation.setOffer(offer);
         postulation.setStatus(PostulationState.WAITING);
+        postulation.setActive(true);
         postulation.setCoverLetter(newDTO.coverLetter());
 
         PostulationsEntity savedPostulation = postulationRepository.save(postulation);
@@ -59,7 +65,68 @@ public class PostulationService {
 
         return responseDTO;
 
+    }
 
+    @Transactional
+    public PostulationResponseDTO updateStatusPostulation(UUID externalId, PostulationState postulationState){
+
+        PostulationsEntity postulation = postulationRepository.findByExternalId(externalId)
+                .orElseThrow(/*REBOLEAS POSTULATION NOT FOUND EXCEPTION*/);
+
+        if (postulation.getStatus() != PostulationState.WAITING){
+            //no se permite modificar el estado de la postulacion EXCEPTION
+        }
+
+        if (postulation.getStatus() == postulationState){
+            //REBOLEAS EXCEPCION DE QUE NO SE PUEDE SETTEAR UN ESTADO 2 VECES IGUALES
+        }
+
+
+
+        postulation.setStatus(postulationState);
+
+        postulationRepository.save(postulation);
+
+        return new PostulationResponseDTO(
+                candidateMapper.toDto(postulation.getCandidate()),
+                offerMapper.toDto(postulation.getOffer()),
+                postulation.getStatus(),
+                postulation.getCoverLetter(),
+                postulation.getPostulationDate()
+        );
+
+    }
+
+    public List<PostulationResponseDTO> findBy (UUID candidateId, UUID offerId, PostulationState state){
+        return postulationRepository.findPostulationsWithFilters(candidateId,offerId,state)
+                .stream()
+                .map(postulation -> new PostulationResponseDTO(
+                        candidateMapper.toDto(postulation.getCandidate()),
+                        offerMapper.toDto(postulation.getOffer()),
+                        postulation.getStatus(),
+                        postulation.getCoverLetter(),
+                        postulation.getPostulationDate()
+                )).toList();
+
+    }
+
+    @Transactional
+    public void Delete (UUID postulationId){
+
+        PostulationsEntity postulation = postulationRepository.findByExternalId(postulationId)
+                .orElseThrow(/*arrojas exception de not found*/);
+
+        if (!postulation.isActive()){
+            // tiras exception ya se dio de baja la postulacion
+        }
+
+        if (postulation.getStatus() != PostulationState.WAITING){
+            //tiras excepcion de regla de negocio no se puede dar de baja una postulacion ya aceptada o rechazada
+        }
+
+        postulation.setActive(false);
+
+        postulationRepository.save(postulation);
     }
 
 
