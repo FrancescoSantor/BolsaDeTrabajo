@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Post;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.dto.CommentsResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostsRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +24,31 @@ public class PostController {
                 .body(postService.create(requestDTO));
     }
 
-    @PatchMapping("/{externalId}")
-    public ResponseEntity<PostResponseDTO> updatePost( @PathVariable UUID externalId,
+    @PatchMapping("/{postId}/update")
+    public ResponseEntity<PostResponseDTO> updatePost( @PathVariable UUID postId,
                                                        @RequestParam(required = false) String title,
                                                        @RequestParam(required = false) String content,
                                                        @RequestParam(required = false) String urlImage) {
-        return ResponseEntity.ok(postService.updatePost(externalId, title, content, urlImage));
+        return ResponseEntity.ok(postService.updatePost(postId, title, content, urlImage));
     }
 
-    @DeleteMapping("/{externalId}")
-    public ResponseEntity<PostResponseDTO> deletePost(@PathVariable UUID externalId) {
-        return ResponseEntity.ok(postService.deletePost(externalId));
+    @DeleteMapping("/{postId}/delete")
+    public ResponseEntity<PostResponseDTO> deletePost(@PathVariable UUID postId) {
+        return ResponseEntity.ok(postService.deletePost(postId));
     }
 
-//    @GetMapping("/{externalId}/comments")
-//    public ResponseEntity<List<CommentsEntity>> viewCommentsPost(@PathVariable UUID externalId) {
-//        return ResponseEntity.ok(postService.viewComentsPost(externalId));
-//    }
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResponseDTO> getPost(@PathVariable UUID postId) {
+        return ResponseEntity.ok(postService.getPost(postId));
+    }
+
+    @GetMapping("/{companyId}")
+    public ResponseEntity<List<PostResponseDTO>> getAllPostByCompany(@PathVariable UUID companyId) {
+        return ResponseEntity.ok(postService.getAllPostByCompany(companyId));
+    }
+
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<List<CommentsResponseDTO>> getCommentsByPost(@PathVariable UUID postId) {
+        return ResponseEntity.ok(postService.getCommentsByPost(postId));
+    }
 }
