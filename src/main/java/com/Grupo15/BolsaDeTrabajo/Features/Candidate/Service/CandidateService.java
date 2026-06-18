@@ -4,8 +4,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exception.ContraseniaInvalidaException;
-import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exception.MailExistenteException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidPasswordException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ExistingEmailException;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
 import jakarta.transaction.Transactional;
@@ -34,7 +34,7 @@ public class CandidateService {
         }
 
         if (candidatesRequestDTO.password() == null || candidatesRequestDTO.password().length() < 8) {
-            throw new ContraseniaInvalidaException("La contraseña debe tener al menos 8 caracteres");
+            throw new InvalidPasswordException("La contraseña debe tener al menos 8 caracteres");
         }
 
         if (candidatesRequestDTO.name() == null || candidatesRequestDTO.name().isBlank()) {
@@ -124,14 +124,14 @@ public class CandidateService {
         //Mail ya existe (en base al que se esta ingresando)
         if (!candidatesEntity.getEmail().equalsIgnoreCase(requestDTO.email()) && candidateRepository.existsByEmail(requestDTO.email())) {
 
-            throw new MailExistenteException("El mail ingresado ya está siendo utilizado por otro usuario.");
+            throw new ExistingEmailException("El mail ingresado ya está siendo utilizado por otro usuario.");
         }
 
         // Contraseña existente y si cumple con la condicion de ser minimo de 8 caracteres (Luego cambiar para q sea con seguridad alto)
         if (requestDTO.password() != null && !requestDTO.password().isBlank()) {
             if (requestDTO.password().length() < 8) {
 
-                throw new ContraseniaInvalidaException("La nueva contraseña debe tener al menos 8 caracteres.");
+                throw new InvalidPasswordException("La nueva contraseña debe tener al menos 8 caracteres.");
             }
         }
 
