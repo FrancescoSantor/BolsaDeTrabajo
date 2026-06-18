@@ -4,8 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidPasswordException;
-import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ExistingEmailException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.*;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
 import jakarta.transaction.Transactional;
@@ -26,24 +25,24 @@ public class CandidateService {
     @Transactional
     public CandidatesResponseDTO creteCandidate(CandidatesRequestDTO candidatesRequestDTO) {
         if (!candidatesRequestDTO.email().contains("@")) {
-            throw new RuntimeException("El formato del correo electrónico es inválido.");
+            throw new BussinesRulesException("The email format is invalid.");
         }
 
         if (candidateRepository.existsByEmail(candidatesRequestDTO.email())) {
-            throw new RuntimeException("EL mail " + candidatesRequestDTO.email() + " ya existe en el sistema");
+            throw new ExistingEmailException("The email " + candidatesRequestDTO.email() + " already exists in the system.");
         }
 
         if (candidatesRequestDTO.password() == null || candidatesRequestDTO.password().length() < 8) {
-            throw new InvalidPasswordException("La contraseña debe tener al menos 8 caracteres");
+            throw new InvalidPasswordException("The password must be at least 8 characters long.");
         }
 
         if (candidatesRequestDTO.name() == null || candidatesRequestDTO.name().isBlank()) {
-            throw new RuntimeException("El nombre es obligatorio.");
+            throw new RuntimeException("The name is required.");
         }
 
         RolesEntity candidateRole = rolesRepository.findByNombre("CANDIDATO")
 
-                .orElseThrow(() -> new RuntimeException("Error del sistema: El rol CANDIDATO no existe configurado en la base de datos."));
+                .orElseThrow(() -> new RuntimeException("System error: The CANDIDATE role is not configured in the database."));
 
         CandidatesEntity candidateEntity = new CandidatesEntity();
 
@@ -77,11 +76,11 @@ public class CandidateService {
     public void deleteCandidate(Long id)
     {
         CandidatesEntity candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se pudo dar de baja, candidato no encontrado con ID"));
+                .orElseThrow(() -> new ElementNotFoundException("Could not deactivate the candidate. No candidate found with ID "));
 
         if (!candidate.isActive()) {
 
-            throw new RuntimeException("El perfil de este candidato ya no está disponible (Dado de baja).");
+            throw new InactiveUserException("This candidate's profile is no longer available (deactivated).");
 
         }
 
@@ -98,11 +97,11 @@ public class CandidateService {
     {
         CandidatesEntity candidate = candidateRepository.findById(id)
 
-                .orElseThrow(()-> new RuntimeException("Candidato no encontrado"));
+                .orElseThrow(()-> new ElementNotFoundException("Candidate not found."));
 
         if(!candidate.isActive()) {
 
-            throw new RuntimeException("Perfil no disponible");
+            throw new InactiveUserException("Profile not available.");
 
         }
         return CandidateMapper.toDto(candidate);
@@ -113,25 +112,25 @@ public class CandidateService {
     public CandidatesResponseDTO updateCandidate(Long id, CandidatesRequestDTO requestDTO){
 
         CandidatesEntity candidatesEntity = candidateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Candidato no encontrado"));
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found."));
 
         //Perfil no activo
         if (!candidatesEntity.isActive()) {
 
-            throw new RuntimeException("Perfil no encontrado");
+            throw new ElementNotFoundException("Profile not found.");
         }
 
         //Mail ya existe (en base al que se esta ingresando)
         if (!candidatesEntity.getEmail().equalsIgnoreCase(requestDTO.email()) && candidateRepository.existsByEmail(requestDTO.email())) {
 
-            throw new ExistingEmailException("El mail ingresado ya está siendo utilizado por otro usuario.");
+            throw new ExistingEmailException("The entered email address is already being used by another user.");
         }
 
         // Contraseña existente y si cumple con la condicion de ser minimo de 8 caracteres (Luego cambiar para q sea con seguridad alto)
         if (requestDTO.password() != null && !requestDTO.password().isBlank()) {
             if (requestDTO.password().length() < 8) {
 
-                throw new InvalidPasswordException("La nueva contraseña debe tener al menos 8 caracteres.");
+                throw new InvalidPasswordException("The new password must be at least 8 characters long.");
             }
         }
 

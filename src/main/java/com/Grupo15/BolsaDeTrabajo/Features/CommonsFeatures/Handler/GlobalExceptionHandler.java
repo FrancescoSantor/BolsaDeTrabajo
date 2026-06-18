@@ -23,6 +23,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(InactiveUserException.class)
+    public ResponseEntity<String> handleInactiveUser(InactiveUserException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+
     @ExceptionHandler(NotDuplicatesException.class)
     public ResponseEntity<String> hanleNotDuplicates(NotDuplicatesException ex){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());

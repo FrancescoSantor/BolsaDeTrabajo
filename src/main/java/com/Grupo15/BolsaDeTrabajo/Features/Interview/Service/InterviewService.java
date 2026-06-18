@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Interview.Service;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Interview.InterviewEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Interview.InterviewRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Interview.InterviewStatus;
@@ -25,11 +26,11 @@ public class InterviewService {
     public InterviewResponseDTO createInterview(InterviewRequestDTO interviewRequestDTO) {
 
         if (interviewRepository.existsByApplicationId(interviewRequestDTO.applicationId())) {
-            throw new IllegalStateException("Esta postulación ya tiene una entrevista asignada.");
+            throw new IllegalStateException("This application already has an assigned interview.");
         }
 
         PostulationsEntity application = postulationsRepository.findById(interviewRequestDTO.applicationId())
-                .orElseThrow(() -> new EntityNotFoundException("Postulación no encontrada" ));
+                .orElseThrow(() -> new ElementNotFoundException("Application not found." ));
 
         InterviewEntity interviewEntity = interviewMapper.toEntity(interviewRequestDTO, application);
         InterviewEntity savedInterview = interviewRepository.save(interviewEntity);
@@ -42,7 +43,7 @@ public class InterviewService {
     public InterviewResponseDTO getInterviewById(Long id) {
 
         InterviewEntity interview = interviewRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Entrevista no encontrada"));
+                .orElseThrow(() -> new ElementNotFoundException("Interview not found."));
 
         return interviewMapper.toResponse(interview);
     }
@@ -51,7 +52,7 @@ public class InterviewService {
     @Transactional
     public InterviewResponseDTO updateStatus(Long id, InterviewStatus newStatus) {
         InterviewEntity interview = interviewRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Entrevista no encontrada"));
+                .orElseThrow(() -> new ElementNotFoundException("Interview not found."));
 
         interview.setStatus(newStatus);
         InterviewEntity updatedInterview = interviewRepository.save(interview);
@@ -63,7 +64,7 @@ public class InterviewService {
     @Transactional
     public void deleteInterview(Long id) {
         if (!interviewRepository.existsById(id)) {
-            throw new EntityNotFoundException("Entrevista no encontrada");
+            throw new ElementNotFoundException("Interview not found.");
         }
         interviewRepository.deleteById(id);
     }

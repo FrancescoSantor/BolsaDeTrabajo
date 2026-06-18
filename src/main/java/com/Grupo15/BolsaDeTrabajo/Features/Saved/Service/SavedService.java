@@ -2,6 +2,8 @@ package com.Grupo15.BolsaDeTrabajo.Features.Saved.Service;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.Mapper.SavedMapper;
@@ -30,14 +32,14 @@ public class SavedService {
     public SavedResponseDTO createSaved(SavedRequestDTO savedRequestDTO) {
 
         if (savedRepository.existsByCandidateIdAndOfferId(savedRequestDTO.candidateId(), savedRequestDTO.offerId())) {
-            throw new IllegalStateException("El candidato ya tiene guardada esta oferta.");
+            throw new BussinesRulesException("This job offer has already been saved by the candidate.");
         }
 
         CandidatesEntity candidate = candidateRepository.findById(savedRequestDTO.candidateId())
-                .orElseThrow(() -> new EntityNotFoundException("Candidato no encontrado con ID: " + savedRequestDTO.candidateId()));
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found with ID: " + savedRequestDTO.candidateId()));
 
         OfferEntity offer = offerRepository.findById(savedRequestDTO.offerId())
-                .orElseThrow(() -> new EntityNotFoundException("Oferta no encontrada con ID: " + savedRequestDTO.offerId()));
+                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with ID: " + savedRequestDTO.offerId()));
 
         SavedEntity savedEntity = SavedEntity.builder()
                 .candidate(candidate)
