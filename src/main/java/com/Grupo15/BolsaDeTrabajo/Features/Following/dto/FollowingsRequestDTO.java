@@ -1,6 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Following.dto;
 
+import java.util.UUID;
+
 public record FollowingsRequestDTO(
-        Long followerId,
-        Long followedId
+        UUID userId,
+        UUID followedId
 ) {}

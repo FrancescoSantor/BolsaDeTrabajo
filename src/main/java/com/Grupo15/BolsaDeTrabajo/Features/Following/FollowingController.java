@@ -7,29 +7,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/following")
 public class FollowingController {
     private final FollowingService followingService;
 
-    @PostMapping("/company")
-    public ResponseEntity<FollowingResponseDTO> followCompany(@RequestBody FollowingsRequestDTO requestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(followingService.setFollowToCompany(requestDTO));
+    @PostMapping("/user")
+    public ResponseEntity<FollowingResponseDTO> setFollow(@RequestBody FollowingsRequestDTO requestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(followingService.setFollow(requestDTO));
     }
 
-    @PatchMapping("/company/{companyId}/unfollow")
-    public ResponseEntity<FollowingResponseDTO> unfollowCompany(@PathVariable Long companyId) {
-        return ResponseEntity.ok(followingService.unfollowCompany(companyId));
+    @PatchMapping("/user/{userFollowedId}/unfollow")
+    public ResponseEntity<FollowingResponseDTO> unfollow(@PathVariable UUID userFollowedId) {
+        return ResponseEntity.ok(followingService.unfollow(userFollowedId));
     }
 
-    @PostMapping("/candidate")
-    public ResponseEntity<FollowingResponseDTO> followCandidate(@RequestBody FollowingsRequestDTO requestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(followingService.setFollowToCandidate(requestDTO));
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity<List<FollowingResponseDTO>> getFollowers(@PathVariable UUID userId) {
+        return ResponseEntity.ok(followingService.getFollowers(userId));
     }
 
-    @PatchMapping("/candidate/{candidateId}/unfollow")
-    public ResponseEntity<FollowingResponseDTO> unfollowCandidate (@PathVariable Long candidateId) {
-        return ResponseEntity.ok(followingService.unfollowCandidate(candidateId));
+    @GetMapping("/{userId}/followeds")
+    public ResponseEntity<List<FollowingResponseDTO>> getFollowings(@PathVariable UUID userId) {
+        return ResponseEntity.ok(followingService.getFollowings(userId));
     }
 }
