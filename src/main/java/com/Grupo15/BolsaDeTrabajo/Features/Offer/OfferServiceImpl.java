@@ -170,10 +170,10 @@ public class OfferServiceImpl implements OfferService {
         // RF17: Evaluamos si el usuario envió un filtro por título específico (Enum)
         if (titleOfOfferEnum != null) {
             // RNF12 y RF17: Buscamos de forma paginada aplicando el filtro de título Y asegurando que el estado sea estrictamente OPEN
-            offersPage = offerRepository.findByTitleAndStatus(titleOfOfferEnum, OfferStatus.OPEN, pageable);
+            offersPage = offerRepository.findByTitleAndOfferStatus(titleOfOfferEnum, OfferStatus.OPEN, pageable);
         } else {
             // RF16: Traemos el listado completo paginado, pero filtrando únicamente que estén activas (status = OPEN)
-            offersPage = offerRepository.findAllByStatus(OfferStatus.OPEN, pageable);
+            offersPage = offerRepository.findAllByOfferStatus(OfferStatus.OPEN, pageable);
         }
 
         return offersPage.map(offerMapper::toDto);

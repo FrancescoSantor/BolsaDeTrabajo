@@ -1,23 +1,20 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Following;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingsRequestDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class FollowingService {
     private final FollowingRepository followingRepository;
     private final FollowingMapper followingMapper;
@@ -35,7 +32,7 @@ public class FollowingService {
             throw new RuntimeException("You can't follow yourself."); //BusinessRuleExcepcion
         }
 
-        if(followingRepository.existsByExternalFollowerIdAndExternalFollowedId(requestDTO.userId(), requestDTO.followedId())) {
+        if(followingRepository.existsByFollowerAndFollowed(userRepository.findByExternalId(requestDTO.userId()).orElseThrow(), userRepository.findByExternalId(requestDTO.followedId()).orElseThrow())) {
             throw new RuntimeException("You have already follow this User."); //BusinessRuleExcepcion
         }
 
@@ -51,7 +48,7 @@ public class FollowingService {
         UsersEntity followed = userRepository.findByExternalId(userFollowedId)
                 .orElseThrow(() -> new ElementNotFoundException("The User doesn´t exists."));
 
-        FollowingsEntity following = followingRepository.findByFollowedId(userFollowedId)
+        FollowingsEntity following = followingRepository.findByFollowed(userRepository.findByExternalId(userFollowedId).orElseThrow())
                 .orElseThrow(() -> new ElementNotFoundException("You didn´t follow yet."));
 
         if(following.getState() == FollowState.NOT_FOLLOWING) {
@@ -84,3 +81,4 @@ public class FollowingService {
                 .toList();
     }
 }
+

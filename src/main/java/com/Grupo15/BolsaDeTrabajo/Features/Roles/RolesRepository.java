@@ -6,5 +6,4 @@ import java.util.Optional;
 
 public interface RolesRepository extends JpaRepository<RolesEntity,Long> {
 
-    Optional<RolesEntity> findByNombre(String nombre);
 }

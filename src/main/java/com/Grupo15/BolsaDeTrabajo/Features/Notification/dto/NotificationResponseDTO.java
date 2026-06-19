@@ -10,7 +10,7 @@ public record NotificationResponseDTO(
         UUID externalId,
         String userName,      // viene de user.name
         String message,
-        Boolean read,
+        boolean IsRead,
         Timestamp createdAt
 ) {
 }

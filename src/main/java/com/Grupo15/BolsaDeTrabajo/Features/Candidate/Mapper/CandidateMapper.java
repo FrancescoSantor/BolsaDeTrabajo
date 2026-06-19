@@ -3,7 +3,9 @@ package com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CandidateMapper {
 
     public static CandidatesResponseDTO toDto(CandidatesEntity candidatesEntity) {

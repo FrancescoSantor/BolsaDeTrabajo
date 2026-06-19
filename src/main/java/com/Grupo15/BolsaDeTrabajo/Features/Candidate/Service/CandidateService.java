@@ -5,6 +5,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.*;
+import com.Grupo15.BolsaDeTrabajo.Features.Roles.RoleRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
 import jakarta.transaction.Transactional;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 public class CandidateService {
 
     private final CandidateRepository candidateRepository;
-    private final RolesRepository rolesRepository;
+    private final RoleRepository rolesRepository;
 
     @Transactional
     public CandidatesResponseDTO creteCandidate(CandidatesRequestDTO candidatesRequestDTO) {
@@ -40,7 +42,7 @@ public class CandidateService {
             throw new RuntimeException("The name is required.");
         }
 
-        RolesEntity candidateRole = rolesRepository.findByNombre("CANDIDATO")
+        RolesEntity candidateRole = rolesRepository.findByRol(Roles.CANDIDATE)
 
                 .orElseThrow(() -> new RuntimeException("System error: The CANDIDATE role is not configured in the database."));
 

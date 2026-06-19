@@ -2,17 +2,17 @@ package com.Grupo15.BolsaDeTrabajo.Features.Following;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+@Repository
 public interface FollowingRepository extends JpaRepository<FollowingsEntity,Long> {
-    Optional<FollowingsEntity> findByFollowedId (UUID followedId);
+    Optional<FollowingsEntity> findByFollowed(UsersEntity followedId);
 
-    Optional<FollowingsEntity> findByUserId (Long userId);
 
-    boolean existsByExternalFollowerIdAndExternalFollowedId (UUID followerId, UUID followedId);
+    boolean existsByFollowerAndFollowed (UsersEntity followerId, UsersEntity followedId);
 
     List<FollowingsEntity> findAllByFollowedId (UsersEntity user);
 

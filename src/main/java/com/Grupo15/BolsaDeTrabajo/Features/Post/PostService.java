@@ -6,6 +6,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Post.Mappers.PostMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostsRequestDTO;
 import lombok.RequiredArgsConstructor;

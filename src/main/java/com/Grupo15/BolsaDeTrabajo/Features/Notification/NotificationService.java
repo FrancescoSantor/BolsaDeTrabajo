@@ -1,19 +1,13 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Notification;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -35,7 +29,7 @@ public class NotificationService {
 
         NotificationEntity notification = notificationMapper.toEntity(requestDTO);
         notification.setUser(user);
-        notification.setRead(false);
+        notification.setIsRead(false);
         //notification.setCreatedAt(Timestamp.from(Instant.now()));
         // solucionado el created at con un pre persists
 
@@ -43,10 +37,10 @@ public class NotificationService {
     }
 
     public NotificationResponseDTO readNotification(UUID externalId) {
-        NotificationEntity notification = notificationRepository.findByUUID(externalId)
+        NotificationEntity notification = notificationRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new RuntimeException("The notification doesn´t exists.")); //ResourceNotFoundException
 
-        notification.setRead(true);
+        notification.setIsRead(true);
 
         return notificationMapper.toDto(notificationRepository.save(notification));
     }

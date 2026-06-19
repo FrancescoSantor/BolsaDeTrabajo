@@ -9,7 +9,6 @@ import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class MessageService implements IMessageService{
         message.setIssuer(issuer);
         message.setReceptor(receptor);
         message.setContent(request.content());
-        message.setRead(false);
+        message.setSeen(false);
 
         MessageEntity saved = messageRepository.save(message);
 
@@ -67,7 +66,7 @@ public class MessageService implements IMessageService{
                 .orElseThrow(()
                         -> new ElementNotFoundException("Message not found"));
 
-        message.setRead(true);
+        message.setSeen(true);
 
         return messageMapper.toDto(messageRepository.save(message));
     }
@@ -111,7 +110,7 @@ public class MessageService implements IMessageService{
     public List<MessageResponseDTO> getUnreadMessages(UUID receptorId) {
 
         return messageRepository
-                .findByReceptorExternalIdAndReadFalse(receptorId)
+                .findByReceptorExternalIdAndSeenFalse(receptorId)
                 .stream()
                 .map(messageMapper::toDto)
                 .toList();
