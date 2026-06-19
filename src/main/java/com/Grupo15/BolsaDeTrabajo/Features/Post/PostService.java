@@ -1,6 +1,10 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Post;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.mapper.CommentsMapper;
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.dto.CommentsResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.mapper.CommentsMapper;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,24 +29,25 @@ public class PostService {
 
     private final CompanyRepository companyRepository;
     private final OfferRepository offerRepository;
+    private final CommentsRepository commentsRepository;
     private final CommentsMapper commentsMapper;
 
     public PostResponseDTO create(PostsRequestDTO requestDTO) {
-        CompaniesEntity company = companyRepository.findById(requestDTO.companyId())
-                .orElseThrow(() -> new RuntimeException("The Company has not been found.")); //ResourceNotFoundException
+        CompaniesEntity company = companyRepository.findByExternalId(requestDTO.companyId())
+                .orElseThrow(() -> new ElementNotFoundException("The Company has not been found."));
 
         if(!company.isActive()) {
             throw new RuntimeException("The Company is not active, so the post cannot be created."); //BusinessRuleException
         }
 
-        OfferEntity offer = offerRepository.findById(requestDTO.offerId())
-                .orElseThrow(() -> new RuntimeException("The Offer has not been found.")); //ResourceNotFoundException
+        OfferEntity offer = offerRepository.findByExternalId(requestDTO.offerId())
+                .orElseThrow(() -> new ElementNotFoundException("The Offer has not been found."));
 
         if(offer.getOfferStatus().equals(OfferStatus.CLOSE)) {
             throw new RuntimeException("The Offer is already ended, so the post cannot be created."); //BusinessRuleException
         }
 
-        if(postRepository.existsByCompanyIdAndOfferId(requestDTO.companyId(), requestDTO.offerId())) {
+        if(postRepository.existsByCompanyExternalIdAndOfferExternalId(requestDTO.companyId(), requestDTO.offerId())) {
             throw new RuntimeException("The post has already been created."); //ResourceExistsException
         }
         if(requestDTO.title() == null || requestDTO.title().isBlank()) {
@@ -59,18 +65,18 @@ public class PostService {
         post.setOffer(offer);
         post.setTitle(requestDTO.title());
         post.setContent(requestDTO.content());
+        post.setUrlImage(requestDTO.urlImage());
         post.setTotalLikes(0);
         post.setTotalComments(0);
         post.setActive(true);
-        post.setUrlImage(requestDTO.urlImage());
         post.setCreatedAt(Timestamp.from(Instant.now()));
 
         return postMapper.toDto(postRepository.save(post));
     }
 
-    public PostResponseDTO updatePost (UUID externalId, String title, String content, String urlImage) {
-        PostsEntity post = postRepository.findByExternalId(externalId)
-                .orElseThrow(() -> new RuntimeException("The post has not been found.")); //ResourceNotFoundException
+    public PostResponseDTO updatePost (UUID postId, String title, String content, String urlImage) {
+        PostsEntity post = postRepository.findByExternalId(postId)
+                .orElseThrow(() -> new ElementNotFoundException("The post has not been found."));
 
         if(!post.getCompany().isActive()) {
             throw new RuntimeException("The Company is not active, so the post cannot be update."); //BusinessRuleException
@@ -94,16 +100,17 @@ public class PostService {
         return postMapper.toDto(postRepository.save(post));
     }
 
-    public PostResponseDTO deletePost (UUID externalId) {
-        PostsEntity post = postRepository.findByExternalId(externalId)
-                .orElseThrow(() -> new RuntimeException("The post has not been found.")); //ResourceNotFoundException
+    public PostResponseDTO deletePost (UUID postId) {
+        PostsEntity post = postRepository.findByExternalId(postId)
+                .orElseThrow(() -> new ElementNotFoundException("The Post has not been found."));
 
-       /*if(!post.getCompany().isActive()) {
-            throw new RuntimeException("The Company is not active, so the post cannot be created.");
+       if(!post.getCompany().isActive()) {
+            throw new RuntimeException("The Company is not active, so the post cannot be deleted.");
         }
+
         if(!post.isActive()) {
-            throw new RuntimeException("The post has already been deactivated.");
-        }*/
+            throw new RuntimeException("The post has already been deleted.");
+        }
 
         post.setUpdatedAt(Timestamp.from(Instant.now()));
         post.setActive(false);
@@ -111,16 +118,31 @@ public class PostService {
         return postMapper.toDto(postRepository.save(post));
     }
 
-    /// agregar cuando se haga merge de Comments
-    /*
-    public List<CommentsEntity> viewComentsPost (UUID externalId) {
-        PostsEntity post = postRepository.findByExternalId(externalId)
-                .orElseThrow(() -> new RuntimeException("The post has not been found.")); //ResourceNotFoundException
+    public PostResponseDTO getPost (UUID postId) {
+        PostsEntity post = postRepository.findByExternalId(postId)
+                .orElseThrow(() -> new ElementNotFoundException("The Post has not been found."));
 
-        return post.getComments().stream()
-                .map(commentsMapper::toDto)
+        return postMapper.toDto(post);
+    }
+
+    public List<PostResponseDTO> getAllPostByCompany (UUID companyId) {
+        CompaniesEntity company = companyRepository.findByExternalId(companyId) // aqui podria ir un if(!companyRepository.existsByExternalId(companyId){}
+                .orElseThrow(() -> new ElementNotFoundException("The Company has not been found."));
+
+        return postRepository.findAllByCompanyExternalId(companyId)
+                .stream()
+                .map(postMapper::toDto)
                 .toList();
     }
 
-     */
+    public List<CommentsResponseDTO> getCommentsByPost (UUID postId) {
+        if(!postRepository.existsByExternalId(postId)) {
+            throw new ElementNotFoundException("The Post has not been found.");
+        }
+
+        return commentsRepository.findByPostExternalId(postId)
+                .stream()
+                .map(commentsMapper::toDTO)
+                .toList();
+    }
 }
