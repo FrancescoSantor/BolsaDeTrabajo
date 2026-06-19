@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Handler;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlerInvalidSalaryRange (InvalidSalaryRangeException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler (MessageNotFoundException.class)
+    public ResponseEntity<String> handlMessageNotFound(MessageNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler (MessageEmptyException.class)
+    public ResponseEntity<String> handleMessageEmpty(MessageEmptyException ex) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler (SelfMessagingException.class)
+    public ResponseEntity <String> handleSelfMessagig (SelfMessagingException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler (AbilityAlreadyExistsException.class)
+    public ResponseEntity <String> handleAbilityAlreadyExists (AbilityAlreadyExistsException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 
 }

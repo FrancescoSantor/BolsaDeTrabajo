@@ -1,5 +1,9 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Message;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.MessageEmptyException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.MessageNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.SelfMessagingException;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.Mapper.MessageMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
@@ -28,18 +32,18 @@ public class MessageService implements IMessageService{
 
         UsersEntity issuer = usersRepository.findByExternalId(request.issuerId())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Issuer not found"));
+                        new ElementNotFoundException("Issuer not found"));
 
         UsersEntity receptor = usersRepository.findByExternalId(request.receptorId())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Receiver not found"));
+                        new ElementNotFoundException("Receiver not found"));
 
-       /*if (request.content() == null || request.content().isBlank()) {
-            throw new IllegalArgumentException("Message content cannot be empty");
-        }*/ // aca iria mensajeNotFoundExc
+       if (request.content() == null || request.content().isBlank()) {
+            throw new MessageEmptyException("Message content cannot be empty");
+        }
 
         if (request.issuerId().equals(request.receptorId())) {
-            throw new IllegalArgumentException(
+            throw new SelfMessagingException(
                     "A user cannot send messages to himself");
         }
 
@@ -61,7 +65,7 @@ public class MessageService implements IMessageService{
 
         MessageEntity message = messageRepository.findByExternalId(messageId)
                 .orElseThrow(()
-                        -> new EntityNotFoundException("Message not found"));
+                        -> new ElementNotFoundException("Message not found"));
 
         message.setRead(true);
 
@@ -88,7 +92,7 @@ public class MessageService implements IMessageService{
 
         MessageEntity message = messageRepository.findByExternalId(externalId)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Message not found"));
+                        new MessageNotFoundException("Message not found"));
 
         return messageMapper.toDto(message);
     }
