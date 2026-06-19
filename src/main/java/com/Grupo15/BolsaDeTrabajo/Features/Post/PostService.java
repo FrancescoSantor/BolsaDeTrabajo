@@ -142,7 +142,11 @@ public class PostService {
 
         return commentsRepository.findByPostExternalId(postId)
                 .stream()
-                .map(commentsMapper::toDTO)
+                .map(commentsEntity -> new CommentsResponseDTO(
+                        commentsEntity.getUser().getName(),
+                        commentsEntity.getContent(),
+                        commentsEntity.getCreatedAt()
+                ))
                 .toList();
     }
 }

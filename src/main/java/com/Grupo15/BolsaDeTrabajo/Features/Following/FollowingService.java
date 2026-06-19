@@ -39,7 +39,7 @@ public class FollowingService {
             throw new RuntimeException("You can't follow yourself."); //BusinessRuleExcepcion
         }
 
-        if(followingRepository.existsByFollowerAndFollowed(userRepository.findByExternalId(requestDTO.userId()).orElseThrow(), userRepository.findByExternalId(requestDTO.followedId()).orElseThrow())) {
+        if(followingRepository.existsByFollowerAndFollowed(userRepository.findByExternalId(requestDTO.followerId()).orElseThrow(), userRepository.findByExternalId(requestDTO.followedId()).orElseThrow())) {
             throw new RuntimeException("You have already follow this User."); //BusinessRuleExcepcion
         }
 

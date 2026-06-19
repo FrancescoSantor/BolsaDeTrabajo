@@ -33,6 +33,6 @@ public class FollowingController {
 
     @GetMapping("/{userId}/followeds")
     public ResponseEntity<List<FollowingResponseDTO>> getFolloweds(@PathVariable UUID userId) {
-        return ResponseEntity.ok(followingService.getFollowed(userId));
+        return ResponseEntity.ok(followingService.getFollowings(userId));
     }
 }
