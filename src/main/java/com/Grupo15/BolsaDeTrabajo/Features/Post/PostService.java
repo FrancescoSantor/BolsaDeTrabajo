@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Post;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.mapper.CommentsMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
@@ -35,7 +36,7 @@ public class PostService {
         OfferEntity offer = offerRepository.findById(requestDTO.offerId())
                 .orElseThrow(() -> new RuntimeException("The Offer has not been found.")); //ResourceNotFoundException
 
-        if(offer.getStatus().equals(OfferStatus.CLOSE)) {
+        if(offer.getOfferStatus().equals(OfferStatus.CLOSE)) {
             throw new RuntimeException("The Offer is already ended, so the post cannot be created."); //BusinessRuleException
         }
 
@@ -74,7 +75,7 @@ public class PostService {
             throw new RuntimeException("The Company is not active, so the post cannot be update."); //BusinessRuleException
         }
 
-        if(post.getOffer().getStatus().equals(OfferStatus.CLOSE)) {
+        if(post.getOffer().getOfferStatus().equals(OfferStatus.CLOSE)) {
             throw new RuntimeException("The Offer is already ended, so the post cannot be update."); //BusinessRuleException
         }
 

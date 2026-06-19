@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Notification.Mapper;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.NotificationEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationResponseDTO;
 
 public class NotificationMapper {
@@ -15,12 +16,10 @@ public class NotificationMapper {
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
-    public static NotificationEntity toEntity(NotificationResponseDTO request)
+    public static NotificationEntity toEntity(NotificationRequestDTO request)
     {
         return NotificationEntity.builder()
-                .message(request.getMessage())
-                .isRead(request.isRead())
-                .createdAt(request.getCreatedAt())
+                .message(request.message())
                 .build();
 
     }
