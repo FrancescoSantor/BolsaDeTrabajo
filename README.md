@@ -1,4 +1,4 @@
-Conecta es un sistema de Bolsa de Trabajo desarrollado con Spring Boot, orientado a la gestión y vinculación entre oferentes y demandantes de empleo.
+WorkMatch es un sistema de Bolsa de Trabajo desarrollado con Spring Boot, orientado a la gestión y vinculación entre oferentes y demandantes de empleo.
 El proyecto busca ofrecer una plataforma digital unificada que facilite la interacción entre empresas y postulantes, optimizando los procesos de búsqueda, selección y comunicación.
 
 Este trabajo práctico se enmarca dentro de la materia de Metodologías de sistemas y Programacion III de la universidad UTN de Mar del Plata.
