@@ -6,5 +6,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NotificationRepository extends JpaRepository<NotificationEntity,Long> {
-    Optional<NotificationEntity> findByUUID (UUID externalId);
+    Optional<NotificationEntity> findByExternalId(UUID externalId);
 }

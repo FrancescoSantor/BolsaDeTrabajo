@@ -8,11 +8,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PostLikeMapper {
 
-    @Mapping(source = "entity.externalId", target = "likeExternalId")
+    @Mapping(source = "entity.externalId", target = "externalId")
     @Mapping(source = "entity.user.name", target = "userName")       // Navega hasta el nombre del usuario
     @Mapping(source = "entity.post.title", target = "postTitle")     // Navega hasta el título del post
     @Mapping(source = "entity.createdAt", target = "createdAt")
-    //liked y totalLikes se calcularán y setearán en el Service
+    @Mapping(target = "liked", ignore = true)
+    @Mapping(target = "totalLikes", ignore = true)
     PostLikesResponseDTO toDto(PostLikesEntity entity);
 
     //No se hace toEntity por como se construyo el RequestDTO

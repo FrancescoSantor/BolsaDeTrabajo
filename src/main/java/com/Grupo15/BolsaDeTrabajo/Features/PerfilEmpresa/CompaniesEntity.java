@@ -51,6 +51,6 @@ public class CompaniesEntity extends UsersEntity {
     @OneToMany(mappedBy = "company")
     private List<PostsEntity> publications;
 
-    @OneToMany(mappedBy = "company")
-    private List<FollowingsEntity> follow_ups;
+//    @OneToMany(mappedBy = "company")
+//   private List<FollowingsEntity> follow_ups;
 }

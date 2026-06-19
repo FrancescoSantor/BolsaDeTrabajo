@@ -32,7 +32,7 @@ public class FollowingsEntity extends BaseEntity {
     private UsersEntity follower;
 
     @ManyToOne
-    @JoinColumn(name = "empresa_id")
+    @JoinColumn(name = "usuario_seguido_id")
     private UsersEntity followed;
 
     private LocalDateTime createdAt;

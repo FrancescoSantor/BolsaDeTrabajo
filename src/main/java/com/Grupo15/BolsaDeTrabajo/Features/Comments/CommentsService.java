@@ -2,6 +2,8 @@ package com.Grupo15.BolsaDeTrabajo.Features.Comments;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.dto.CommentsNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.dto.CommentsResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.PostRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.PostsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
@@ -25,18 +27,18 @@ public class CommentsService {
     public CommentsResponseDTO createComment(CommentsNewDTO newDTO){
 
         PostsEntity post = postRepository.findByExternalId(newDTO.post_externalId())
-                .orElseThrow(/*Tiras exception de post not found*/);
+                .orElseThrow(() -> new ElementNotFoundException("The post to comment does not exists"));
 
         UsersEntity user = userRepository.findByExternalId(newDTO.user_externalId())
-                .orElseThrow(/*Usuario not found*/);
+                .orElseThrow(() -> new ElementNotFoundException("this user does not exists"));
 
 
          if(!post.isActive()){
-             /*TIRAS EXCEPTION DE NO SE PUEDE COMENTAR A ESTA PUBLICACION*/
+             throw new BussinesRulesException("you cant comment a post that is inactive");
          }
 
          if(!user.isActive()){
-             //TIRAS USUARIO INACTIVO EXCEPTION
+             throw new BussinesRulesException("an user that is inactive cant comment");
          }
 
          CommentsEntity comment = new CommentsEntity();
@@ -57,10 +59,10 @@ public class CommentsService {
     public CommentsResponseDTO updateComment (UUID comment_externalId, String content){
 
         CommentsEntity comment = commentsRepository.findByExternalId(comment_externalId)
-                .orElseThrow(/*tras not found exception*/);
+                .orElseThrow(() -> new ElementNotFoundException("the comment to update not exists"));
 
         if (!comment.isActive()){
-            //tiras coment not active exception
+            throw new BussinesRulesException("the coment is not active");
         }
 
         comment.setContent(content);
@@ -76,10 +78,10 @@ public class CommentsService {
     public void DeleteComent (UUID comment_externalId){
 
         CommentsEntity comment = commentsRepository.findByExternalId(comment_externalId)
-                .orElseThrow(/*NOT FOUND EXCEPTION*/);
+                .orElseThrow(() -> new ElementNotFoundException("the comment to delete does not exists"));
 
         if (!comment.isActive()){
-            //tiras exception de que el comentario ya esta dado de baja
+            throw new BussinesRulesException("the comment to delete is already exists");
         }
         comment.setActive(false);
         commentsRepository.save(comment);

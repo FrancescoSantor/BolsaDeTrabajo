@@ -57,7 +57,7 @@ public abstract class UsersEntity extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<CommentsEntity> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "follower")
     private List<FollowingsEntity> followings;
 
 

@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Post;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Comments.mapper.CommentsMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.dto.CommentsResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.mapper.CommentsMapper;
@@ -9,6 +10,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Post.Mappers.PostMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostsRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -140,7 +142,11 @@ public class PostService {
 
         return commentsRepository.findByPostExternalId(postId)
                 .stream()
-                .map(commentsMapper::toDTO)
+                .map(commentsEntity -> new CommentsResponseDTO(
+                        commentsEntity.getUser().getName(),
+                        commentsEntity.getContent(),
+                        commentsEntity.getCreatedAt()
+                ))
                 .toList();
     }
 }

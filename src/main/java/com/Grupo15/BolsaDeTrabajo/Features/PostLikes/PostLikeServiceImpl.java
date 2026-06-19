@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PostLikes;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.PostRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.PostsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PostLikes.Mapper.PostLikeMapper;
@@ -31,11 +32,13 @@ public class PostLikeServiceImpl implements PostLikeService{
 
         // Buscamos el Post por su UUID seguro provisto por el frontend
         PostsEntity post = postRepository.findByExternalId(requestDto.postExternalId())
-                //.orElseThrow(() -> new ResourceNotFoundException("El post no existe."));
+                                                                //El post no existe.
+                .orElseThrow(() -> new ElementNotFoundException("El post no existe."));
 
         // Buscamos al usuario que hace la acción
         UsersEntity user = usersRepository.findById(requestDto.userId())
-                //.orElseThrow(() -> new ResourceNotFoundException("El usuario no existe."));
+                                                                //El usuario no existe.
+                .orElseThrow(() -> new ElementNotFoundException("El usuario no existe."));
 
         // Verificamos si este usuario ya le había dado like a este post anteriormente
         Optional<PostLikesEntity> existingLike = postLikeRepository.findByUserIdAndPostId(user.getId(), post.getId());

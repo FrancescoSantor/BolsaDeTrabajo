@@ -1,5 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ResourceAlreadyExistsException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper.CompanyMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
@@ -29,10 +32,10 @@ public class CompanyServices {
     public CompanyResponseDTO create_Company (CompanyNewDTO newDTO){
 
         if(companyRepository.existsByCuit(newDTO.cuit())){
-            //rebolea excepcion de ya existente
+            throw new ResourceAlreadyExistsException("the cuit that you want to register already exists");
         }
         if (companyRepository.existsByEmail(newDTO.email())){
-            //reboleas excepcion de ya existente
+            throw new ResourceAlreadyExistsException("The email that you want to register already exists");
         }
 
         CompaniesEntity companies = companyMapper.toEntity(newDTO);
@@ -42,9 +45,7 @@ public class CompanyServices {
         companies.setPassword(newDTO.password());
 
         RolesEntity rol = roleRepository.findByRol(Roles.COMPANY)
-                .orElseThrow(
-                        //REBOLEAS NOT FOUND EXCEPTION
-                );
+                .orElseThrow(() -> new ElementNotFoundException(""));
 
         companies.setRol(rol);
 
@@ -69,14 +70,14 @@ public class CompanyServices {
     public CompanyResponseDTO DeleteCompany(UUID externalId){
 
         CompaniesEntity Company = companyRepository.findByExternalId(externalId)
-                .orElseThrow(/*REBOLEAS EXCEPCION DE USUARIO NO EXISTENTE*/);
+                .orElseThrow(() -> new ElementNotFoundException("The company that you want to delete does not exists"));
 
         if(Company
                 .getOffers()
                 .stream()
                 .anyMatch(offerEntity -> offerEntity.getOfferStatus() == OfferStatus.OPEN)){
 
-            /*TIRAS EXCEPCION DE REGLA DE NEGOCIO NO SE PUEDEN ELIMINAR EMPRESA CON OFERTAS ABIERTAS*/
+            throw new BussinesRulesException("you cant delete a company whit offers in open state");
 
         }
 
@@ -97,7 +98,7 @@ public class CompanyServices {
     public CompanyResponseDTO UpdateCompany (CompaniesRequestDTO atUpdate){
 
         CompaniesEntity company = companyRepository.findByCuit(atUpdate.cuit())
-                .orElseThrow(/*REBOLEAS NOT FOUND EXCEPTION*/);
+                .orElseThrow(() -> new ElementNotFoundException("the company that you want to update does not exists"));
 
         if (atUpdate.name() != null){
             company.setName(atUpdate.name());
@@ -128,7 +129,7 @@ public class CompanyServices {
 
         return companyRepository.findByExternalId(externalId)
                 .map(companyMapper::toDTO)
-                .orElseThrow(/*ARROJAS EXCEPTION DE NOT FOUND*/);
+                .orElseThrow(() -> new ElementNotFoundException("this company does not exists"));
 
     }
 

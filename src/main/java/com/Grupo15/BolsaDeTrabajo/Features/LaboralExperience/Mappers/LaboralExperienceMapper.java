@@ -14,11 +14,12 @@ public interface LaboralExperienceMapper {
     @Mapping(source = "candidate.lastName", target = "candidateLastName")
     @Mapping(source = "company", target = "company")
     // Si no usamos referencias de empresas en el request/entity, este mapping ignorará el campo o podemos dejarlo según la entidad
-    @Mapping(source = "companyReference.registeredName", target = "companyReferenceName")
+    @Mapping(source = "companyReferences.name", target = "companyReferenceName")
     LaboralExperienceResponseDTO toDto(LaboralExperienceEntity entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "candidate", ignore = true)
-    @Mapping(target = "companyReference", ignore = true)
+    @Mapping(target = "externalId", ignore = true)
+    @Mapping(target = "companyReferences", ignore = true)
     LaboralExperienceEntity toEntity(LaboralExperienceRequestDTO request);
 }
