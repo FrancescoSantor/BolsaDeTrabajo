@@ -1,5 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidSalaryRangeException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.Mapper.OfferMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
@@ -30,22 +33,26 @@ public class OfferServiceImpl implements OfferService {
 
         // Validación: Chequeamos que el ID de la empresa no sea nulo
         if (requestDto.companyId() == null) {
-            //throw new BadRequestException("El ID de la empresa es obligatorio.");
+                                            //El ID de la empresa es obligatorio.
+            throw new BussinesRulesException("Company ID is required.");
         }
 
         // Buscamos la empresa en la base de datos para verificar que realmente exista
         CompaniesEntity company = companiesRepository.findById(requestDto.companyId())
-                //.orElseThrow(() -> new ResourceNotFoundException("La empresa con ID " + requestDto.companyId() + " no existe."));
+                                                                //La empresa con ID " + requestDto.companyId() + " no existe.
+                .orElseThrow(() -> new ElementNotFoundException("Company with ID " + requestDto.companyId() + " does not exist."));
 
         // Validación: El título de la oferta (Enum) no puede ser nulo
         if (requestDto.title() == null) {
-            //throw new BadRequestException("El título de la oferta es obligatorio.");
+                                            //"El título de la oferta es obligatorio."
+            throw new BussinesRulesException("Offer title is required.");
         }
 
         // Regla de negocio: Validamos que los rangos salariales sean coherentes entre sí
         if (requestDto.minSalary() != null && requestDto.maxSalary() != null) {
             if (requestDto.minSalary() > requestDto.maxSalary()) {
-                //throw new BadRequestException("El salario mínimo no puede ser mayor al salario máximo.");
+                                           //El salario mínimo no puede ser mayor al salario máximo.
+                throw new InvalidSalaryRangeException("Minimum salary cannot be greater than maximum salary.");
             }
         }
 
@@ -70,16 +77,19 @@ public class OfferServiceImpl implements OfferService {
     public OfferResponseDTO updateOffer(UUID externalId, OfferRequestDTO requestDto) {
         // Buscamos usando el UUID seguro que viene del controller
         OfferEntity existingOffer = offerRepository.findByExternalId(externalId)
-               // .orElseThrow(() -> new ResourceNotFoundException("Oferta laboral no encontrada con el ID seguro: " + externalId));
+                                                             //"Oferta laboral no encontrada con el ID seguro: " + externalId
+                .orElseThrow(() -> new ElementNotFoundException("Job offernot found with the secure identifier: " + externalId));
 
         // RNF12 - Baja lógica: Comprobamos si la oferta no fue cancelada o cerrada previamente
         if (existingOffer.getOfferStatus() == OfferStatus.CLOSE) {
-            //throw new BadRequestException("No se puede modificar una oferta laboral que ha sido dada de baja.");
+                                           //"No se puede modificar una oferta laboral que ha sido dada de baja."
+            throw new BussinesRulesException(" Cannot modify a job offer that has already been closed.");
         }
 
         // Validación: Aseguramos que no intenten borrar el título en la actualización
         if (requestDto.title() == null) {
-           // throw new BadRequestException("El título de la oferta no puede ser nulo.");
+                                           //"El título de la oferta no puede ser nulo."
+            throw new BussinesRulesException("Offer title cannot be null");
         }
 
         // Regla de negocio: Volvemos a validar los sueldos en caso de que hayan modificado los montos
@@ -87,7 +97,8 @@ public class OfferServiceImpl implements OfferService {
             // Si los sueldos editados no son nulos
             // Si el nuevo salario mínimo supera al máximo
             if (requestDto.minSalary() > requestDto.maxSalary()) {
-                //throw new BadRequestException("El salario mínimo no puede ser mayor al salario máximo.");
+                                                    //"El salario mínimo no puede ser mayor al salario máximo."
+                throw new InvalidSalaryRangeException("Minimum salary cannot be greater than maximun salary.");
             }
         }
 
@@ -117,11 +128,13 @@ public class OfferServiceImpl implements OfferService {
 
         // Buscamos usando el UUID seguro y verificamos existencia
         OfferEntity existingOffer = offerRepository.findByExternalId(externalId)
-                //.orElseThrow(() -> new ResourceNotFoundException("Oferta laboral no encontrada con el ID seguro: " + externalId));
+                                                              //Oferta laboral no encontrada con el ID seguro:  + externalId
+                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with the secure identifier: " + externalId));
 
         // Validación: Si ya estaba dada de baja, evitamos procesarla de nuevo
         if (existingOffer.getOfferStatus() == OfferStatus.CLOSE) {
-            //throw new BadRequestException("La oferta laboral ya se encuentra dada de baja (CLOSE).");
+                                            //La oferta laboral ya se encuentra dada de baja (CLOSE).
+            throw new BussinesRulesException("The job offer is already closed.");
         }
 
         // Baja lógica
@@ -135,11 +148,13 @@ public class OfferServiceImpl implements OfferService {
     public OfferResponseDTO getOfferById(UUID externalId) {
         // Buscamos usando el UUID seguro
         OfferEntity offer = offerRepository.findByExternalId(externalId)
-                //.orElseThrow(() -> new ResourceNotFoundException("Oferta laboral no encontrada con el ID seguro: " + externalId));
+                                                             //Oferta laboral no encontrada con el ID seguro: " + externalId
+                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with the secure identifier: " + externalId));
 
         // Seguridad de negocio (RNF12): Si la oferta está dada de baja lógicamente, protegemos el dato simulando que no existe
         if (offer.getOfferStatus() == OfferStatus.CLOSE) {
-            //throw new ResourceNotFoundException("La oferta laboral solicitada ya no está disponible.");
+                                            //La oferta laboral solicitada ya no está disponible
+            throw new ElementNotFoundException("The requested job offer is no longer available.");
         }
 
         return offerMapper.toDto(offer);

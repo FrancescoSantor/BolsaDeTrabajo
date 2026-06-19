@@ -2,6 +2,8 @@ package com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidDateRangeException;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.Mappers.LaboralExperienceMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.dto.LaboralExperienceRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.dto.LaboralExperienceResponseDTO;
@@ -28,15 +30,16 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
 
         // Verificamos que el candidato ingresado realmente exista en nuestro sistema
         CandidatesEntity candidate = candidatesRepository.findById(requestDto.candidateId())
-                //.orElseThrow(() -> new ResourceNotFoundException("El candidato con ID " + requestDto.candidateId() + " no existe."));
+                                                               //El candidato con ID " + requestDto.candidateId() + " no existe.
+                .orElseThrow(() -> new ElementNotFoundException("Candidate with ID" + requestDto.candidateId() + " does not exist."));
 
         // Regla de negocio: Validamos que la fecha de fin no sea anterior al inicio si es que fue enviada
         if (requestDto.endDate() != null) {
 
             // Compara si la fecha de fin se ubica cronológicamente antes del inicio
             if (requestDto.endDate().isBefore(requestDto.initialDate())) {
-
-                //throw new BadRequestException("La fecha de finalización no puede ser previa a la fecha de inicio."); // Detiene el flujo con error 400
+                                                  //La fecha de finalización no puede ser previa a la fecha de inicio.
+                throw new InvalidDateRangeException(" End date cannot be prior to the initial date. "); // Detiene el flujo con error 400
             }
         }
 
@@ -57,7 +60,8 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
 
         // Seguridad: Ubicamos la experiencia existente a través de su identificador UUID público
         LaboralExperienceEntity existingExperience = laboralExperienceRepository.findByExternalId(externalId)
-                //.orElseThrow(() -> new ResourceNotFoundException("Experiencia laboral no encontrada con el identificador seguro: " + externalId)); // Error 404 si no existe
+                                                             //"Experiencia laboral no encontrada con el identificador seguro: " + externalId
+                .orElseThrow(() -> new ElementNotFoundException("Laboral experience not found with the secure identifier: " + externalId)); // Error 404 si no existe
 
         // Regla de negocio: Validamos la coherencia de fechas provistas en la petición de cambio
         // Si el JSON editado contiene una fecha de fin
@@ -65,7 +69,8 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
 
             // Verifica si la fecha de fin quebranta la lógica temporal frente al inicio
             if (requestDto.endDate().isBefore(requestDto.initialDate())) {
-                //throw new BadRequestException("La fecha de finalización no puede ser previa a la fecha de inicio."); // Lanza error 400 impidiendo la persistencia
+                                                  //La fecha de finalización no puede ser previa a la fecha de inicio.
+                throw new InvalidDateRangeException("End date cannot be prior to the initial date."); // Lanza error 400 impidiendo la persistencia
             }
 
         }
@@ -90,7 +95,8 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
 
         // Buscamos la experiencia por su UUID seguro para corroborar su existencia previa
         LaboralExperienceEntity existingExperience = laboralExperienceRepository.findByExternalId(externalId)
-                //.orElseThrow(() -> new ResourceNotFoundException("Experiencia laboral no encontrada con el identificador seguro: " + externalId)); // Lanza 404 si no existe
+                                                              //"Experiencia laboral no encontrada con el identificador seguro: " + externalId
+                .orElseThrow(() -> new ElementNotFoundException("Laboral experience not found with the secure identifier: " + externalId)); // Lanza 404 si no existe
 
         // Si en este módulo aplican eliminación física directa, borramos el registro por completo
         laboralExperienceRepository.delete(existingExperience);
@@ -104,7 +110,8 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
 
         // Buscamos la experiencia por su UUID seguro
         LaboralExperienceEntity experience = laboralExperienceRepository.findByExternalId(externalId)
-               // .orElseThrow(() -> new ResourceNotFoundException("Experiencia laboral no encontrada con el identificador seguro: " + externalId)); // Lanza 404 si no coincide
+                                                             //"Experiencia laboral no encontrada con el identificador seguro: " + externalId
+               .orElseThrow(() -> new ElementNotFoundException("Laboral experience not found with the secure identifier: " + externalId)); // Lanza 404 si no coincide
 
         return laboralExperienceMapper.toDto(experience);
     }
@@ -116,7 +123,8 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
 
         // Validación: Corroboramos si el candidato realmente existe en el sistema
         if (!candidatesRepository.existsById(candidateId)) {
-            //throw new ResourceNotFoundException("El candidato con ID " + candidateId + " no existe."); // Frena lanzando un error 404
+                                             //"El candidato con ID " + candidateId + " no existe."
+            throw new ElementNotFoundException("Candidate with ID " + candidateId + " does not exist."); // Frena lanzando un error 404
         }
 
         // Buscamos todas las experiencias vinculadas al ID del candidato

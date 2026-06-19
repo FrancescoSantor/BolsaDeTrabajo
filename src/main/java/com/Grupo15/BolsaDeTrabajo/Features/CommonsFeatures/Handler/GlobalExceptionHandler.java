@@ -41,4 +41,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleBussinesRule(ResourceAlreadyExistsException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public ResponseEntity<String> handlerInvalidDateRange (InvalidDateRangeException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidSalaryRangeException.class)
+    public ResponseEntity<String> handlerInvalidSalaryRange (InvalidSalaryRangeException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 }
