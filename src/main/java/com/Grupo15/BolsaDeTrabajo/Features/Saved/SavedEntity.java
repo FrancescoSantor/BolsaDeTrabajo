@@ -3,6 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Saved;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -25,6 +26,10 @@ public class SavedEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "candidato_id")
     private CandidatesEntity candidate;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private CompaniesEntity company;
 
     @ManyToOne
     @JoinColumn(name = "oferta_id")

@@ -18,6 +18,8 @@ public interface CompanyRepository extends JpaRepository<CompaniesEntity,Long> {
 
     boolean existsByEmail(String email);
 
+    Optional<CompaniesEntity> findById(Long id);
+
     Optional<CompaniesEntity> findByExternalId(UUID externalId);
 
     Optional<CompaniesEntity> findByCuit(String cuit);

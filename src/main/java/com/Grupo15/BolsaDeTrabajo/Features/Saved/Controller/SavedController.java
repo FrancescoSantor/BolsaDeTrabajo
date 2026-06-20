@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Saved.Controller;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.Service.SavedService;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedCandidateRequestDto;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedResponseDTO;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/saved")
 @PreAuthorize("hasRole('COMPANY')")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
 public class SavedController {
 
     private final SavedService savedService;
@@ -26,4 +28,11 @@ public class SavedController {
         SavedResponseDTO response = savedService.createSaved(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @PostMapping("/candidate")
+    public ResponseEntity<SavedResponseDTO> saveCandidate(@Valid @RequestBody SavedCandidateRequestDto request) {
+        SavedResponseDTO response = savedService.saveCandidate(request.companyId(), request.candidateId());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
 }

@@ -6,6 +6,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRu
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.Mapper.SavedMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedRepository;
@@ -27,6 +29,7 @@ public class SavedService {
     private final SavedRepository savedRepository;
     private final CandidateRepository candidateRepository;
     private final OfferRepository offerRepository;
+    private final CompanyRepository companyRepository;
 
     @Transactional
     public SavedResponseDTO createSaved(SavedRequestDTO savedRequestDTO) {
@@ -44,6 +47,29 @@ public class SavedService {
         SavedEntity savedEntity = SavedEntity.builder()
                 .candidate(candidate)
                 .offer(offer)
+                .createdAt(Timestamp.from(Instant.now()))
+                .build();
+
+        SavedEntity saved = savedRepository.save(savedEntity);
+
+        return SavedMapper.toDto(saved);
+    }
+
+    @Transactional
+    public SavedResponseDTO saveCandidate(Long companyId, Long candidateId) {
+
+        CompaniesEntity company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new ElementNotFoundException("Company not found with ID: " + companyId));
+
+        CandidatesEntity candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found with ID: " + candidateId));
+
+        if (savedRepository.existsByCompanyIdAndCandidateId(companyId, candidateId)) {
+            throw new BussinesRulesException("This candidate has already been saved.");
+        }
+        SavedEntity savedEntity = SavedEntity.builder()
+                .company(company)
+                .candidate(candidate)
                 .createdAt(Timestamp.from(Instant.now()))
                 .build();
 

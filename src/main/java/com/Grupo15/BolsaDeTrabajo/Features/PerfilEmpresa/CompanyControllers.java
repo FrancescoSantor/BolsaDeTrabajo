@@ -18,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('COMPANY')")
 @RequestMapping("/Company")
+@PreAuthorize("hasRole('COMPANY')")
 public class CompanyControllers {
 
     private final CompanyServices companyServices;
