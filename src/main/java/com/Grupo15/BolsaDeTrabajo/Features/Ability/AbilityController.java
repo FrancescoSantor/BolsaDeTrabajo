@@ -6,6 +6,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/BolsaDeTrabajo/abilities")
+@PreAuthorize("hasRole('CANDIDATE')")
 @RequiredArgsConstructor
 public class AbilityController {
 
