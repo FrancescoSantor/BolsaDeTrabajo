@@ -2,6 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Notification;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,12 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE')")
-@RequestMapping("/api/notifications")
+@RequestMapping("/BolsaDeTrabajo/notifications")
 public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping
-    public ResponseEntity<NotificationResponseDTO> receiveNotification(@RequestBody NotificationRequestDTO requestDTO) {
+    public ResponseEntity<NotificationResponseDTO> receiveNotification(@Valid @RequestBody NotificationRequestDTO requestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.receiveNotification(requestDTO));
     }
 

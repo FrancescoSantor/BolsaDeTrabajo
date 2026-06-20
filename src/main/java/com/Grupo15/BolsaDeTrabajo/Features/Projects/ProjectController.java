@@ -3,6 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Projects;
 import com.Grupo15.BolsaDeTrabajo.Features.Projects.dto.ProjectRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Projects.dto.ProjectResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Projects.dto.ProjectUpdateRequestDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +15,13 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/projects")
+@RequestMapping("/BolsaDeTrabajo/projects")
 public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ProjectResponseDTO> create(@RequestBody ProjectRequestDTO requestDTO) {
+    public ResponseEntity<ProjectResponseDTO> create(@Valid @RequestBody ProjectRequestDTO requestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(projectService.create(requestDTO));
     }
 

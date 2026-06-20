@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE')")
-@RequestMapping("/comments")
+@RequestMapping("/BolsaDeTrabajo/comments")
 public class CommentsController {
 
     private final CommentsService commentsService;
@@ -27,16 +27,16 @@ public class CommentsController {
 
     // 2. EDITAR COMENTARIO
     // Usamos @PatchMapping ya que modificamos únicamente el campo parcial 'content'
-    @PatchMapping("/{comment_externalId}")
+    @PatchMapping("/{commentExternalId}")
     public ResponseEntity<CommentsResponseDTO> updateComment(
-            @PathVariable UUID comment_externalId,
+            @PathVariable UUID commentExternalId,
             @RequestParam String content) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentsService.updateComment(comment_externalId,content)); // Retorna 200 OK con el DTO actualizado
+        return ResponseEntity.status(HttpStatus.OK).body(commentsService.updateComment(commentExternalId,content)); // Retorna 200 OK con el DTO actualizado
     }
 
-    @DeleteMapping("/{comment_externalId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable UUID comment_externalId) {
-        commentsService.DeleteComent(comment_externalId);
+    @DeleteMapping("/{commentExternalId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable UUID commentExternalId) {
+        commentsService.DeleteComent(commentExternalId);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Message;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +19,7 @@ public class MessageController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO sendMessage(@RequestBody MessageRequestDTO dto) {
+    public MessageResponseDTO sendMessage(@Valid @RequestBody MessageRequestDTO dto) {
 
         return messageService.sendMessage(dto);
     }

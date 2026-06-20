@@ -13,19 +13,20 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/postulation")
+@RequestMapping("/BolsaDeTrabajo/postulation")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
 public class PostulationController {
 
     private final PostulationService postulationService;
 
     @PostMapping
+    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<PostulationResponseDTO> create(@Valid @RequestBody PostulationNewDTO newDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(postulationService.CreatePostulation(newDTO));
     }
 
     @PatchMapping("/{externalId}/status")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<PostulationResponseDTO> updateStatus(
             @PathVariable UUID externalId,
             @RequestParam PostulationState state) {
@@ -34,6 +35,7 @@ public class PostulationController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
     public ResponseEntity<List<PostulationResponseDTO>> getWithFilters(
             @RequestParam(required = false) UUID candidateId,
             @RequestParam(required = false) UUID offerId,
@@ -42,6 +44,7 @@ public class PostulationController {
     }
 
     @DeleteMapping("/{externalId}")
+    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<Void> delete(@PathVariable UUID externalId) {
         postulationService.Delete(externalId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Retorna 204 No Content (estándar para DELETE exitosos)

@@ -2,6 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Following;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingsRequestDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,12 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE')")
-@RequestMapping("/api/following")
+@RequestMapping("/BolsaDeTrabajo/following")
 public class FollowingController {
     private final FollowingService followingService;
 
     @PostMapping("/user")
-    public ResponseEntity<FollowingResponseDTO> setFollow(@RequestBody FollowingsRequestDTO requestDTO) {
+    public ResponseEntity<FollowingResponseDTO> setFollow(@Valid @RequestBody FollowingsRequestDTO requestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(followingService.setFollow(requestDTO));
     }
 

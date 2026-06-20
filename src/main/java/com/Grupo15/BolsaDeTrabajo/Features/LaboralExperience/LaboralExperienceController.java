@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/laboral-experiences")
+@RequestMapping("/BolsaDeTrabajo/laboralExperiences")
 @RequiredArgsConstructor
 public class LaboralExperienceController {
 

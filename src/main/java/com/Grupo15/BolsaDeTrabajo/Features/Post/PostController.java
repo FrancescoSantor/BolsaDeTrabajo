@@ -4,6 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.dto.CommentsResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.dto.PostsRequestDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,13 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/post")
+@RequestMapping("/BolsaDeTrabajo/post")
 public class PostController {
     private final PostService postService;
 
     @PostMapping
     @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<PostResponseDTO> create(@RequestBody PostsRequestDTO requestDTO) {
+    public ResponseEntity<PostResponseDTO> create(@Valid @RequestBody PostsRequestDTO requestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(postService.create(requestDTO));
     }

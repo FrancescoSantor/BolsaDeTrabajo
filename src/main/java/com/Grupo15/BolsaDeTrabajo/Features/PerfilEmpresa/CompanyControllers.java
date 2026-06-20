@@ -3,6 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +18,13 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('COMPANY')")
-@RequestMapping("/Company")
-@PreAuthorize("hasRole('COMPANY')")
+@RequestMapping("/BolsaDeTrabajo/Company")
 public class CompanyControllers {
 
     private final CompanyServices companyServices;
 
     @PostMapping
-    public ResponseEntity<CompanyResponseDTO> createCompany(@RequestBody CompanyNewDTO newDTO) {
+    public ResponseEntity<CompanyResponseDTO> createCompany(@Valid @RequestBody CompanyNewDTO newDTO) {
         CompanyResponseDTO createdCompany = companyServices.create_Company(newDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCompany);
     }

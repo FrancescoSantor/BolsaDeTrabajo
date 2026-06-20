@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/saved")
-@PreAuthorize("hasRole('COMPANY')")
+@RequestMapping("/BolsaDeTrabajo/saved")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
 public class SavedController {
 
     private final SavedService savedService;
 
     @PostMapping
+    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<SavedResponseDTO> createSaved(@Valid @RequestBody SavedRequestDTO request) {
         SavedResponseDTO response = savedService.createSaved(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/candidate")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<SavedResponseDTO> saveCandidate(@Valid @RequestBody SavedCandidateRequestDto request) {
         SavedResponseDTO response = savedService.saveCandidate(request.companyId(), request.candidateId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);

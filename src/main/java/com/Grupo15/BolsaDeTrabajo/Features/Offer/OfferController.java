@@ -2,6 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/offers") //Aca hay que ver si Definimos bien la ruta
+@RequestMapping("/BolsaDeTrabajo/offers") //Aca hay que ver si Definimos bien la ruta
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('COMPANY')")
 public class OfferController {
@@ -23,7 +24,7 @@ public class OfferController {
 
     //Creamos oferta
     @PostMapping
-    public ResponseEntity<OfferResponseDTO> createOffer(@RequestBody OfferRequestDTO requestDto){
+    public ResponseEntity<OfferResponseDTO> createOffer(@Valid @RequestBody OfferRequestDTO requestDto){
         OfferResponseDTO response = offerService.createOffer(requestDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);//Devuelve un estado 201 CREATED con el objeto JSON
     }

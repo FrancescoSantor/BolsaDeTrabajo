@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/posts/likes")
+@RequestMapping("/BolsaDeTrabajo/posts/likes")
 @PreAuthorize("hasRole('CANDIDATE')")
 @RequiredArgsConstructor
 public class PostLikesController {
