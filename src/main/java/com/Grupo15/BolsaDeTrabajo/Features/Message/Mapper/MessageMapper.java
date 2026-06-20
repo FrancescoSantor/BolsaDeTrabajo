@@ -15,7 +15,13 @@ public interface MessageMapper {
 
     @Mapping(target = "issuerName", expression = "java(mapUserToName(entity.getIssuer()))")
     @Mapping(target = "receptorName", expression = "java(mapUserToName(entity.getReceptor()))") // esto edu lo tiene con expression, pero tmbn se puede hacer con qualified
+    @Mapping(target = "read",source = "seen")
     MessageResponseDTO toDto(MessageEntity entity);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "issuer", ignore = true)
+    @Mapping(target = "receptor", ignore = true)
+    @Mapping(target = "seen", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     MessageEntity toEntity(MessageRequestDTO dto);
 
     // sin este metodo el candidato que envia un mensaje no tendria apellido.

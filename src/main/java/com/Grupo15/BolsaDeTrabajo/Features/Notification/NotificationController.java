@@ -1,0 +1,28 @@
+package com.Grupo15.BolsaDeTrabajo.Features.Notification;
+
+import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Notification.dto.NotificationResponseDTO;
+import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/notifications")
+public class NotificationController {
+    private final NotificationService notificationService;
+
+    @PostMapping
+    public ResponseEntity<NotificationResponseDTO> receiveNotification(@RequestBody NotificationRequestDTO requestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.receiveNotification(requestDTO));
+    }
+
+    @PatchMapping("/{externalId}/read")
+    public ResponseEntity<NotificationResponseDTO> readNotification(@PathVariable UUID externalId) {
+        return ResponseEntity.ok(notificationService.readNotification(externalId));
+    }
+}

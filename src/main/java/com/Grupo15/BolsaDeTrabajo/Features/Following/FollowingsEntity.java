@@ -23,13 +23,17 @@ public class FollowingsEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private UsersEntity user;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    FollowState state;
 
     @ManyToOne
-    @JoinColumn(name = "empresa_id")
-    private CompaniesEntity company;
+    @JoinColumn(name = "usuario_id")
+    private UsersEntity follower;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_seguido_id")
+    private UsersEntity followed;
 
     private LocalDateTime createdAt;
 }

@@ -20,7 +20,7 @@ public class OfferResponseDTO {
     private String contractType;
     private Double minSalary;
     private Double maxSalary;
-    private OfferStatus status;
+    private OfferStatus offerStatus;
     private Timestamp publicationDate;
     private Timestamp publicationClosing;
 }

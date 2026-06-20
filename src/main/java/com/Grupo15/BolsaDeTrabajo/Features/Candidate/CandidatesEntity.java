@@ -2,6 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Candidate;
 
 import com.Grupo15.BolsaDeTrabajo.Features.CandidateAbility.CandidateAbilityEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.LaboralExperienceEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Projects.ProjectEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
@@ -28,12 +29,20 @@ public class CandidatesEntity extends UsersEntity {
     //resumen
     private String summary;
 
-
+    @Column(name="cvUrl",nullable = false)
     private String cvUrl;
+
+    @Column(name="linkedinUrl",nullable = false)
     private String linkedinUrl;
+
+    @Column(name="photoUrl",nullable = false)
     private String photoUrl;
 
+    @Column(name="updatedAt",nullable = false)
     private Timestamp updatedAt;
+
+    @OneToMany(mappedBy = "candidate")
+    private List<ProjectEntity> projects;
 
     @OneToMany(mappedBy = "candidate")
     private List<PostulationsEntity> applications;

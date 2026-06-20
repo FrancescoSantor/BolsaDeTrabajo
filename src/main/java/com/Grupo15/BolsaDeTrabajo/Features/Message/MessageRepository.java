@@ -15,12 +15,13 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
 
     List<MessageEntity> findByReceptorExternalId(UUID receptorId);
 
-    List<MessageEntity> findByReceptorExternalIdAndReadFalse(UUID receptorId);
+    List<MessageEntity> findByReceptorExternalIdAndSeenFalse(UUID receptorId);
 
     //List<MessageEntity> findByContentContainingIgnoreCase (String content);
 
     List<MessageEntity> findByReceptorExternalIdAndContentContainingIgnoreCase(UUID receptorId, String content);
 
+    List<MessageEntity> findByIssuerExternalIdAndReceptorExternalId(UUID issuerId, UUID receptorId);
 
 
 }

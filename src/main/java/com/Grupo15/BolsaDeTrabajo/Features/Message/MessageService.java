@@ -1,21 +1,26 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Message;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.MessageEmptyException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.MessageNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.SelfMessagingException;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.Mapper.MessageMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class MessageService {
+public class MessageService implements IMessageService{
 
     private final MessageRepository messageRepository;
     private final UserRepository usersRepository;
@@ -26,18 +31,18 @@ public class MessageService {
 
         UsersEntity issuer = usersRepository.findByExternalId(request.issuerId())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Issuer not found"));
+                        new ElementNotFoundException("Issuer not found"));
 
         UsersEntity receptor = usersRepository.findByExternalId(request.receptorId())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Receiver not found"));
+                        new ElementNotFoundException("Receiver not found"));
 
-       /*if (request.content() == null || request.content().isBlank()) {
-            throw new IllegalArgumentException("Message content cannot be empty");
-        }*/ // aca iria mensajeNotFoundExc
+       if (request.content() == null || request.content().isBlank()) {
+            throw new MessageEmptyException("Message content cannot be empty");
+        }
 
         if (request.issuerId().equals(request.receptorId())) {
-            throw new IllegalArgumentException(
+            throw new SelfMessagingException(
                     "A user cannot send messages to himself");
         }
 
@@ -46,7 +51,7 @@ public class MessageService {
         message.setIssuer(issuer);
         message.setReceptor(receptor);
         message.setContent(request.content());
-        message.setRead(false);
+        message.setSeen(false);
 
         MessageEntity saved = messageRepository.save(message);
 
@@ -59,9 +64,9 @@ public class MessageService {
 
         MessageEntity message = messageRepository.findByExternalId(messageId)
                 .orElseThrow(()
-                        -> new EntityNotFoundException("Message not found"));
+                        -> new ElementNotFoundException("Message not found"));
 
-        message.setRead(true);
+        message.setSeen(true);
 
         return messageMapper.toDto(messageRepository.save(message));
     }
@@ -86,7 +91,7 @@ public class MessageService {
 
         MessageEntity message = messageRepository.findByExternalId(externalId)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Message not found"));
+                        new MessageNotFoundException("Message not found"));
 
         return messageMapper.toDto(message);
     }
@@ -105,11 +110,25 @@ public class MessageService {
     public List<MessageResponseDTO> getUnreadMessages(UUID receptorId) {
 
         return messageRepository
-                .findByReceptorExternalIdAndReadFalse(receptorId)
+                .findByReceptorExternalIdAndSeenFalse(receptorId)
                 .stream()
                 .map(messageMapper::toDto)
                 .toList();
     }
 
+    // no se si funcionara
+    public List<MessageResponseDTO> getChat(UUID userA, UUID userB) {
 
+        return Stream.concat(
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB)
+                                .stream(),
+
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA)
+                                .stream())
+                .sorted(Comparator.comparing(MessageEntity::getCreatedAt))
+                .map(messageMapper::toDto)
+                .toList();
+    }
 }
+
+

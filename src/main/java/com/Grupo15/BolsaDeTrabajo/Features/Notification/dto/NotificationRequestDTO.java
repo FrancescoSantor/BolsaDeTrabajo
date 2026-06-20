@@ -1,6 +1,8 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Notification.dto;
 
+import java.util.UUID;
+
 public record NotificationRequestDTO(
-        Long userId,
+        UUID userId,
         String message
 ) {}
