@@ -8,5 +8,7 @@ public interface SavedRepository extends JpaRepository<SavedEntity,Long> {
 
     boolean existsByCandidateIdAndOfferId(Long candidateId, Long offerId);
 
+    boolean existsByCompanyIdAndCandidateId(Long companyId, Long candidateId);
+
     List<SavedEntity> findByCandidateId(Long candidateId);
 }
