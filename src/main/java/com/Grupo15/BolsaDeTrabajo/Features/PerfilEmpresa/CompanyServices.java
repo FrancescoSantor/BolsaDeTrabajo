@@ -1,25 +1,25 @@
 package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
 
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidPasswordException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ResourceAlreadyExistsException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper.CompanyMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.NewAccountRequest;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 
 import java.util.Set;
 import java.util.UUID;
@@ -30,7 +30,6 @@ public class CompanyServices {
 
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
-    private final RolesRepository rolesRepository;
     private final CredentialsRepository credentialsRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepositorySecurity;
@@ -40,10 +39,10 @@ public class CompanyServices {
     public CompanyResponseDTO create_Company (CompanyNewDTO newDTO){
 
         if(companyRepository.existsByCuit(newDTO.cuit())){
-            //rebolea excepcion de ya existente
+            throw new ResourceAlreadyExistsException("the cuit that you want to register already exists");
         }
         if (companyRepository.existsByEmail(newDTO.email())){
-            //reboleas excepcion de ya existente
+            throw new ResourceAlreadyExistsException("The email that you want to register already exists");
         }
 
         if (credentialsRepository.existsByUsername(
@@ -53,19 +52,17 @@ public class CompanyServices {
                     "El username ya existe");
         }
 
+        if (newDTO.password() == null ||
+                newDTO.password().length() < 8) {
+
+            throw new InvalidPasswordException(
+                    "The password must be at least 8 characters long.");
+        }
 
         CompaniesEntity companies = companyMapper.toEntity(newDTO);
         companies.setActive(true);
         companies.setName(newDTO.name());
         companies.setEmail(newDTO.email());
-        //companies.setPassword(newDTO.password());
-
-        RolesEntity rol = rolesRepository.findByRol(Roles.COMPANY)
-                .orElseThrow(
-                        //REBOLEAS NOT FOUND EXCEPTION
-                );
-
-        companies.setRol(rol);
 
         companyRepository.save(companies);
 
@@ -107,14 +104,14 @@ public class CompanyServices {
     public CompanyResponseDTO DeleteCompany(UUID externalId){
 
         CompaniesEntity Company = companyRepository.findByExternalId(externalId)
-                .orElseThrow(/*REBOLEAS EXCEPCION DE USUARIO NO EXISTENTE*/);
+                .orElseThrow(() -> new ElementNotFoundException("The company that you want to delete does not exists"));
 
         if(Company
                 .getOffers()
                 .stream()
-                .anyMatch(offerEntity -> offerEntity.getStatus() == OfferStatus.OPEN)){
+                .anyMatch(offerEntity -> offerEntity.getOfferStatus() == OfferStatus.OPEN)){
 
-            /*TIRAS EXCEPCION DE REGLA DE NEGOCIO NO SE PUEDEN ELIMINAR EMPRESA CON OFERTAS ABIERTAS*/
+            throw new BussinesRulesException("you cant delete a company whit offers in open state");
 
         }
 
@@ -135,7 +132,7 @@ public class CompanyServices {
     public CompanyResponseDTO UpdateCompany (CompaniesRequestDTO atUpdate){
 
         CompaniesEntity company = companyRepository.findByCuit(atUpdate.cuit())
-                .orElseThrow(/*REBOLEAS NOT FOUND EXCEPTION*/);
+                .orElseThrow(() -> new ElementNotFoundException("the company that you want to update does not exists"));
 
         if (atUpdate.name() != null){
             company.setName(atUpdate.name());
@@ -166,9 +163,11 @@ public class CompanyServices {
 
         return companyRepository.findByExternalId(externalId)
                 .map(companyMapper::toDTO)
-                .orElseThrow(/*ARROJAS EXCEPTION DE NOT FOUND*/);
+                .orElseThrow(() -> new ElementNotFoundException("this company does not exists"));
 
     }
+
+
 
 
 

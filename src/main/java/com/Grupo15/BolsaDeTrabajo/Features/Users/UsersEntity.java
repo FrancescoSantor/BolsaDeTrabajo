@@ -6,7 +6,6 @@ import com.Grupo15.BolsaDeTrabajo.Features.Message.MessageEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Notification.NotificationEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PostLikes.PostLikesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.FollowingsEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -36,11 +35,6 @@ public abstract class UsersEntity extends BaseEntity {
     @Column (nullable = false)
     private boolean active;
 
-    //SOLUCION DE RELACION ROL/USUARIO
-    @ManyToOne
-    @JoinColumn(name = "rol_id")
-    private RolesEntity rol;
-
     private Timestamp createdAt;
 
     @OneToMany(mappedBy = "user")
@@ -58,7 +52,7 @@ public abstract class UsersEntity extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<CommentsEntity> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "follower")
     private List<FollowingsEntity> followings;
 
     @PrePersist

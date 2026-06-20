@@ -1,6 +1,5 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Users.dto;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
 import lombok.Builder;
 
 
@@ -10,5 +9,5 @@ import lombok.Builder;
 //        String lastName,
 //        String email,
 //        String password,
-//        Roles rol
+//        Roles ro
 //) {}

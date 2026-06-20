@@ -3,6 +3,8 @@ package com.Grupo15.BolsaDeTrabajo.Features.Ability;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.Mappers.AbilityMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.AbilityAlreadyExistsException;
+import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,7 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AbilityService {
+public class AbilityService implements IAbilityService {
 
     private final AbilityRepository repositoryAbility;
     private final AbilityMapper mapperAbility;
@@ -25,7 +27,7 @@ public class AbilityService {
     public AbilityResponseDTO createAbility(AbilityRequestDTO requestAbility) {
 
         if (repositoryAbility.existsByNameIgnoreCase(requestAbility.name())) {
-            throw new EntityExistsException(
+            throw new AbilityAlreadyExistsException(
                     "The ability " + requestAbility.name() + " already exists");
         }
 
@@ -40,7 +42,7 @@ public class AbilityService {
     public AbilityResponseDTO getAbilityByExternalId(UUID externalId) {
         AbilityEntity ability = repositoryAbility.findByExternalId(externalId)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("The ability : " + externalId + " was not found"));
+                        new ElementNotFoundException("The ability : " + externalId + " was not found"));
 
         return mapperAbility.toDto(ability);
     }
@@ -66,7 +68,7 @@ public class AbilityService {
     public void deleteAbility(UUID externalIdAbility) {
         AbilityEntity ability = repositoryAbility.findByExternalId(externalIdAbility)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Ability not found"));
+                        new ElementNotFoundException("Ability not found"));
 
         repositoryAbility.delete(ability);
     }

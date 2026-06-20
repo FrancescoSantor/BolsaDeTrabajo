@@ -1,6 +1,5 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Users.dto;
 
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
 import lombok.Builder;
 import lombok.Data;
 import java.util.UUID;

@@ -32,7 +32,7 @@ public class MessageEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private boolean isRead; //leido
+    private boolean seen; //leido
 
     private Timestamp createdAt;
 
