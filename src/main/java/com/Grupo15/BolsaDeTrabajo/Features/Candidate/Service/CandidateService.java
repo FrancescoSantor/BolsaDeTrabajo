@@ -66,6 +66,9 @@ public class CandidateService {
         candidate.setProfessionalTitle(candidatesRequestDTO.professionalTitle());
         candidate.setSummary(candidatesRequestDTO.summary());
         candidate.setUpdatedAt(Timestamp.from(Instant.now()));
+        candidate.setCvUrl(candidatesRequestDTO.cvUrl());
+        candidate.setLinkedinUrl(candidatesRequestDTO.linkedinUrl());
+        candidate.setPhotoUrl(candidatesRequestDTO.photoUrl());
         //candidate.setProjects(new ArrayList<>());
         //candidate.setApplications(new ArrayList<>());
         //candidate.setAbilityCandidates(new ArrayList<>());

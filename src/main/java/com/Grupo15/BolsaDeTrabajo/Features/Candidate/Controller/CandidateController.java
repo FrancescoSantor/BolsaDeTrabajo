@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/BolsaDeTrabajo/candidate")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('CANDIDATE')")
 public class CandidateController {
 
     private final CandidateService candidateService;
 
     @PostMapping
+    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<CandidatesResponseDTO> create(
             @Valid @RequestBody CandidatesRequestDTO request) {
 
@@ -27,6 +27,7 @@ public class CandidateController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
 
         candidateService.deleteCandidate(id);
@@ -34,13 +35,14 @@ public class CandidateController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
     public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable Long id) {
-
         CandidatesResponseDTO responseDto = candidateService.getCandidate(id);
         return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<CandidatesResponseDTO> updateCandidate(
             @PathVariable Long id,
             @Valid @RequestBody CandidatesRequestDTO request) {

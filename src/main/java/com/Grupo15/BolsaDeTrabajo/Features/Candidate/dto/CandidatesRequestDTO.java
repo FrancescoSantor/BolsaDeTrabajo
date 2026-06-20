@@ -8,8 +8,8 @@ import org.hibernate.validator.constraints.Length;
 
 public record CandidatesRequestDTO(
 
-        @NotNull(message = "User id is required")
-        Long userId,
+       /* @NotNull(message = "User id is required")
+        Long userId,*/
 
         @NotBlank(message = "Name is required")
         String name,

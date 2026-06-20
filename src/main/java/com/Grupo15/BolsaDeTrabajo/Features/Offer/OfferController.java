@@ -17,20 +17,21 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/BolsaDeTrabajo/offers") //Aca hay que ver si Definimos bien la ruta
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('COMPANY')")
 public class OfferController {
 
     private final OfferService offerService;
 
     //Creamos oferta
     @PostMapping
-    public ResponseEntity<OfferResponseDTO> createOffer(@Valid @RequestBody OfferRequestDTO requestDto){
+    @PreAuthorize("hasRole('COMPANY')")
+    public ResponseEntity<OfferResponseDTO> createOffer(@Valid @RequestBody OfferRequestDTO requestDto) {
         OfferResponseDTO response = offerService.createOffer(requestDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);//Devuelve un estado 201 CREATED con el objeto JSON
     }
 
     //Modificar oferta
     @PutMapping("/{externalId}")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<OfferResponseDTO> updateOffer(
             @PathVariable UUID externalId,
             @RequestBody OfferRequestDTO requestDto) {
@@ -41,6 +42,7 @@ public class OfferController {
 
     //Eliminar de forma lógica (Cerrar) una oferta
     @DeleteMapping("/{externalId}")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<Void> deleteOffer(@PathVariable UUID externalId) {
         offerService.deleteOffer(externalId);
         return ResponseEntity.noContent().build(); // Devuelve un estado 244 NO CONTENT
@@ -48,6 +50,7 @@ public class OfferController {
 
     //Obtener el detalle de una única oferta por su UUID seguro
     @GetMapping("/{externalId}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
     public ResponseEntity<OfferResponseDTO> getOfferById(@PathVariable UUID externalId) {
         OfferResponseDTO response = offerService.getOfferById(externalId);
         return ResponseEntity.ok(response); // Devuelve un estado 200 OK con el detalle de la oferta
@@ -55,6 +58,7 @@ public class OfferController {
 
     //Listar ofertas
     @GetMapping
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
     public ResponseEntity<Page<OfferResponseDTO>> getOffers(
             // @PageableDefault configura valores por defecto si el frontend no los envía (Página 0, tamaño de 10 elementos)
             @PageableDefault(page = 0, size = 10) Pageable pageable,

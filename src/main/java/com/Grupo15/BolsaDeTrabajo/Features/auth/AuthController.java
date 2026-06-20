@@ -10,6 +10,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.AuthRequest;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.AuthResponse;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.dto.NewAccountRequest;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.jwt.JwtService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/BolsaDeTrabajo/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -36,7 +37,7 @@ public class AuthController {
     @PostMapping("/register/candidate")
     @ResponseStatus(HttpStatus.CREATED)
     public CandidatesResponseDTO registerCandidate(
-            @RequestBody CandidatesRequestDTO dto) {
+            @Valid @RequestBody CandidatesRequestDTO dto) {
 
         return candidateService.creteCandidate(dto);
     }
@@ -44,7 +45,7 @@ public class AuthController {
     @PostMapping("/register/company")
     @ResponseStatus(HttpStatus.CREATED)
     public CompanyResponseDTO registerCompany(
-            @RequestBody CompanyNewDTO dto) {
+           @Valid @RequestBody CompanyNewDTO dto) {
 
         return companyService.create_Company(dto);
     }

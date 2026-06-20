@@ -73,6 +73,10 @@ public class OfferEntity extends BaseEntity {
     @OneToMany(mappedBy = "offer")
     private List<SavedEntity> saved;
 
+    @PrePersist
+    protected void anCreate() {
+        this.offerStatus = OfferStatus.OPEN;
+    }
     // habia un onetomany a publicaciones que decidimos sacarlo.
 }
 

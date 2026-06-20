@@ -65,6 +65,10 @@ public class OfferServiceImpl implements OfferService {
         //RNF12 - Baja lógica: Forzamos el estado inicial de la oferta como abierta
         entity.setOfferStatus(OfferStatus.OPEN); // Nace activa
 
+        if (requestDto.location() == null || requestDto.location().isBlank()) {
+            entity.setLocation(company.getLocation());
+        }
+
         // Persistencia: Guardamos la entidad con todos sus datos en la base de datos
         OfferEntity savedEntity = offerRepository.save(entity);
 
@@ -111,9 +115,9 @@ public class OfferServiceImpl implements OfferService {
         existingOffer.setMaxSalary(requestDto.maxSalary());
 
         // Control opcional del estado: Si nos mandaron un estado nuevo en la petición, lo cambiamos
-        if (requestDto.offerStatus() != null) {
+       /* if (requestDto.offerStatus() != null) {
             existingOffer.setOfferStatus(requestDto.offerStatus());
-        }
+        }*/
 
         //Guardamos la entidad ya modificada en la base de datos
         OfferEntity updatedEntity = offerRepository.save(existingOffer);

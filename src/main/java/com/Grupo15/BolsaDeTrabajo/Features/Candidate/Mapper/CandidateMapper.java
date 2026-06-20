@@ -24,13 +24,15 @@ public class CandidateMapper {
                 .build();
     }
 
-        public static CandidatesEntity toEntity (CandidatesRequestDTO request){
+    public static CandidatesEntity toEntity (CandidatesRequestDTO request){
         return CandidatesEntity.builder()
+                .lastName(request.lastName())
                 .professionalTitle(request.professionalTitle())
                 .summary(request.summary())
                 .cvUrl(request.cvUrl())
                 .linkedinUrl(request.linkedinUrl())
                 .photoUrl(request.photoUrl())
+                .updatedAt(new java.sql.Timestamp(System.currentTimeMillis()))
                 .build();
-        }
+    }
 }
