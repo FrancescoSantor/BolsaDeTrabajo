@@ -46,8 +46,6 @@ public class CandidateService {
 
                 .orElseThrow(() -> new RuntimeException("System error: The CANDIDATE role is not configured in the database."));
 
-        CandidatesEntity candidateEntity = new CandidatesEntity();
-
         CandidatesEntity candidate = new CandidatesEntity();
 
         candidate.setName(candidatesRequestDTO.name());
@@ -55,22 +53,20 @@ public class CandidateService {
         candidate.setPassword(candidatesRequestDTO.password());
         candidate.setActive(true);
         candidate.setRol(candidateRole);
-
-        //candidate.setLastName(candidatesRequestDTO.lastName());
+        candidate.setLastName(candidatesRequestDTO.lastName());
 
         candidate.setProfessionalTitle(candidatesRequestDTO.professionalTitle());
         candidate.setSummary(candidatesRequestDTO.summary());
         candidate.setUpdatedAt(Timestamp.from(Instant.now()));
-        candidate.setApplications(new ArrayList<>());
-        candidate.setAbilityCandidates(new ArrayList<>());
-        candidate.setLaboralExperiences(new ArrayList<>());
-
-        candidate.setSaved(new ArrayList<>());
+        //candidate.setProjects(new ArrayList<>());
+        //candidate.setApplications(new ArrayList<>());
+        //candidate.setAbilityCandidates(new ArrayList<>());
+        //candidate.setLaboralExperiences(new ArrayList<>());
+        //candidate.setSaved(new ArrayList<>());
 
         CandidatesEntity savedCandidate = candidateRepository.save(candidate);
 
         return CandidateMapper.toDto(savedCandidate);
-
     }
 
     //El metodo no borra al usuario de la base de datos sino que actualiza su estado
