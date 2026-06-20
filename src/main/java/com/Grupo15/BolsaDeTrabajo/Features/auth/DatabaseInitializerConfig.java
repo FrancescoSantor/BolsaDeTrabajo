@@ -1,10 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.auth;
 
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.*;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
-
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -17,30 +13,15 @@ public class DatabaseInitializerConfig {
     @Transactional
     public CommandLineRunner initDatabase(
             PermitRepository permitRepository,
-            RoleRepository roleRepository,
-            RolesRepository rolesRepository //
+            RoleRepository roleRepository
     ) {
 
         return args -> {
-            System.out.println("Sincronizando roles viejos de negocio : ");
-
-            // por los roles viejos tuve que hacer esto pq al registrar users me tiraba 500 siempre.
-            // Habria que sacar los roles viejos y luego borrar.
-            if (rolesRepository.count() == 0) {
-                RolesEntity viejoCandidato = new RolesEntity();
-                viejoCandidato.setRol(Roles.CANDIDATE);
-                rolesRepository.save(viejoCandidato);
-
-                RolesEntity viejaEmpresa = new RolesEntity();
-                viejaEmpresa.setRol(Roles.COMPANY);
-                rolesRepository.save(viejaEmpresa);
-                System.out.println(">> Roles VIEJOS guardados con éxito.");
-            }
 
 
             if (permitRepository.count() > 0) {
                 System.out.println(">> Los permisos ya existían. Evitando duplicados.");
-                return;
+               return;
             }
 
             System.out.println(">> Cargando permisos y roles nuevos de seguridad...");
@@ -64,6 +45,7 @@ public class DatabaseInitializerConfig {
             candidateRole.getPermits().add(enviarMensaje);
             candidateRole.getPermits().add(leerMensajes);
             roleRepository.save(candidateRole);
+
 
             //ROLE COMPANY
             RoleEntity companyRole = new RoleEntity(Role.ROLE_COMPANY);

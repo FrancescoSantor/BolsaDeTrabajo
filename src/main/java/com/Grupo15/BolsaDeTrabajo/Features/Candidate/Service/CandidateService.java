@@ -5,16 +5,19 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.*;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RoleRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.Roles;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Roles.RolesRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +25,9 @@ import java.util.ArrayList;
 public class CandidateService {
 
     private final CandidateRepository candidateRepository;
-    private final RoleRepository rolesRepository;
+    private final CredentialsRepository credentialsRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepositorySecurity;
 
     @Transactional
     public CandidatesResponseDTO creteCandidate(CandidatesRequestDTO candidatesRequestDTO) {
@@ -34,6 +39,14 @@ public class CandidateService {
             throw new ExistingEmailException("The email " + candidatesRequestDTO.email() + " already exists in the system.");
         }
 
+        if (credentialsRepository.existsByUsername(
+                candidatesRequestDTO.username())) {
+
+            throw new RuntimeException(
+                    "El username ya existe");
+        }
+
+
         if (candidatesRequestDTO.password() == null || candidatesRequestDTO.password().length() < 8) {
             throw new InvalidPasswordException("The password must be at least 8 characters long.");
         }
@@ -42,17 +55,12 @@ public class CandidateService {
             throw new RuntimeException("The name is required.");
         }
 
-        RolesEntity candidateRole = rolesRepository.findByRol(Roles.CANDIDATE)
-
-                .orElseThrow(() -> new RuntimeException("System error: The CANDIDATE role is not configured in the database."));
 
         CandidatesEntity candidate = new CandidatesEntity();
 
         candidate.setName(candidatesRequestDTO.name());
         candidate.setEmail(candidatesRequestDTO.email());
-        candidate.setPassword(candidatesRequestDTO.password());
         candidate.setActive(true);
-        candidate.setRol(candidateRole);
         candidate.setLastName(candidatesRequestDTO.lastName());
 
         candidate.setProfessionalTitle(candidatesRequestDTO.professionalTitle());
@@ -66,6 +74,25 @@ public class CandidateService {
 
         CandidatesEntity savedCandidate = candidateRepository.save(candidate);
 
+
+        RoleEntity securityRole = roleRepositorySecurity
+                .findByRole(Role.ROLE_CANDIDATE)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        CredentialsEntity credentials =
+                CredentialsEntity.builder()
+                        .username(candidatesRequestDTO.username())
+                        .password(
+                                passwordEncoder.encode(
+                                        candidatesRequestDTO.password()
+                                )
+                        )
+                        .enabled(true)
+                        .usuario(savedCandidate)
+                        .roles(Set.of(securityRole))
+                        .build();
+
+        credentialsRepository.save(credentials);
         return CandidateMapper.toDto(savedCandidate);
     }
 
