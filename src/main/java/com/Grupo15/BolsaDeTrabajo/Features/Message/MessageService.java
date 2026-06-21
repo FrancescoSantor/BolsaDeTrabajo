@@ -119,15 +119,21 @@ public class MessageService implements IMessageService{
                 .toList();
     }
 
-    // no se si funcionara
-    public List<MessageResponseDTO> getChat(UUID userA, UUID userB) {
+    // no se si funcionara. Antes era mas simple pero cualquier usuario podia vver conversaciones ajenas si conocia los id.
+    public List<MessageResponseDTO> getChat(UUID userA, UUID userB, String username) {
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getExternalId().equals(userA) && !loggedUser.getExternalId().equals(userB)) {
+            throw new RuntimeException("You do not have permission to view this conversation.");
+        }
 
         return Stream.concat(
-                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB)
-                                .stream(),
-
-                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA)
-                                .stream())
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB).stream(),
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA).stream())
                 .sorted(Comparator.comparing(MessageEntity::getCreatedAt))
                 .map(messageMapper::toDto)
                 .toList();

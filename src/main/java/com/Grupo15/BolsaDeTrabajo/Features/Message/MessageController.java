@@ -61,12 +61,13 @@ public class MessageController {
         return messageService.searchMessagesByContent(receptorId, content);
     }
 
-    @GetMapping("/chat") // aca no se si poner los uuid pq quedaria un Url medio largo
+    @GetMapping("/chat")
     @ResponseStatus(HttpStatus.OK)
     public List<MessageResponseDTO> getChat(@RequestParam UUID userA,
-                                            @RequestParam UUID userB) {
+                                            @RequestParam UUID userB,
+                                            Authentication authentication) {
 
-        return messageService.getChat(userA, userB);
+        return messageService.getChat(userA, userB, authentication.getName());
     }
 
     @DeleteMapping("/{messageId}")

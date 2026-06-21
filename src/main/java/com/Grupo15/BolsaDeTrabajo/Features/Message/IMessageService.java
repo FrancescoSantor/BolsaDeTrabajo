@@ -15,7 +15,7 @@ public interface IMessageService {
     MessageResponseDTO getMessageByExternalId(UUID externalId);
     List<MessageResponseDTO> searchMessagesByContent(UUID receptorId, String content);
     List<MessageResponseDTO> getUnreadMessages(UUID receptorId);
-    List<MessageResponseDTO> getChat(UUID userA, UUID userB);
+    List<MessageResponseDTO> getChat(UUID userA, UUID userB, String username);
     void deleteMessage(UUID messageId, String username);
 
 
