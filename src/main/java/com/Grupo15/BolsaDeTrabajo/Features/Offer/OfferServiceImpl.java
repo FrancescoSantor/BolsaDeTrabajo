@@ -6,9 +6,13 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidSal
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.Mapper.OfferMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,7 @@ public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
     private final CompanyRepository companiesRepository;
     private final OfferMapper offerMapper;
+    private final CredentialsRepository credentialsRepository;
 
     @Override
     @Transactional//Crear Oferta en el sistema
@@ -77,36 +82,28 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @Transactional//Update/Actualizacion de oferta
-    public OfferResponseDTO updateOffer(UUID externalId, OfferRequestDTO requestDto) {
-        // Buscamos usando el UUID seguro que viene del controller
-        OfferEntity existingOffer = offerRepository.findByExternalId(externalId)
-                                                             //"Oferta laboral no encontrada con el ID seguro: " + externalId
-                .orElseThrow(() -> new ElementNotFoundException("Job offernot found with the secure identifier: " + externalId));
+    @Transactional // Update/Actualizacion de oferta
+    public OfferResponseDTO updateOffer(UUID externalId, OfferRequestDTO requestDto, Authentication authentication) {
 
-        // RNF12 - Baja lógica: Comprobamos si la oferta no fue cancelada o cerrada previamente
+        OfferEntity existingOffer = offerRepository.findByExternalId(externalId)
+                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with the secure identifier: " + externalId));
+
         if (existingOffer.getOfferStatus() == OfferStatus.CLOSE) {
-                                           //"No se puede modificar una oferta laboral que ha sido dada de baja."
-            throw new BussinesRulesException(" Cannot modify a job offer that has already been closed.");
+            throw new BussinesRulesException("Cannot modify a job offer that has already been closed.");
         }
 
-        // Validación: Aseguramos que no intenten borrar el título en la actualización
+        checkOfferAuthority(existingOffer, authentication);
+
         if (requestDto.title() == null) {
-                                           //"El título de la oferta no puede ser nulo."
             throw new BussinesRulesException("Offer title cannot be null");
         }
 
-        // Regla de negocio: Volvemos a validar los sueldos en caso de que hayan modificado los montos
         if (requestDto.minSalary() != null && requestDto.maxSalary() != null) {
-            // Si los sueldos editados no son nulos
-            // Si el nuevo salario mínimo supera al máximo
             if (requestDto.minSalary() > requestDto.maxSalary()) {
-                                                    //"El salario mínimo no puede ser mayor al salario máximo."
-                throw new InvalidSalaryRangeException("Minimum salary cannot be greater than maximun salary.");
+                throw new InvalidSalaryRangeException("Minimum salary cannot be greater than maximum salary.");
             }
         }
 
-        // Seteo manual campo por campo
         existingOffer.setTitle(requestDto.title());
         existingOffer.setDescription(requestDto.description());
         existingOffer.setModality(requestDto.modality());
@@ -114,36 +111,47 @@ public class OfferServiceImpl implements OfferService {
         existingOffer.setMinSalary(requestDto.minSalary());
         existingOffer.setMaxSalary(requestDto.maxSalary());
 
-        // Control opcional del estado: Si nos mandaron un estado nuevo en la petición, lo cambiamos
-       /* if (requestDto.offerStatus() != null) {
-            existingOffer.setOfferStatus(requestDto.offerStatus());
-        }*/
-
-        //Guardamos la entidad ya modificada en la base de datos
         OfferEntity updatedEntity = offerRepository.save(existingOffer);
-
-
         return offerMapper.toDto(updatedEntity);
     }
 
-    @Override
-    @Transactional//Eliminar/Dar de baja una oferta
-    public void deleteOffer(UUID externalId) {
 
-        // Buscamos usando el UUID seguro y verificamos existencia
+    private void checkOfferAuthority(OfferEntity offer, Authentication authentication) {
+        // 1. Si es ADMIN, pasa directo sin importar de quién es la oferta
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return;
+        }
+        // 2. Si no es admin, asumimos que es una empresa. Buscamos su usuario de la sesión.
+        String username = authentication.getName();
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        // 3. Comparamos el ID de la empresa dueña de la oferta con el ID del usuario logueado
+        if (!offer.getCompany().getId().equals(loggedUser.getId())) {
+            throw new RuntimeException("You do not have permission to manage this offer");
+        }
+    }
+
+    @Override
+    @Transactional // Eliminar/Dar de baja una oferta
+    public void deleteOffer(UUID externalId, Authentication authentication) {
+
         OfferEntity existingOffer = offerRepository.findByExternalId(externalId)
-                                                              //Oferta laboral no encontrada con el ID seguro:  + externalId
                 .orElseThrow(() -> new ElementNotFoundException("Job offer not found with the secure identifier: " + externalId));
 
-        // Validación: Si ya estaba dada de baja, evitamos procesarla de nuevo
         if (existingOffer.getOfferStatus() == OfferStatus.CLOSE) {
-                                            //La oferta laboral ya se encuentra dada de baja (CLOSE).
             throw new BussinesRulesException("The job offer is already closed.");
         }
 
-        // Baja lógica
-        existingOffer.setOfferStatus(OfferStatus.CLOSE);
+        // 🛡️ SECURITY CHECK FOR ADMIN / OWNER
+        checkOfferAuthority(existingOffer, authentication);
 
+        existingOffer.setOfferStatus(OfferStatus.CLOSE);
         offerRepository.save(existingOffer);
     }
 
