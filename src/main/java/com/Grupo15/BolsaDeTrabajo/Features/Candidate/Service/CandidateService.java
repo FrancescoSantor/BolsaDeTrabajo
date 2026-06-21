@@ -1,10 +1,15 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Candidate.Service;
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.CandidateAbility.CandidateAbilityEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.*;
+import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;
@@ -12,11 +17,13 @@ import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,6 +36,7 @@ public class CandidateService {
     private final CredentialsRepository credentialsRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepositorySecurity;
+    private final AbilityRepository abilityRepository;
 
     @Transactional
     public CandidatesResponseDTO creteCandidate(CandidatesRequestDTO candidatesRequestDTO) {
@@ -178,5 +186,62 @@ public class CandidateService {
         return CandidateMapper.toDto(updatedCandidate);
     }
 
+    private void checkCandidateAuthority(UUID candidateId, Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return;
+        }
+        String username = authentication.getName();
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!candidateId.equals(loggedUser.getId())) {
+            throw new RuntimeException("You do not have permission to modify this candidate's profile");
+        }
+    }
+
+    @Transactional
+    public void addAbilityToCandidate(UUID candidateId, AbilityCategory category, Authentication authentication) {
+        checkCandidateAuthority(candidateId, authentication);
+
+        CandidatesEntity candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
+
+        List<AbilityEntity> abilities = abilityRepository.findByCategory(category);
+
+        if (abilities.isEmpty()) {
+            throw new ElementNotFoundException("No ability found in the database for category: " + category);
+        }
+
+        AbilityEntity ability = abilities.get(0);
+
+        CandidateAbilityEntity candidateAbility = new CandidateAbilityEntity();
+        candidateAbility.setCandidate(candidate);
+        candidateAbility.setAbility(ability);
+
+        candidate.getAbilityCandidates().add(candidateAbility);
+        candidateRepository.save(candidate);
+    }
+
+    @Transactional
+    public void deleteAbilityFromCandidate(UUID candidateId, AbilityCategory category, Authentication authentication) {
+        checkCandidateAuthority(candidateId, authentication);
+
+        CandidatesEntity candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
+
+        CandidateAbilityEntity abilityToRemove = candidate.getAbilityCandidates().stream()
+                .filter(ca -> ca.getAbility() != null && ca.getAbility().getCategory() == category)
+                .findFirst()
+                .orElseThrow(() -> new ElementNotFoundException("The candidate does not have an ability with category: " + category));
+
+        candidate.getAbilityCandidates().remove(abilityToRemove);
+
+        candidateRepository.save(candidate);
+    }
 
 } 

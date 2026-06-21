@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Candidate.Controller;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Service.CandidateService;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -50,5 +52,27 @@ public class CandidateController {
 
         CandidatesResponseDTO responseDto = candidateService.updateCandidate(id, request);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PostMapping("/{id}/abilities")
+    @PreAuthorize("hasAnyRole('CANDIDATE')")
+    public ResponseEntity<Void> addAbility(
+            @PathVariable UUID id,
+            @RequestParam AbilityCategory category,
+            Authentication authentication) {
+
+        candidateService.addAbilityToCandidate(id, category, authentication);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{id}/abilities")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
+    public ResponseEntity<Void> deleteAbility(
+            @PathVariable UUID id,
+            @RequestParam AbilityCategory category,
+            Authentication authentication) {
+
+        candidateService.deleteAbilityFromCandidate(id, category, authentication);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
