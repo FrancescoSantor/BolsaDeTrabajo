@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -98,7 +99,7 @@ public class CandidateService {
 
     //El metodo no borra al usuario de la base de datos sino que actualiza su estado
     @Transactional
-    public void deleteCandidate(Long id)
+    public void deleteCandidate(UUID id)
     {
         CandidatesEntity candidate = candidateRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not deactivate the candidate. No candidate found with ID "));
@@ -118,7 +119,7 @@ public class CandidateService {
 
     //Obtener candidato en base al id
     @Transactional
-    public CandidatesResponseDTO getCandidate(Long id)
+    public CandidatesResponseDTO getCandidate(UUID id)
     {
         CandidatesEntity candidate = candidateRepository.findById(id)
 

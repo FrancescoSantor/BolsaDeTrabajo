@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/candidate")
 @RequiredArgsConstructor
@@ -27,14 +29,14 @@ public class CandidateController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCandidate(@PathVariable UUID id) {
 
         candidateService.deleteCandidate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable Long id) {
+    public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable UUID id) {
 
         CandidatesResponseDTO responseDto = candidateService.getCandidate(id);
         return ResponseEntity.ok(responseDto);
