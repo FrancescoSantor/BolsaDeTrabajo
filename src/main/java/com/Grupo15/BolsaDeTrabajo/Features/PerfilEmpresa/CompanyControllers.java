@@ -11,6 +11,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -18,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('COMPANY')")
-@RequestMapping("/BolsaDeTrabajo/Company")
+@RequestMapping("/BolsaDeTrabajo/company")
 public class CompanyControllers {
 
     private final CompanyServices companyServices;
@@ -48,15 +50,17 @@ public class CompanyControllers {
     }
 
     @PutMapping
-    public ResponseEntity<CompanyResponseDTO> updateCompany(@RequestBody CompaniesRequestDTO atUpdate
+    public ResponseEntity<CompanyResponseDTO> updateCompany(@RequestBody CompaniesRequestDTO atUpdate,
+                                                            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        CompanyResponseDTO updatedCompany = companyServices.UpdateCompany(atUpdate);
+        CompanyResponseDTO updatedCompany = companyServices.UpdateCompany(atUpdate,userDetails.getUsername());
         return ResponseEntity.ok(updatedCompany);
     }
 
     @DeleteMapping("/{externalId}")
-    public ResponseEntity<CompanyResponseDTO> deleteCompany(@PathVariable UUID externalId) {
-        CompanyResponseDTO deletedCompany = companyServices.DeleteCompany(externalId);
+    public ResponseEntity<CompanyResponseDTO> deleteCompany(@PathVariable UUID externalId,
+                                                            @AuthenticationPrincipal UserDetails userDetails) {
+        CompanyResponseDTO deletedCompany = companyServices.DeleteCompany(externalId, userDetails.getUsername());
         return ResponseEntity.ok(deletedCompany);
     }
 }

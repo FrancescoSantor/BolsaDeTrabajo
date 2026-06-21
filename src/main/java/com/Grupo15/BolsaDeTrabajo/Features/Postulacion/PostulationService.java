@@ -12,6 +12,9 @@ import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.DTO.PostulationNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.DTO.PostulationResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +32,16 @@ public class PostulationService {
     private final OfferMapper offerMapper;
     private final CandidateRepository candidateRepository;
     private final CandidateMapper candidateMapper;
+    private final CredentialsRepository credentialsRepository;
 
 
 
-    public PostulationResponseDTO CreatePostulation (PostulationNewDTO newDTO){
+    public PostulationResponseDTO CreatePostulation (PostulationNewDTO newDTO, String username){
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("you don't have permissions to create this offer"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
 
         OfferEntity offer = offerRepository.findByExternalId(newDTO.idOffer())
                 .orElseThrow(() ->new ElementNotFoundException("does not exists the offer that you want to postulate"));
@@ -40,6 +49,9 @@ public class PostulationService {
         CandidatesEntity candidates = candidateRepository.findByExternalId(newDTO.idCandidate())
                 .orElseThrow(() -> new ElementNotFoundException("does not exists the candidate profile whit this ID"));
 
+        if (!loggedUser.getId().equals(candidates.getId())){
+            throw new RuntimeException("you don't have the permission to postulate another candidate");
+        }
 
         if(postulationRepository.existsByCandidateAndOffer(candidates,offer)){
             throw new NotDuplicatesException("the candidate can´t postulate more than 1 time for each offer");
@@ -71,10 +83,19 @@ public class PostulationService {
     }
 
     @Transactional
-    public PostulationResponseDTO updateStatusPostulation(UUID externalId, PostulationState postulationState){
+    public PostulationResponseDTO updateStatusPostulation(UUID externalId, PostulationState postulationState, String username){
 
         PostulationsEntity postulation = postulationRepository.findByExternalId(externalId)
                 .orElseThrow(()->new ElementNotFoundException("The postulation that you want to update does not exists"));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getId().equals(postulation.getOffer().getCompany().getId())){
+            throw new RuntimeException("you don't haver permissions to update the status of the postulation");
+        }
 
         if (postulation.getStatus() != PostulationState.WAITING){
             throw new BussinesRulesException("You can´t change the status of the offer when it is change already");
@@ -114,7 +135,7 @@ public class PostulationService {
     }
 
     @Transactional
-    public void Delete (UUID postulationId){
+    public void Delete (UUID postulationId, String username){
 
         PostulationsEntity postulation = postulationRepository.findByExternalId(postulationId)
                 .orElseThrow(() -> new ElementNotFoundException("The postulation that you wants to delete does not exists"));
@@ -122,6 +143,16 @@ public class PostulationService {
         if (!postulation.isActive()){
             throw new BussinesRulesException("The postulation was already deleted");
         }
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found "));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!postulation.getCandidate().getId().equals(loggedUser.getId())){
+            throw new RuntimeException("you don't have permission to delete this postulation");
+        }
+
 
         if (postulation.getStatus() != PostulationState.WAITING){
             throw new BussinesRulesException("you cant delete a postulation that have a state distinct of waiting");

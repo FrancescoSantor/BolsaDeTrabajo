@@ -9,6 +9,8 @@ import org.hibernate.validator.constraints.Length;
 import java.util.UUID;
 
 public record CompaniesRequestDTO(
+        @NotNull
+        UUID externalId,
         @NotBlank(message = "User name is required")
         String name,
         @NotBlank(message = "Email is required")

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,17 +23,19 @@ public class PostulationController {
 
     @PostMapping
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<PostulationResponseDTO> create(@Valid @RequestBody PostulationNewDTO newDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(postulationService.CreatePostulation(newDTO));
+    public ResponseEntity<PostulationResponseDTO> create(@Valid @RequestBody PostulationNewDTO newDTO,
+                                                         @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(postulationService.CreatePostulation(newDTO, userDetails.getUsername()));
     }
 
     @PatchMapping("/{externalId}/status")
     @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<PostulationResponseDTO> updateStatus(
             @PathVariable UUID externalId,
-            @RequestParam PostulationState state) {
+            @RequestParam PostulationState state,
+            @AuthenticationPrincipal UserDetails userDetails) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(postulationService.updateStatusPostulation(externalId, state));
+        return ResponseEntity.status(HttpStatus.OK).body(postulationService.updateStatusPostulation(externalId, state, userDetails.getUsername()));
     }
 
     @GetMapping
@@ -45,8 +49,9 @@ public class PostulationController {
 
     @DeleteMapping("/{externalId}")
     @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<Void> delete(@PathVariable UUID externalId) {
-        postulationService.Delete(externalId);
+    public ResponseEntity<Void> delete(@PathVariable UUID externalId,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        postulationService.Delete(externalId, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Retorna 204 No Content (estándar para DELETE exitosos)
     }
 }

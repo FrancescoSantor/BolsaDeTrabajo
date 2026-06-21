@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,18 +27,18 @@ public class CommentsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentsService.createComment(newDTO)); // Retorna 201 Created
     }
 
-    // 2. EDITAR COMENTARIO
-    // Usamos @PatchMapping ya que modificamos únicamente el campo parcial 'content'
     @PatchMapping("/{commentExternalId}")
     public ResponseEntity<CommentsResponseDTO> updateComment(
             @PathVariable UUID commentExternalId,
-            @RequestParam String content) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentsService.updateComment(commentExternalId,content)); // Retorna 200 OK con el DTO actualizado
+            @RequestParam String content,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.status(HttpStatus.OK).body(commentsService.updateComment(commentExternalId,content, userDetails.getUsername())); // Retorna 200 OK con el DTO actualizado
     }
 
     @DeleteMapping("/{commentExternalId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable UUID commentExternalId) {
-        commentsService.DeleteComent(commentExternalId);
+    public ResponseEntity<Void> deleteComment(@PathVariable UUID commentExternalId,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        commentsService.DeleteComent(commentExternalId, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 

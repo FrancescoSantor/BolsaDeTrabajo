@@ -9,6 +9,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper.CompanyMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.RoleEntity;
@@ -101,10 +103,19 @@ public class CompanyServices {
 
 
     @Transactional
-    public CompanyResponseDTO DeleteCompany(UUID externalId){
+    public CompanyResponseDTO DeleteCompany(UUID externalId, String username){
 
         CompaniesEntity Company = companyRepository.findByExternalId(externalId)
                 .orElseThrow(() -> new ElementNotFoundException("The company that you want to delete does not exists"));
+
+        CredentialsEntity credentials =  credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser =  credentials.getUsuario();
+
+        if (!Company.getId().equals(loggedUser.getId()) && !credentials.getRoles().equals(Role.ROLE_ADMIN)){
+            throw new RuntimeException("you don't have permissions to update the information of the company ");
+        }
 
         if(Company
                 .getOffers()
@@ -129,10 +140,19 @@ public class CompanyServices {
 
 
     @Transactional
-    public CompanyResponseDTO UpdateCompany (CompaniesRequestDTO atUpdate){
+    public CompanyResponseDTO UpdateCompany (CompaniesRequestDTO atUpdate, String username){
 
-        CompaniesEntity company = companyRepository.findByCuit(atUpdate.cuit())
+        CompaniesEntity company = companyRepository.findByExternalId(atUpdate.externalId())
                 .orElseThrow(() -> new ElementNotFoundException("the company that you want to update does not exists"));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser =  credentials.getUsuario();
+
+        if (!company.getId().equals(loggedUser.getId())){
+            throw new RuntimeException("you don't have permissions to update the information of the company ");
+        }
 
         if (atUpdate.name() != null){
             company.setName(atUpdate.name());
