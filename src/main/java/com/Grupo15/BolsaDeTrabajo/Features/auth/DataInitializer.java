@@ -48,9 +48,9 @@ public class DataInitializer implements CommandLineRunner {
 
             credentialsRepository.save(adminCredentials);
 
-            System.out.println("👉 [DataInitializer] Global admin credentials created successfully.");
+            System.out.println(" [DataInitializer] Global admin credentials created successfully.");
         } else {
-            System.out.println("👉 [DataInitializer] Admin credentials already registered.");
+            System.out.println(" [DataInitializer] Admin credentials already registered.");
         }
     }
 }
