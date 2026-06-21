@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -66,5 +67,13 @@ public class MessageController {
                                             @RequestParam UUID userB) {
 
         return messageService.getChat(userA, userB);
+    }
+
+    @DeleteMapping("/{messageId}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMessage(@PathVariable UUID messageId, Authentication authentication) {
+
+        messageService.deleteMessage(messageId, authentication.getName());
     }
 }

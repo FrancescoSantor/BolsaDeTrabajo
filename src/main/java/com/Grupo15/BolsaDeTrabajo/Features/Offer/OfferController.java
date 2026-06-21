@@ -42,7 +42,7 @@ public class OfferController {
 
     //Eliminar de forma lógica (Cerrar) una oferta
     @DeleteMapping("/{externalId}")
-    @PreAuthorize("hasRole('COMPANY')")
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
     public ResponseEntity<Void> deleteOffer(@PathVariable UUID externalId) {
         offerService.deleteOffer(externalId);
         return ResponseEntity.noContent().build(); // Devuelve un estado 244 NO CONTENT

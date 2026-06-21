@@ -18,7 +18,6 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @PostMapping
-    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<CandidatesResponseDTO> create(
             @Valid @RequestBody CandidatesRequestDTO request) {
 
@@ -27,7 +26,7 @@ public class CandidateController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('CANDIDATE')")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
     public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
 
         candidateService.deleteCandidate(id);
@@ -35,7 +34,7 @@ public class CandidateController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY', 'ADMIN')")
     public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable Long id) {
         CandidatesResponseDTO responseDto = candidateService.getCandidate(id);
         return ResponseEntity.ok(responseDto);

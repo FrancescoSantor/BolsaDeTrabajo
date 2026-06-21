@@ -14,13 +14,13 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE')")
 @RequestMapping("/BolsaDeTrabajo/comments")
 public class CommentsController {
 
     private final CommentsService commentsService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE')")
     public ResponseEntity<CommentsResponseDTO> createComment(@Valid @RequestBody CommentsNewDTO newDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentsService.createComment(newDTO)); // Retorna 201 Created
     }
@@ -28,19 +28,23 @@ public class CommentsController {
     // 2. EDITAR COMENTARIO
     // Usamos @PatchMapping ya que modificamos únicamente el campo parcial 'content'
     @PatchMapping("/{commentExternalId}")
+    @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE')")
+
     public ResponseEntity<CommentsResponseDTO> updateComment(
             @PathVariable UUID commentExternalId,
             @RequestParam String content) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentsService.updateComment(commentExternalId,content)); // Retorna 200 OK con el DTO actualizado
+        return ResponseEntity.status(HttpStatus.OK).body(commentsService.updateComment(commentExternalId, content)); // Retorna 200 OK con el DTO actualizado
     }
 
     @DeleteMapping("/{commentExternalId}")
+    @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE', 'ADMIN')")
     public ResponseEntity<Void> deleteComment(@PathVariable UUID commentExternalId) {
         commentsService.DeleteComent(commentExternalId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/post/{postExternalId}")
+    @PreAuthorize("hasAnyRole('COMPANY', 'CANDIDATE', 'ADMIN')")
     public ResponseEntity<List<CommentsResponseDTO>> listCommentsByPost(@PathVariable UUID postExternalId) {
         return ResponseEntity.status(HttpStatus.OK).body(commentsService.ListCommentsByPost(postExternalId)); // Retorna 200 OK con la lista cronológica activa
     }

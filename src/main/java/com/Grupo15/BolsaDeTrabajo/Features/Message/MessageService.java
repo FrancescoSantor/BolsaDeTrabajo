@@ -9,6 +9,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class MessageService implements IMessageService{
     private final MessageRepository messageRepository;
     private final UserRepository usersRepository;
     private final MessageMapper messageMapper;
+    private final CredentialsRepository credentialsRepository;
 
     @Transactional
     public MessageResponseDTO sendMessage(MessageRequestDTO request) {
@@ -128,6 +131,28 @@ public class MessageService implements IMessageService{
                 .sorted(Comparator.comparing(MessageEntity::getCreatedAt))
                 .map(messageMapper::toDto)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteMessage(UUID messageId, String username) {
+
+        MessageEntity message = messageRepository.findByExternalId(messageId)
+                .orElseThrow(() ->
+                        new MessageNotFoundException("Message not found"));
+
+        CredentialsEntity credentials = credentialsRepository
+                .findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!message.getIssuer().getId().equals(loggedUser.getId())) {
+            throw new RuntimeException(
+                    "You do not have permission to delete this message");
+        }
+
+        messageRepository.delete(message);
     }
 }
 

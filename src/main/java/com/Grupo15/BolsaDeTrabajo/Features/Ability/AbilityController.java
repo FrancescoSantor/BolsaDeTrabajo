@@ -14,13 +14,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/BolsaDeTrabajo/abilities")
-@PreAuthorize("hasRole('CANDIDATE')")
 @RequiredArgsConstructor
 public class AbilityController {
 
     private final AbilityService abilityService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public AbilityResponseDTO createAbility(
             @Valid @RequestBody AbilityRequestDTO dto) {
@@ -29,6 +29,7 @@ public class AbilityController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<AbilityResponseDTO> getAllAbilities() {
 
@@ -36,6 +37,7 @@ public class AbilityController {
     }
 
     @GetMapping("/{externalId}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public AbilityResponseDTO getAbilityById(
             @PathVariable UUID externalId) {
@@ -44,6 +46,7 @@ public class AbilityController {
     }
 
     @GetMapping("/category/{category}")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<AbilityResponseDTO> getAbilitiesByCategory(
             @PathVariable AbilityCategory category) {
@@ -51,7 +54,10 @@ public class AbilityController {
         return abilityService.getAllAbilitiesByCategory(category);
     }
 
+
+
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<AbilityResponseDTO> searchAbility(
             @RequestParam String name) {
@@ -60,6 +66,7 @@ public class AbilityController {
     }
 
     @DeleteMapping("/{externalId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAbility(
             @PathVariable UUID externalId) {

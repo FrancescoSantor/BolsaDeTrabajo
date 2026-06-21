@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('COMPANY')")
 @RequestMapping("/BolsaDeTrabajo/Company")
 public class CompanyControllers {
 
@@ -30,6 +29,7 @@ public class CompanyControllers {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN' , 'CANDIDATE')")
     public ResponseEntity<Page<CompanyResponseDTO>> listCompanies(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
@@ -42,12 +42,14 @@ public class CompanyControllers {
     }
 
     @GetMapping("/{externalId}")
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN' , 'CANDIDATE')")
     public ResponseEntity<CompanyResponseDTO> getCompanyById(@PathVariable UUID externalId) {
         CompanyResponseDTO company = companyServices.getById(externalId);
         return ResponseEntity.ok(company);
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<CompanyResponseDTO> updateCompany(@RequestBody CompaniesRequestDTO atUpdate
     ) {
         CompanyResponseDTO updatedCompany = companyServices.UpdateCompany(atUpdate);
@@ -55,6 +57,7 @@ public class CompanyControllers {
     }
 
     @DeleteMapping("/{externalId}")
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
     public ResponseEntity<CompanyResponseDTO> deleteCompany(@PathVariable UUID externalId) {
         CompanyResponseDTO deletedCompany = companyServices.DeleteCompany(externalId);
         return ResponseEntity.ok(deletedCompany);
