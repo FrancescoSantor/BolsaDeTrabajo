@@ -1,4 +1,5 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Message;
+
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
 import jakarta.validation.Valid;
@@ -21,44 +22,33 @@ public class MessageController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO sendMessage(@Valid @RequestBody MessageRequestDTO dto) {
-
         return messageService.sendMessage(dto);
-    }
-
-    @GetMapping("/{externalId}")
-    @ResponseStatus(HttpStatus.OK)
-    public MessageResponseDTO getMessageById(@PathVariable UUID externalId) {
-
-        return messageService.getMessageByExternalId(externalId);
     }
 
     @PatchMapping("/{externalId}/read")
     @ResponseStatus(HttpStatus.OK)
-    public MessageResponseDTO markAsRead(@PathVariable UUID externalId) {
-
-        return messageService.markAsRead(externalId);
+    public MessageResponseDTO markAsRead(@PathVariable UUID externalId, Authentication authentication) {
+        return messageService.markAsRead(externalId, authentication.getName());
     }
 
     @GetMapping("/received/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<MessageResponseDTO> getReceivedMessages(@PathVariable UUID userId) {
-
-        return messageService.getReceivedMessages(userId);
+    public List<MessageResponseDTO> getReceivedMessages(@PathVariable UUID userId, Authentication authentication) {
+        return messageService.getReceivedMessages(userId, authentication.getName());
     }
 
     @GetMapping("/unread/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<MessageResponseDTO> getUnreadMessages(@PathVariable UUID userId) {
-
-        return messageService.getUnreadMessages(userId);
+    public List<MessageResponseDTO> getUnreadMessages(@PathVariable UUID userId, Authentication authentication) {
+        return messageService.getUnreadMessages(userId, authentication.getName());
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<MessageResponseDTO> searchMessagesByContent(@RequestParam UUID receptorId,
-                                                            @RequestParam String content) {
-
-        return messageService.searchMessagesByContent(receptorId, content);
+                                                            @RequestParam String content,
+                                                            Authentication authentication) {
+        return messageService.searchMessagesByContent(receptorId, content, authentication.getName());
     }
 
     @GetMapping("/chat")
@@ -66,7 +56,6 @@ public class MessageController {
     public List<MessageResponseDTO> getChat(@RequestParam UUID userA,
                                             @RequestParam UUID userB,
                                             Authentication authentication) {
-
         return messageService.getChat(userA, userB, authentication.getName());
     }
 
@@ -74,7 +63,6 @@ public class MessageController {
     @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMessage(@PathVariable UUID messageId, Authentication authentication) {
-
         messageService.deleteMessage(messageId, authentication.getName());
     }
 }

@@ -63,14 +63,19 @@ public class MessageService implements IMessageService{
 
 
     @Transactional
-    public MessageResponseDTO markAsRead(UUID messageId) {
-
+    public MessageResponseDTO markAsRead(UUID messageId, String username) {
         MessageEntity message = messageRepository.findByExternalId(messageId)
-                .orElseThrow(()
-                        -> new ElementNotFoundException("Message not found"));
+                .orElseThrow(() -> new ElementNotFoundException("Message not found"));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!message.getReceptor().getExternalId().equals(loggedUser.getExternalId())) {
+            throw new RuntimeException("You need to be receptorr for mark as read this message.");
+        }
 
         message.setSeen(true);
-
         return messageMapper.toDto(messageRepository.save(message));
     }
 
@@ -82,7 +87,8 @@ public class MessageService implements IMessageService{
                 .toList();
     }
 
-    public List<MessageResponseDTO> getReceivedMessages(UUID userId) {
+    public List<MessageResponseDTO> getReceivedMessages(UUID userId, String username) {
+        validateUser(userId, username);
 
         return messageRepository.findByReceptorExternalId(userId)
                 .stream()
@@ -90,27 +96,19 @@ public class MessageService implements IMessageService{
                 .toList();
     }
 
-    public MessageResponseDTO getMessageByExternalId(UUID externalId) {
 
-        MessageEntity message = messageRepository.findByExternalId(externalId)
-                .orElseThrow(() ->
-                        new MessageNotFoundException("Message not found"));
-
-        return messageMapper.toDto(message);
-    }
-
-    public List<MessageResponseDTO> searchMessagesByContent(UUID receptorId, String content) {
+    public List<MessageResponseDTO> searchMessagesByContent(UUID receptorId, String content, String username) {
+        validateUser(receptorId, username);
 
         return messageRepository
-                .findByReceptorExternalIdAndContentContainingIgnoreCase(
-                        receptorId,
-                        content)
+                .findByReceptorExternalIdAndContentContainingIgnoreCase(receptorId, content)
                 .stream()
                 .map(messageMapper::toDto)
                 .toList();
     }
 
-    public List<MessageResponseDTO> getUnreadMessages(UUID receptorId) {
+    public List<MessageResponseDTO> getUnreadMessages(UUID receptorId, String username) {
+        validateUser(receptorId, username);
 
         return messageRepository
                 .findByReceptorExternalIdAndSeenFalse(receptorId)
@@ -159,6 +157,17 @@ public class MessageService implements IMessageService{
         }
 
         messageRepository.delete(message);
+    }
+
+    private void validateUser(UUID externalId, String username) {
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getExternalId().equals(externalId)) {
+            throw new RuntimeException("You do not have permission to access this resource.");
+        }
     }
 }
 
