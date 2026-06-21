@@ -14,6 +14,6 @@ public interface ExperienceRepository extends JpaRepository<LaboralExperienceEnt
     Optional<LaboralExperienceEntity> findByExternalId(UUID externalId);
 
     // Trae la lista completa de experiencias de un candidato usando su ID numérico
-    List<LaboralExperienceEntity> findAllByCandidateId(Long candidateId);
+    List<LaboralExperienceEntity> findAllByCandidateId(UUID candidateId);
 }
 

@@ -13,13 +13,13 @@ import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedResponseDTO;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class SavedService {
     }
 
     @Transactional
-    public SavedResponseDTO saveCandidate(Long companyId, Long candidateId) {
+    public SavedResponseDTO saveCandidate(Long companyId, UUID candidateId) {
 
         CompaniesEntity company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ElementNotFoundException("Company not found with ID: " + companyId));

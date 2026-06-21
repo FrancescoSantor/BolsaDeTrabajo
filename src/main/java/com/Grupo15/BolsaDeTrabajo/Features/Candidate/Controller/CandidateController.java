@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/BolsaDeTrabajo/candidate")
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class CandidateController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
-    public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCandidate(@PathVariable UUID id) {
 
         candidateService.deleteCandidate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -35,7 +37,7 @@ public class CandidateController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY', 'ADMIN')")
-    public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable Long id) {
+    public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable UUID id) {
         CandidatesResponseDTO responseDto = candidateService.getCandidate(id);
         return ResponseEntity.ok(responseDto);
     }
@@ -43,7 +45,7 @@ public class CandidateController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<CandidatesResponseDTO> updateCandidate(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @Valid @RequestBody CandidatesRequestDTO request) {
 
         CandidatesResponseDTO responseDto = candidateService.updateCandidate(id, request);

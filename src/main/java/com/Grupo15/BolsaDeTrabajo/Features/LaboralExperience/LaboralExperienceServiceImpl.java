@@ -116,10 +116,9 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
         return laboralExperienceMapper.toDto(experience);
     }
 
-    @Override
     @Transactional//(readOnly = true)
     // Recibe el ID numérico interno del candidato
-    public List<LaboralExperienceResponseDTO> getExperiencesByCandidate(Long candidateId) {
+    public List<LaboralExperienceResponseDTO> getExperiencesByCandidate(UUID candidateId) {
 
         // Validación: Corroboramos si el candidato realmente existe en el sistema
         if (!candidatesRepository.existsById(candidateId)) {

@@ -53,7 +53,7 @@ public class LaboralExperienceController {
     @GetMapping("/candidate/{candidateId}")
     @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
     // Se consume pasando el ID por la URL
-    public ResponseEntity<List<LaboralExperienceResponseDTO>> getExperiencesByCandidate(@PathVariable Long candidateId) {
+    public ResponseEntity<List<LaboralExperienceResponseDTO>> getExperiencesByCandidate(@PathVariable UUID candidateId) {
         List<LaboralExperienceResponseDTO> response = laboralExperienceService.getExperiencesByCandidate(candidateId);
         return ResponseEntity.ok(response); // Devuelve la lista completa con estado 200 OK
     }
