@@ -8,10 +8,11 @@ import org.springframework.cglib.core.Local;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record LaboralExperienceRequestDTO(
         @NotNull(message = "El ID del candidato es obligatorio.")
-        Long candidateId,
+        UUID candidateId,
 
         @NotBlank(message = "El nombre de la empresa no puede estar vacío.")
         @Size(max = 100, message = "El nombre de la empresa no puede superar los 100 caracteres.")

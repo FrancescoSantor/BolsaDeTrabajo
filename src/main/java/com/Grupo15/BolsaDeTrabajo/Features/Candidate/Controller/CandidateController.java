@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Candidate.Controller;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Service.CandidateService;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
@@ -8,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/BolsaDeTrabajo/candidate")
@@ -18,7 +22,6 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @PostMapping
-    @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<CandidatesResponseDTO> create(
             @Valid @RequestBody CandidatesRequestDTO request) {
 
@@ -27,16 +30,16 @@ public class CandidateController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<Void> deleteCandidate(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
+    public ResponseEntity<Void> deleteCandidate(@PathVariable UUID id) {
 
         candidateService.deleteCandidate(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
-    public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY', 'ADMIN')")
+    public ResponseEntity<CandidatesResponseDTO> getCandidate(@PathVariable UUID id) {
         CandidatesResponseDTO responseDto = candidateService.getCandidate(id);
         return ResponseEntity.ok(responseDto);
     }
@@ -44,10 +47,32 @@ public class CandidateController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<CandidatesResponseDTO> updateCandidate(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @Valid @RequestBody CandidatesRequestDTO request) {
 
         CandidatesResponseDTO responseDto = candidateService.updateCandidate(id, request);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PostMapping("/{id}/abilities")
+    @PreAuthorize("hasAnyRole('CANDIDATE')")
+    public ResponseEntity<Void> addAbility(
+            @PathVariable UUID id,
+            @RequestParam AbilityCategory category,
+            Authentication authentication) {
+
+        candidateService.addAbilityToCandidate(id, category, authentication);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{id}/abilities")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
+    public ResponseEntity<Void> deleteAbility(
+            @PathVariable UUID id,
+            @RequestParam AbilityCategory category,
+            Authentication authentication) {
+
+        candidateService.deleteAbilityFromCandidate(id, category, authentication);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

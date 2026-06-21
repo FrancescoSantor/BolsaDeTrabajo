@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -31,21 +32,25 @@ public class OfferController {
 
     //Modificar oferta
     @PutMapping("/{externalId}")
-    @PreAuthorize("hasRole('COMPANY')")
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
     public ResponseEntity<OfferResponseDTO> updateOffer(
             @PathVariable UUID externalId,
-            @RequestBody OfferRequestDTO requestDto) {
+            @RequestBody OfferRequestDTO requestDto,
+            Authentication authentication) {
 
-        OfferResponseDTO response = offerService.updateOffer(externalId, requestDto);
-        return ResponseEntity.ok(response); // Devuelve un estado 200 OK con los datos modificados
+        OfferResponseDTO response = offerService.updateOffer(externalId, requestDto, authentication);
+        return ResponseEntity.ok(response);
     }
 
     //Eliminar de forma lógica (Cerrar) una oferta
     @DeleteMapping("/{externalId}")
-    @PreAuthorize("hasRole('COMPANY')")
-    public ResponseEntity<Void> deleteOffer(@PathVariable UUID externalId) {
-        offerService.deleteOffer(externalId);
-        return ResponseEntity.noContent().build(); // Devuelve un estado 244 NO CONTENT
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
+    public ResponseEntity<Void> deleteOffer(
+            @PathVariable UUID externalId,
+            Authentication authentication) {
+
+        offerService.deleteOffer(externalId, authentication);
+        return ResponseEntity.noContent().build();
     }
 
     //Obtener el detalle de una única oferta por su UUID seguro

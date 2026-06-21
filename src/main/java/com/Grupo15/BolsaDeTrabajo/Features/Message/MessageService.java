@@ -9,6 +9,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class MessageService implements IMessageService{
     private final MessageRepository messageRepository;
     private final UserRepository usersRepository;
     private final MessageMapper messageMapper;
+    private final CredentialsRepository credentialsRepository;
 
     @Transactional
     public MessageResponseDTO sendMessage(MessageRequestDTO request) {
@@ -60,14 +63,19 @@ public class MessageService implements IMessageService{
 
 
     @Transactional
-    public MessageResponseDTO markAsRead(UUID messageId) {
-
+    public MessageResponseDTO markAsRead(UUID messageId, String username) {
         MessageEntity message = messageRepository.findByExternalId(messageId)
-                .orElseThrow(()
-                        -> new ElementNotFoundException("Message not found"));
+                .orElseThrow(() -> new ElementNotFoundException("Message not found"));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!message.getReceptor().getExternalId().equals(loggedUser.getExternalId())) {
+            throw new RuntimeException("You need to be receptorr for mark as read this message.");
+        }
 
         message.setSeen(true);
-
         return messageMapper.toDto(messageRepository.save(message));
     }
 
@@ -79,7 +87,8 @@ public class MessageService implements IMessageService{
                 .toList();
     }
 
-    public List<MessageResponseDTO> getReceivedMessages(UUID userId) {
+    public List<MessageResponseDTO> getReceivedMessages(UUID userId, String username) {
+        validateUser(userId, username);
 
         return messageRepository.findByReceptorExternalId(userId)
                 .stream()
@@ -87,27 +96,19 @@ public class MessageService implements IMessageService{
                 .toList();
     }
 
-    public MessageResponseDTO getMessageByExternalId(UUID externalId) {
 
-        MessageEntity message = messageRepository.findByExternalId(externalId)
-                .orElseThrow(() ->
-                        new MessageNotFoundException("Message not found"));
-
-        return messageMapper.toDto(message);
-    }
-
-    public List<MessageResponseDTO> searchMessagesByContent(UUID receptorId, String content) {
+    public List<MessageResponseDTO> searchMessagesByContent(UUID receptorId, String content, String username) {
+        validateUser(receptorId, username);
 
         return messageRepository
-                .findByReceptorExternalIdAndContentContainingIgnoreCase(
-                        receptorId,
-                        content)
+                .findByReceptorExternalIdAndContentContainingIgnoreCase(receptorId, content)
                 .stream()
                 .map(messageMapper::toDto)
                 .toList();
     }
 
-    public List<MessageResponseDTO> getUnreadMessages(UUID receptorId) {
+    public List<MessageResponseDTO> getUnreadMessages(UUID receptorId, String username) {
+        validateUser(receptorId, username);
 
         return messageRepository
                 .findByReceptorExternalIdAndSeenFalse(receptorId)
@@ -116,18 +117,57 @@ public class MessageService implements IMessageService{
                 .toList();
     }
 
-    // no se si funcionara
-    public List<MessageResponseDTO> getChat(UUID userA, UUID userB) {
+    // no se si funcionara. Antes era mas simple pero cualquier usuario podia vver conversaciones ajenas si conocia los id.
+    public List<MessageResponseDTO> getChat(UUID userA, UUID userB, String username) {
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getExternalId().equals(userA) && !loggedUser.getExternalId().equals(userB)) {
+            throw new RuntimeException("You do not have permission to view this conversation.");
+        }
 
         return Stream.concat(
-                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB)
-                                .stream(),
-
-                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA)
-                                .stream())
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB).stream(),
+                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA).stream())
                 .sorted(Comparator.comparing(MessageEntity::getCreatedAt))
                 .map(messageMapper::toDto)
                 .toList();
+    }
+
+    @Transactional
+    public void deleteMessage(UUID messageId, String username) {
+
+        MessageEntity message = messageRepository.findByExternalId(messageId)
+                .orElseThrow(() ->
+                        new MessageNotFoundException("Message not found"));
+
+        CredentialsEntity credentials = credentialsRepository
+                .findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!message.getIssuer().getId().equals(loggedUser.getId())) {
+            throw new RuntimeException(
+                    "You do not have permission to delete this message");
+        }
+
+        messageRepository.delete(message);
+    }
+
+    private void validateUser(UUID externalId, String username) {
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getExternalId().equals(externalId)) {
+            throw new RuntimeException("You do not have permission to access this resource.");
+        }
     }
 }
 

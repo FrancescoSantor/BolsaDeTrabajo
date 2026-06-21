@@ -17,5 +17,5 @@ public interface LaboralExperienceService {
 
     LaboralExperienceResponseDTO getExperienceByExternalId(UUID externalId);
 
-    List<LaboralExperienceResponseDTO> getExperiencesByCandidate(Long candidateId);
+    List<LaboralExperienceResponseDTO> getExperiencesByCandidate(UUID candidateId);
 }
