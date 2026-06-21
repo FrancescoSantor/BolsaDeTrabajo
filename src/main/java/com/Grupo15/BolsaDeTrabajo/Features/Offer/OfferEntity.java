@@ -4,7 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability_x_Offer.Ability_x_OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Title;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import jakarta.persistence.*;
 import lombok.*;

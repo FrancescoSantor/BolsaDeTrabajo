@@ -3,17 +3,9 @@ package com.Grupo15.BolsaDeTrabajo.Features.Following;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingsRequestDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
-import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Following.dto.FollowingsRequestDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

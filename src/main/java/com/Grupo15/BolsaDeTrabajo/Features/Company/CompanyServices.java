@@ -1,15 +1,14 @@
-package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
+package com.Grupo15.BolsaDeTrabajo.Features.Company;
 
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidPasswordException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ResourceAlreadyExistsException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper.CompanyMapper;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompaniesRequestDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Users.UserRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.Mapper.CompanyMapper;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.dto.CompaniesRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.dto.CompanyNewDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.dto.CompanyResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.permissions.Role;

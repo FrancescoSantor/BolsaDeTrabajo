@@ -3,7 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Saved;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;

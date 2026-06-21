@@ -1,6 +1,6 @@
-package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto;
+package com.Grupo15.BolsaDeTrabajo.Features.Company.dto;
 
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Category;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.Category;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -4,8 +4,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRu
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidSalaryRangeException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.Mapper.OfferMapper;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;

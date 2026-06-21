@@ -1,9 +1,7 @@
-package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
+package com.Grupo15.BolsaDeTrabajo.Features.Company;
 
-import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.LaboralExperienceEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Post.PostsEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Following.FollowingsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;

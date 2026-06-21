@@ -1,8 +1,8 @@
-package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.Mapper;
+package com.Grupo15.BolsaDeTrabajo.Features.Company.Mapper;
 
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyNewDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.dto.CompanyResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.dto.CompanyNewDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.dto.CompanyResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

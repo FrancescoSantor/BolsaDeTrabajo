@@ -1,4 +1,4 @@
-package com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa;
+package com.Grupo15.BolsaDeTrabajo.Features.Company;
 
 public enum Category {
     TECHNOLOGY("Technology"),

@@ -4,7 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.MessageEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Message.dto.MessageResponseDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

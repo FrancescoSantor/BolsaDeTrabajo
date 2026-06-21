@@ -6,8 +6,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRu
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompanyRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.Mapper.SavedMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedRepository;
