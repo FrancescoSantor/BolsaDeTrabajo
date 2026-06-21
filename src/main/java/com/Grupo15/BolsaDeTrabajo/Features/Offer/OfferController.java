@@ -33,11 +33,7 @@ public class OfferController {
     //Modificar oferta
     @PutMapping("/{externalId}")
     @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
-    public ResponseEntity<OfferResponseDTO> updateOffer(
-            @PathVariable UUID externalId,
-            @RequestBody OfferRequestDTO requestDto,
-            Authentication authentication) {
-
+    public ResponseEntity<OfferResponseDTO> updateOffer(@PathVariable UUID externalId, @Valid @RequestBody OfferRequestDTO requestDto, Authentication authentication) {
         OfferResponseDTO response = offerService.updateOffer(externalId, requestDto, authentication);
         return ResponseEntity.ok(response);
     }
@@ -45,10 +41,7 @@ public class OfferController {
     //Eliminar de forma lógica (Cerrar) una oferta
     @DeleteMapping("/{externalId}")
     @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
-    public ResponseEntity<Void> deleteOffer(
-            @PathVariable UUID externalId,
-            Authentication authentication) {
-
+    public ResponseEntity<Void> deleteOffer(@PathVariable UUID externalId, Authentication authentication) {
         offerService.deleteOffer(externalId, authentication);
         return ResponseEntity.noContent().build();
     }
@@ -64,13 +57,7 @@ public class OfferController {
     //Listar ofertas
     @GetMapping
     @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY')")
-    public ResponseEntity<Page<OfferResponseDTO>> getOffers(
-            // @PageableDefault configura valores por defecto si el frontend no los envía (Página 0, tamaño de 10 elementos)
-            @PageableDefault(page = 0, size = 10) Pageable pageable,
-            // Permite recibir un filtro opcional por parámetro en la URL (?title=ENGINEER)
-            @RequestParam(required = false) TitleOfOffer titleOfOffer) {
-
-        // Llama al service pasándole la información de paginación y el filtro de título
+    public ResponseEntity<Page<OfferResponseDTO>> getOffers(@PageableDefault(page = 0, size = 10) Pageable pageable, @RequestParam(required = false) TitleOfOffer titleOfOffer) {
         Page<OfferResponseDTO> response = offerService.getOffers(pageable, titleOfOffer);
         return ResponseEntity.ok(response); // Devuelve la página completa de resultados con estado 200 OK
     }

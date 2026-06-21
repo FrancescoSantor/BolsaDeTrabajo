@@ -12,12 +12,13 @@ public interface OfferService {
 
     OfferResponseDTO createOffer(OfferRequestDTO requestDto);
 
+    OfferResponseDTO updateOffer(UUID externalId, OfferRequestDTO requestDto, Authentication authentication);
+
     void deleteOffer(UUID externalId, Authentication authentication);
 
     OfferResponseDTO getOfferById(UUID externalId);
 
     Page<OfferResponseDTO> getOffers(Pageable pageable, TitleOfOffer titleOfOfferEnum);
 
-    OfferResponseDTO updateOffer(UUID externalId, OfferRequestDTO requestDto, Authentication authentication);
 
 }
