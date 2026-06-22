@@ -2,12 +2,16 @@ package com.Grupo15.BolsaDeTrabajo.Features.Interview.dto;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Interview.InterviewStatus;
 import com.Grupo15.BolsaDeTrabajo.Features.Interview.Type;
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class InterviewResponseDTO {
     private UUID externalId;
     private String candidateName;       // viene de application.candidate.user.name
