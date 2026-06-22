@@ -18,7 +18,7 @@ public interface OfferMapper {
     @Mapping(target = "applications", ignore = true)
     @Mapping(target = "abilities", ignore = true)
     @Mapping(target = "saved", ignore = true)
-    @Mapping(target = "location", ignore = true)
+    //@Mapping(target = "location", ignore = true)
     OfferEntity toEntity(OfferRequestDTO request);
 
 }

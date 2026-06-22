@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,6 +33,16 @@ public class CandidateController {
 
         CandidatesResponseDTO responseDto = candidateService.creteCandidate(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
+    @Operation(summary = "Get all active candidates", description = "Retrieves a flat list containing all candidate profiles currently active in the system.")
+    @ApiResponse(responseCode = "200", description = "List of candidates retrieved successfully")
+    @ApiResponse(responseCode = "403", description = "Access denied. Restricted to Company or Admin roles")
+    public ResponseEntity<List<CandidatesResponseDTO>> listAllCandidates() {
+        List<CandidatesResponseDTO> response = candidateService.listAllCandidates();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

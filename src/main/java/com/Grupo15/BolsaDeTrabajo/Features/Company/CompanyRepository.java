@@ -34,6 +34,8 @@ public interface CompanyRepository extends JpaRepository<CompaniesEntity,Long> {
 
     List<CompaniesEntity> findByLocationContaining(String location);
 
+
+
     @Query("""
             SELECT c FROM CompaniesEntity c
             WHERE (:name     IS NULL OR c.name    LIKE CONCAT('%',:name, '%'))

@@ -3,6 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Offer.dto;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Title;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferType;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferStatus;
+import com.Grupo15.BolsaDeTrabajo.Features.Offer.TitleOfOffer;
 import lombok.Builder;
 import lombok.Data;
 import java.sql.Timestamp;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class OfferResponseDTO {
     private UUID externalId;
     private String companyName;       // viene de company.registeredName
-    private Title title;
+    private TitleOfOffer title;
     private String description;
     private String location;
     private OfferType modality;

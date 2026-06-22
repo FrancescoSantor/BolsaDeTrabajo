@@ -92,14 +92,11 @@ public class OfferController {
     @Operation(summary = "List all active job offers (Paginated)", description = "Retrieves a paginated list of all active vacancies with status OPEN, with an optional filter matching title specifications.")
     @ApiResponse(responseCode = "200", description = "Paginated results page container retrieved successfully")
     public ResponseEntity<Page<OfferResponseDTO>> getOffers(
-            // @PageableDefault configura valores por defecto si el frontend no los envía (Página 0, tamaño de 10 elementos)
-            @Parameter(description = "Pagination configuration sorting metadata values") @PageableDefault(page = 0, size = 10) Pageable pageable,
-            // Permite recibir un filtro opcional por parámetro en la URL (?title=ENGINEER)
-            @Parameter(description = "Optional enum category title to filter results query") @RequestParam(required = false) TitleOfOffer titleOfOffer) {
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable,
+            @RequestParam(required = false) TitleOfOffer titleOfOffer) {
 
-        // Llama al service pasándole la información de paginación y el filtro de título
         Page<OfferResponseDTO> response = offerService.getOffers(pageable, titleOfOffer);
-        return ResponseEntity.ok(response); // Devuelve la página completa de resultados con estado 200 OK
+        return ResponseEntity.ok(response);
     }
 
 }

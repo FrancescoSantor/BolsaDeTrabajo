@@ -37,15 +37,15 @@ public class OfferServiceImpl implements OfferService {
     public OfferResponseDTO createOffer(OfferRequestDTO requestDto) {
 
         // Validación: Chequeamos que el ID de la empresa no sea nulo
-        if (requestDto.companyId() == null) {
-                                            //El ID de la empresa es obligatorio.
+        if (requestDto.companyExternalId() == null) {
+                                            //El UUID de la empresa es obligatorio.
             throw new BussinesRulesException("Company ID is required.");
         }
 
         // Buscamos la empresa en la base de datos para verificar que realmente exista
-        CompaniesEntity company = companiesRepository.findById(requestDto.companyId())
-                                                                //La empresa con ID " + requestDto.companyId() + " no existe.
-                .orElseThrow(() -> new ElementNotFoundException("Company with ID " + requestDto.companyId() + " does not exist."));
+        CompaniesEntity company = companiesRepository.findByExternalId(requestDto.companyExternalId())
+                                                                //La empresa con UUID " + requestDto.companyId() + " no existe.
+                .orElseThrow(() -> new ElementNotFoundException("Company with UUID " + requestDto.companyExternalId() + " does not exist."));
 
         // Validación: El título de la oferta (Enum) no puede ser nulo
         if (requestDto.title() == null) {

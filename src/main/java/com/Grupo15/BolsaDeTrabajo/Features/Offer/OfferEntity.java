@@ -32,7 +32,7 @@ public class OfferEntity extends BaseEntity {
     //ENUM DE TIPO DE TITULO
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Title title;
+    private TitleOfOffer title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;

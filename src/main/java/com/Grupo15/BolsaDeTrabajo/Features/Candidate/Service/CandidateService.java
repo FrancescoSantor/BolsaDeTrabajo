@@ -128,6 +128,15 @@ public class CandidateService {
 
     }
 
+    public List<CandidatesResponseDTO> listAllCandidates() {
+
+        List<CandidatesEntity> candidates = candidateRepository.findAllByActiveTrue();
+
+        return candidates.stream()
+                .map(CandidateMapper::toDto)
+                .toList();
+    }
+
     //Obtener candidato en base al id
     @Transactional
     public CandidatesResponseDTO getCandidate(UUID id)
