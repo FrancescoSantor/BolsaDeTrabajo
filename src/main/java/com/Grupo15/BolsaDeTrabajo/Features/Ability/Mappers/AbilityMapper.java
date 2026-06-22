@@ -3,21 +3,16 @@ package com.Grupo15.BolsaDeTrabajo.Features.Ability.Mappers;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class AbilityMapper {
+@Mapper (componentModel = "spring")
+public interface AbilityMapper {
 
-    public static AbilityResponseDTO toResponse (AbilityEntity ability) {
-        return AbilityResponseDTO.builder()
-                .externalId(ability.getExternalId())
-                .name(ability.getName())
-                .category(ability.getCategory())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "ability_x_OfferEntities", ignore = true)
+    @Mapping(target = "abilityCandidate", ignore = true)
+    AbilityEntity toEntity (AbilityRequestDTO Dto);
 
-    public static AbilityEntity toRequest (AbilityRequestDTO request) {
-        return AbilityEntity.builder()
-                .name(request.name())
-                .category(request.category())
-                .build();
-    }
+    AbilityResponseDTO toDto (AbilityEntity ability);
 }

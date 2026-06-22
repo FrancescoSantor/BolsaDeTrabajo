@@ -1,12 +1,12 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Ability.dto;
 
-import lombok.Builder;
-
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
 import java.util.UUID;
 
-@Builder
-public class AbilityResponseDTO {
-    private UUID externalId;
-    private String name;
-    private String category;
+
+public record AbilityResponseDTO(
+        UUID externalId,
+        String name,
+        AbilityCategory category
+) {
 }

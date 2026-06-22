@@ -4,7 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability_x_Offer.Ability_x_OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Title;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationsEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,24 +25,27 @@ public class OfferEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "empresa_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id", nullable = false)
     private CompaniesEntity company;
 
     //ENUM DE TIPO DE TITULO
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Title title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-//    private String location;
+    @Column(nullable = false)
+    private String location;
 
     //ENUM DE MODALIDAD
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OfferType modality; //or mode
 
-    //???
+    @Column(name = "contract_type", nullable = false)
     private String contractType;
 
     @Column(nullable = false)
@@ -53,9 +56,12 @@ public class OfferEntity extends BaseEntity {
     //ENUM DE ESTADO DE LA OFERTA
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OfferStatus status;
+    private OfferStatus offerStatus;
 
+    @Column(nullable = false)
     private Timestamp publicationDate;
+
+    @Column(nullable = false)
     private Timestamp publicationClosing;
 
     @OneToMany(mappedBy = "offer")
@@ -67,6 +73,10 @@ public class OfferEntity extends BaseEntity {
     @OneToMany(mappedBy = "offer")
     private List<SavedEntity> saved;
 
+    @PrePersist
+    protected void anCreate() {
+        this.offerStatus = OfferStatus.OPEN;
+    }
     // habia un onetomany a publicaciones que decidimos sacarlo.
 }
 

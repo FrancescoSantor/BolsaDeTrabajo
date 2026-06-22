@@ -4,6 +4,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 import lombok.*;
 
@@ -29,10 +30,18 @@ public class NotificationEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private String type;
     */
+
+    @Column(nullable = false)
     private String message;
-    private boolean read;
+    @Column(nullable = false)
+    private boolean IsRead;
 
     private Timestamp createdAt;
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = Timestamp.from(Instant.now());
+    }
 }
 
 

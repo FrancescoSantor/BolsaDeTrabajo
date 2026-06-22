@@ -10,7 +10,9 @@ import java.sql.Timestamp;
 import lombok.*;
 
 @Entity
-@Table(name = "publicacion_likes")
+@Table(name = "publicacion_likes",
+        /*Aca evitamos que un mismo usuario le de me gusta multiples veces a la misma publicaciones   */
+       uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "publicaciones_id"}))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,5 +32,6 @@ public class PostLikesEntity extends BaseEntity {
     @JoinColumn(name = "publicacion_id")
     private PostsEntity post;
 
-    private Timestamp createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Timestamp createdAt; //No se usa @prePersist para evitar conflictos, la fecha se setea manualmente en el service al hacer el insert
 }

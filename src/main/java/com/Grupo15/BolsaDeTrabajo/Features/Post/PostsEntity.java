@@ -3,7 +3,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Post;
 import com.Grupo15.BolsaDeTrabajo.Features.Comments.CommentsEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.BaseEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.PerfilEmpresa.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.PostLikes.PostLikesEntity;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
