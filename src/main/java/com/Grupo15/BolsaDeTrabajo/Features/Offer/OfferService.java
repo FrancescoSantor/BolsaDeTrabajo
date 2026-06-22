@@ -1,11 +1,13 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface OfferService {
@@ -20,4 +22,7 @@ public interface OfferService {
 
     OfferResponseDTO updateOffer(UUID externalId, OfferRequestDTO requestDto, Authentication authentication);
 
-}
+    List<CandidatesResponseDTO> getCandidatesByOffer(UUID offerExternalId, Authentication authentication);
+
+
+    }
