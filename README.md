@@ -63,6 +63,15 @@ MySQL Server → Versión 8.0 o superior.
 IDE compatible → Se recomienda IntelliJ IDEA, aunque también puedes usar Eclipse o VS Code con las extensiones de Spring instaladas.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
+Acceso a la documentacion :
+
+La documentación y guía de los endpoints está disponible en Swagger. 
+
+Para acceder, clona el repositorio, compila y ejecuta el proyecto. Luego, ingresa la siguiente URL en tu navegador: 
+
+http://localhost:8080/swagger-ui/index.html
+
+---------------------------------------------------------------------------------------------------------------------------------------------
 
 # Reglas de Negocio del Sistema Bolsa de Trabajo
 
