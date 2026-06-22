@@ -15,6 +15,7 @@ public interface InterviewMapper {
     @Mapping(target = "offerTitle", source = "application.offer.title")
     InterviewResponseDTO toResponse(InterviewEntity interview);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "application", ignore = true)
     @Mapping(target = "feedbackCandidate", ignore = true)
     InterviewEntity toEntity(InterviewRequestDTO request, PostulationsEntity application);

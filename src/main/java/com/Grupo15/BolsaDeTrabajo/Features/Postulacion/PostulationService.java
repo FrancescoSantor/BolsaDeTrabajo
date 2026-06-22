@@ -72,6 +72,7 @@ public class PostulationService {
         PostulationsEntity savedPostulation = postulationRepository.save(postulation);
 
         PostulationResponseDTO responseDTO = new PostulationResponseDTO(
+                savedPostulation.getExternalId(),
                 candidateMapper.toDto(candidates),
                 offerMapper.toDto(offer),
                 savedPostulation.getStatus(),
@@ -112,6 +113,7 @@ public class PostulationService {
         postulationRepository.save(postulation);
 
         return new PostulationResponseDTO(
+                postulation.getExternalId(),
                 candidateMapper.toDto(postulation.getCandidate()),
                 offerMapper.toDto(postulation.getOffer()),
                 postulation.getStatus(),
@@ -125,6 +127,7 @@ public class PostulationService {
         return postulationRepository.findPostulationsWithFilters(candidateId,offerId,state)
                 .stream()
                 .map(postulation -> new PostulationResponseDTO(
+                        postulation.getExternalId(),
                         candidateMapper.toDto(postulation.getCandidate()),
                         offerMapper.toDto(postulation.getOffer()),
                         postulation.getStatus(),

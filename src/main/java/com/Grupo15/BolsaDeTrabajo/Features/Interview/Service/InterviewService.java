@@ -25,14 +25,17 @@ public class InterviewService {
     @Transactional
     public InterviewResponseDTO createInterview(InterviewRequestDTO interviewRequestDTO) {
 
-        if (interviewRepository.existsByApplicationId(interviewRequestDTO.applicationId())) {
+        if (interviewRepository.existsByApplicationExternalId(interviewRequestDTO.externalId())) {
             throw new IllegalStateException("This application already has an assigned interview.");
         }
 
-        PostulationsEntity application = postulationsRepository.findById(interviewRequestDTO.applicationId())
+        PostulationsEntity application = postulationsRepository.findByExternalId(interviewRequestDTO.externalId())
                 .orElseThrow(() -> new ElementNotFoundException("Application not found." ));
 
         InterviewEntity interviewEntity = interviewMapper.toEntity(interviewRequestDTO, application);
+
+        interviewEntity.setApplication(application);
+
         InterviewEntity savedInterview = interviewRepository.save(interviewEntity);
 
         return interviewMapper.toResponse(savedInterview);

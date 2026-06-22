@@ -9,8 +9,10 @@ import com.Grupo15.BolsaDeTrabajo.Features.Postulacion.PostulationState;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public record PostulationResponseDTO(
+        UUID externalId,
         //CANDIDATE
         CandidatesResponseDTO candidatesResponseDTO,
         //OFFER
