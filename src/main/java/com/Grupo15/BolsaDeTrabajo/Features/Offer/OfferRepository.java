@@ -18,5 +18,6 @@ public interface OfferRepository extends JpaRepository<OfferEntity,Long> {
 
     // RF17: Filtra por el ENUM de título y que el estado sea OPEN al mismo tiempo
     Page<OfferEntity> findByTitleAndOfferStatus(TitleOfOffer titleOfOffer, OfferStatus offerStatus, Pageable pageable);
+
 }
 

@@ -1,5 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidSalaryRangeException;
@@ -20,6 +22,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
 //import com.Grupo15.BolsaDeTrabajo.Exception.ResourceNotFoundException;
 //import com.Grupo15.BolsaDeTrabajo.Exception.BadRequestException;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -31,6 +34,7 @@ public class OfferServiceImpl implements OfferService {
     private final CompanyRepository companiesRepository;
     private final OfferMapper offerMapper;
     private final CredentialsRepository credentialsRepository;
+    private final CandidateMapper candidateMapper;
 
     @Override
     @Transactional//Crear Oferta en el sistema
@@ -190,5 +194,30 @@ public class OfferServiceImpl implements OfferService {
 
         return offersPage.map(offerMapper::toDto);
     }
+
+    @Override
+    @Transactional(readOnly = true) //Listamos los candidatos que esten en esa oferta
+    public List<CandidatesResponseDTO> getCandidatesByOffer(UUID offerExternalId, Authentication authentication) {
+
+        // Busca la oferta por su UUID seguro; si no existe, lanza una excepción de elemento no encontrado
+        OfferEntity offer = offerRepository.findByExternalId(offerExternalId)
+                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with the secure identifier: " + offerExternalId));
+
+        // Valida la regla de negocio: si la oferta ya fue cerrada, no permite ver sus postulantes
+        if (offer.getOfferStatus() == OfferStatus.CLOSE) {
+            throw new BussinesRulesException("Cannot view candidates for a job offer that has already been closed.");
+        }
+
+        // Verifica que el usuario logueado tenga permisos (sea ADMIN o la empresa creadora de la oferta)
+        checkOfferAuthority(offer, authentication);
+
+        // Procesa la lista: recorre las postulaciones, extrae la entidad candidato, la convierte a DTO y arma la lista final
+        return offer.getApplications().stream()
+                .map(postulation -> postulation.getCandidate())
+                .map(CandidateMapper::toDto)
+                .toList();
+    }
+
+
 
 }

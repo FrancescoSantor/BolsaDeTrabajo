@@ -1,5 +1,6 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Offer;
 
+import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -97,6 +99,22 @@ public class OfferController {
 
         Page<OfferResponseDTO> response = offerService.getOffers(pageable, titleOfOffer);
         return ResponseEntity.ok(response);
+    }
+
+    // Obtener todos los candidatos postulados a una oferta en particular
+    @GetMapping("/{externalId}/candidates")
+    @PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
+    @Operation(summary = "Get all applicants for a specific offer", description = "Retrieves a list of all candidates who applied to a specific job vacancy. Restricted to Admin or the Company owner.")
+    @ApiResponse(responseCode = "200", description = "List of applicants retrieved successfully")
+    @ApiResponse(responseCode = "400", description = "The job offer is already closed")
+    @ApiResponse(responseCode = "403", description = "Access denied. Action restricted to Admin or the actual Company listing owner")
+    @ApiResponse(responseCode = "404", description = "Job offer or authenticated session record not found")
+    public ResponseEntity<List<CandidatesResponseDTO>> getCandidatesByOffer(
+            @Parameter(description = "Secure public UUID of the job offer") @PathVariable UUID externalId,
+            Authentication authentication) {
+
+        List<CandidatesResponseDTO> response = offerService.getCandidatesByOffer(externalId, authentication);
+        return ResponseEntity.ok(response); // Devuelve un estado 200 OK con la lista de candidatos
     }
 
 }
