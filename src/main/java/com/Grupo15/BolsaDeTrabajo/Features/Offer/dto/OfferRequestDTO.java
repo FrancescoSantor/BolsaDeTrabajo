@@ -37,9 +37,6 @@ public record OfferRequestDTO(
         @PositiveOrZero(message = "El salario maximo no puede ser negativo.")
         Double maxSalary,
 
-        @NotNull(message = "La fecha de publicación es obligatoria.")
-        Timestamp publicationDate,
-
         @NotNull(message = "La fecha de cierre es obligatoria.")
         Timestamp publicationClosing,
 

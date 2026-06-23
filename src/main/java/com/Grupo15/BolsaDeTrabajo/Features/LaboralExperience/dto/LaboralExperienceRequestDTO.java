@@ -4,32 +4,31 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
-import org.springframework.cglib.core.Local;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 
 public record LaboralExperienceRequestDTO(
-        @NotNull(message = "El ID del candidato es obligatorio.")
+        @NotNull(message = "Candidate ID is required.")
         UUID candidateId,
 
-        @NotBlank(message = "El nombre de la empresa no puede estar vacío.")
-        @Size(max = 100, message = "El nombre de la empresa no puede superar los 100 caracteres.")
-        String company,
+        @NotBlank(message = "Company name cannot be empty.")
+        @Size(max = 100, message = "Company name cannot exceed 100 characters.")
+        String companyReferenceName,
 
-        @NotBlank(message = "El puesto de trabajo no puede estar vacío.")
-        @Size(max = 100, message = "El puesto no puede superar los 100 caracteres.")
+        @NotBlank(message = "Job position cannot be empty.")
+        @Size(max = 100, message = "Job position cannot exceed 100 characters.")
         String position,
 
-        @NotNull(message = "La fecha de inicio es obligatoria.")
-        @PastOrPresent(message = "La fecha de inicio no puede ser una fecha futura.")
+        @NotNull(message = "Initial date is required.")
+        @PastOrPresent(message = "Initial date cannot be a future date.")
         LocalDate initialDate,
-
 
         LocalDate endDate,
 
-        @NotBlank(message = "La descripción de las tareas es obligatoria.")
-        @Size(max = 2000, message = "La descripción no puede superar los 2000 caracteres.")
-        String description
+        @NotBlank(message = "Task description is required.")
+        @Size(max = 2000, message = "Description cannot exceed 2000 characters.")
+        String description,
+
+        UUID companyReferenceId
 ) {}
