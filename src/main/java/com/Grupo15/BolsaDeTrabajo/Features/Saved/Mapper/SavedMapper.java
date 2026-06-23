@@ -1,28 +1,23 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Saved.Mapper;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
-import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedCandidateResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedOfferResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+@Mapper(componentModel = "spring")
+public interface SavedMapper {
 
-public class SavedMapper {
+    @Mapping(source = "offer.externalId", target = "offerExternalId")
+    @Mapping(source = "offer.title", target = "offerTitle")
+    @Mapping(source = "offer.location", target = "offerLocation")
+    @Mapping(source = "offer.company.name", target = "companyName")
+    SavedOfferResponseDTO toOfferDto(SavedEntity entity);
 
-    public static SavedResponseDTO toDto(SavedEntity entity)
-    {
-        return SavedResponseDTO.builder()
-                .externalId(entity.getExternalId())
-                .candidateName(entity.getCandidate().getName())
-                .candidateLastName(entity.getCandidate().getLastName())
-                .offerTitle(String.valueOf(entity.getOffer().getTitle()))
-                .createdAt(entity.getCreatedAt())
-                .build();
-    }
-
-    public static SavedEntity toEntity(SavedResponseDTO request)
-    {
-        return SavedEntity.builder()
-                .createdAt(Timestamp.from(Instant.now()))
-                .build();
-    }
+    @Mapping(source = "candidate.externalId", target = "candidateExternalId")
+    @Mapping(source = "candidate.name", target = "candidateName")
+    @Mapping(source = "candidate.lastName", target = "candidateLastName")
+    SavedCandidateResponseDTO toCandidateDto(SavedEntity entity);
 }

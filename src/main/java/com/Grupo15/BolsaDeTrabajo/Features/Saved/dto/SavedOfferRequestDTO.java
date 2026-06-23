@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record SavedRequestDTO(
+public record SavedOfferRequestDTO(
 
         @NotNull(message = "Candidate id is required")
-        UUID candidateId,
+        UUID candidateExternalId,
 
         @NotNull(message = "Offer id is required")
-        Long offerId
+        UUID offerExternalId
 
 ) {}
