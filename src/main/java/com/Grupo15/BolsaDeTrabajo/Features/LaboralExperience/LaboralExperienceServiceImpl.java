@@ -4,6 +4,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.InvalidDateRangeException;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompaniesEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.Company.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.Mappers.LaboralExperienceMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.dto.LaboralExperienceRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.LaboralExperience.dto.LaboralExperienceResponseDTO;
@@ -23,34 +25,31 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
     private final ExperienceRepository laboralExperienceRepository; // Repositorio de la tabla de experiencias
     private final CandidateRepository candidatesRepository; // Repositorio de la tabla de candidatos
     private final LaboralExperienceMapper laboralExperienceMapper; // Componente de mapeo automatizado MapStruct
+    private final CompanyRepository companyRepository;
 
     @Override
     @Transactional
     public LaboralExperienceResponseDTO createExperience(LaboralExperienceRequestDTO requestDto) {
 
-        // Verificamos que el candidato ingresado realmente exista en nuestro sistema
-        CandidatesEntity candidate = candidatesRepository.findById(requestDto.candidateId())
-                                                               //El candidato con ID " + requestDto.candidateId() + " no existe.
-                .orElseThrow(() -> new ElementNotFoundException("Candidate with ID" + requestDto.candidateId() + " does not exist."));
+        CandidatesEntity candidate = candidatesRepository.findByExternalId(requestDto.candidateId())
+                .orElseThrow(() -> new ElementNotFoundException("Candidate with ID " + requestDto.candidateId() + " does not exist."));
 
-        // Regla de negocio: Validamos que la fecha de fin no sea anterior al inicio si es que fue enviada
-        if (requestDto.endDate() != null) {
-
-            // Compara si la fecha de fin se ubica cronológicamente antes del inicio
-            if (requestDto.endDate().isBefore(requestDto.initialDate())) {
-                                                  //La fecha de finalización no puede ser previa a la fecha de inicio.
-                throw new InvalidDateRangeException(" End date cannot be prior to the initial date. "); // Detiene el flujo con error 400
-            }
+        if (requestDto.endDate() != null && requestDto.endDate().isBefore(requestDto.initialDate())) {
+            throw new InvalidDateRangeException("End date cannot be prior to the initial date.");
         }
 
         LaboralExperienceEntity entity = laboralExperienceMapper.toEntity(requestDto);
 
-        // Vinculación: Enlazamos el candidato real que recuperamos de la base de datos a la nueva experiencia laboral
         entity.setCandidate(candidate);
-        // Persistencia: Guardamos el registro completo en la base de datos
+        entity.setCompanyReferenceName(requestDto.companyReferenceName()); // Una sola vez es suficiente
+
+        if (requestDto.companyReferenceId() != null) {
+            CompaniesEntity companyRef = companyRepository.findByExternalId(requestDto.companyReferenceId())
+                    .orElseThrow(() -> new ElementNotFoundException("Company reference not found"));
+            entity.setCompanyReferences(companyRef);
+        }
+
         LaboralExperienceEntity savedEntity = laboralExperienceRepository.save(entity);
-
-
         return laboralExperienceMapper.toDto(savedEntity);
     }
 
@@ -76,7 +75,7 @@ public class LaboralExperienceServiceImpl implements LaboralExperienceService{
         }
 
         // Seteo manual
-        existingExperience.setCompany(requestDto.company());
+        existingExperience.setCompanyReferenceName(requestDto.companyReferenceName());
         existingExperience.setPosition(requestDto.position());
         existingExperience.setInitialDate(requestDto.initialDate());
         existingExperience.setEndDate(requestDto.endDate());
