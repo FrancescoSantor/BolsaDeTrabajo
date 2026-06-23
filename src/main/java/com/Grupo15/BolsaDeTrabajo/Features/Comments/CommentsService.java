@@ -91,7 +91,7 @@ public class CommentsService {
     }
 
     @Transactional
-    public void DeleteComent (UUID comment_externalId, String username){
+    public void DeleteComment(UUID comment_externalId, String username){
 
         CommentsEntity comment = commentsRepository.findByExternalId(comment_externalId)
                 .orElseThrow(() -> new ElementNotFoundException("the comment to delete does not exists"));
@@ -101,11 +101,14 @@ public class CommentsService {
 
         UsersEntity loggedUser = credentials.getUsuario();
 
+        boolean isAdmin = credentials.getRoles().stream()
+                .anyMatch(r -> r.getRole().equals(Role.ROLE_ADMIN));
+
         if (!comment.isActive()){
-            throw new BussinesRulesException("the comment to delete is already exists");
+            throw new BussinesRulesException("the comment to delete is already deleted");
         }
 
-        if (!comment.getUser().getId().equals(loggedUser.getId()) && !credentials.getRoles().equals(Role.ROLE_ADMIN)){
+        if (!comment.getUser().getId().equals(loggedUser.getId()) && !isAdmin){
             throw new RuntimeException("you don't haver permission to delete this comment");
         }
 
@@ -118,6 +121,7 @@ public class CommentsService {
     public List<CommentsResponseDTO> ListCommentsByPost (UUID PostExternalId){
         return commentsRepository.findByPostExternalId(PostExternalId)
                 .stream()
+                .filter(CommentsEntity::isActive)
                 .map(comment -> new CommentsResponseDTO(
                         comment.getUser().getName(),
                         comment.getContent(),

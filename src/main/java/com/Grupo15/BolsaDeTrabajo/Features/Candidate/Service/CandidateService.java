@@ -112,7 +112,7 @@ public class CandidateService {
     @Transactional
     public void deleteCandidate(UUID id)
     {
-        CandidatesEntity candidate = candidateRepository.findById(id)
+        CandidatesEntity candidate = candidateRepository.findByExternalId(id)
                 .orElseThrow(() -> new ElementNotFoundException("Could not deactivate the candidate. No candidate found with ID "));
 
         if (!candidate.isActive()) {
@@ -141,7 +141,7 @@ public class CandidateService {
     @Transactional
     public CandidatesResponseDTO getCandidate(UUID id)
     {
-        CandidatesEntity candidate = candidateRepository.findById(id)
+        CandidatesEntity candidate = candidateRepository.findByExternalId(id)
 
                 .orElseThrow(()-> new ElementNotFoundException("Candidate not found."));
 
@@ -157,7 +157,7 @@ public class CandidateService {
     @Transactional
     public CandidatesResponseDTO updateCandidate(UUID id, CandidatesRequestDTO requestDTO){
 
-        CandidatesEntity candidatesEntity = candidateRepository.findById(id)
+        CandidatesEntity candidatesEntity = candidateRepository.findByExternalId(id)
                 .orElseThrow(() -> new ElementNotFoundException("Candidate not found."));
 
         //Perfil no activo
@@ -208,7 +208,7 @@ public class CandidateService {
 
         UsersEntity loggedUser = credentials.getUsuario();
 
-        if (!candidateId.equals(loggedUser.getId())) {
+        if (!candidateId.equals(loggedUser.getExternalId())) {
             throw new RuntimeException("You do not have permission to modify this candidate's profile");
         }
     }
@@ -217,7 +217,7 @@ public class CandidateService {
     public void addAbilityToCandidate(UUID candidateId, AbilityCategory category, Authentication authentication) {
         checkCandidateAuthority(candidateId, authentication);
 
-        CandidatesEntity candidate = candidateRepository.findById(candidateId)
+        CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
                 .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
 
         List<AbilityEntity> abilities = abilityRepository.findByCategory(category);
@@ -240,7 +240,7 @@ public class CandidateService {
     public void deleteAbilityFromCandidate(UUID candidateId, AbilityCategory category, Authentication authentication) {
         checkCandidateAuthority(candidateId, authentication);
 
-        CandidatesEntity candidate = candidateRepository.findById(candidateId)
+        CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
                 .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
 
         CandidateAbilityEntity abilityToRemove = candidate.getAbilityCandidates().stream()
