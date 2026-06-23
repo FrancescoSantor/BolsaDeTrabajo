@@ -6,6 +6,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.BussinesRulesException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.NotDuplicatesException;
+import com.Grupo15.BolsaDeTrabajo.Features.Notification.Sender.NotificationSender;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.Mapper.OfferMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.OfferRepository;
@@ -28,14 +29,16 @@ import java.util.UUID;
 public class PostulationService {
 
     private final PostulationRepository postulationRepository;
+    private final PostulationMapper postulationMapper;
     private final OfferRepository offerRepository;
     private final OfferMapper offerMapper;
     private final CandidateRepository candidateRepository;
     private final CandidateMapper candidateMapper;
     private final CredentialsRepository credentialsRepository;
+    private final NotificationSender notificationSender;
 
 
-
+    @Transactional
     public PostulationResponseDTO CreatePostulation (PostulationNewDTO newDTO, String username){
 
         CredentialsEntity credentials = credentialsRepository.findByUsername(username)
@@ -79,6 +82,7 @@ public class PostulationService {
                 savedPostulation.getCoverLetter(),
                 savedPostulation.getPostulationDate());
 
+        notificationSender.sendNewApplicationNotification(offer.getCompany().getExternalId(), candidates.getName(), offer.getExternalId());
         return responseDTO;
 
     }
@@ -111,6 +115,8 @@ public class PostulationService {
         postulation.setStatus(postulationState);
 
         postulationRepository.save(postulation);
+
+        notificationSender.sendApplicationStatusChangedNotification(postulation.getCandidate().getExternalId(), postulation.getOffer().getExternalId(), postulation.getExternalId());
 
         return new PostulationResponseDTO(
                 postulation.getExternalId(),
@@ -166,8 +172,23 @@ public class PostulationService {
         postulationRepository.save(postulation);
     }
 
+    public List<PostulationResponseDTO> getPostulationsByCandidate(UUID candidateId, String username) {
+        CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
 
+        UsersEntity loggedUser = credentials.getUsuario();
 
+        CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
+                .orElseThrow(() -> new ElementNotFoundException("Candidate profile not found"));
 
+        if (!loggedUser.getId().equals(candidate.getId())) {
+            throw new RuntimeException("You do not have permission to access this resource.");
+        }
+
+        return postulationRepository.findByCandidateExternalId(candidateId)
+                .stream()
+                .map(postulationMapper::toDto)
+                .toList();
+    }
 
 }

@@ -16,7 +16,7 @@ public interface PostulationRepository extends JpaRepository<PostulationsEntity,
 
     Optional<PostulationsEntity> findByExternalId(UUID externalId);
 
-
+    List<PostulationsEntity> findByCandidateExternalId(UUID candidateExternalId);
 
     @Query("SELECT p FROM PostulationsEntity p " +
     "WHERE (:CandidateId IS NULL OR p.candidate.externalId = :CandidateId) " +
