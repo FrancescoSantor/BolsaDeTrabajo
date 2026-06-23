@@ -77,4 +77,17 @@ public class PostulationController {
         postulationService.Delete(externalId, username);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("/candidate/{candidateId}")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Get candidate postulations history", description = "Retrieves a complete list of all job applications submitted by the designated candidate.")
+    @ApiResponse(responseCode = "200", description = "Candidate postulations history fetched successfully")
+    @ApiResponse(responseCode = "403", description = "Access denied. Candidates can only fetch their own application history")
+    @ApiResponse(responseCode = "404", description = "Candidate profile context not found")
+    public ResponseEntity<List<PostulationResponseDTO>> getPostulationsByCandidate(
+            @Parameter(description = "Unique external UUID of the target candidate") @PathVariable UUID candidateId,
+            Authentication authentication) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(postulationService.getPostulationsByCandidate(candidateId, authentication.getName()));
+    }
 }
