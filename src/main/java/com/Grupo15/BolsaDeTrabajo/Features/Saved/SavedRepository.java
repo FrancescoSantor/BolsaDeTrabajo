@@ -7,9 +7,9 @@ import java.util.UUID;
 
 public interface SavedRepository extends JpaRepository<SavedEntity,Long> {
 
-    boolean existsByCandidateIdAndOfferId(UUID candidateId, Long offerId);
+    boolean existsByCandidateExternalIdAndOfferExternalId(UUID candidateId, UUID offerId);
 
-    boolean existsByCompanyIdAndCandidateId(Long companyId, UUID candidateId);
+    boolean existsByCompanyExternalIdAndCandidateExternalId(UUID companyId, UUID candidateId);
 
-    List<SavedEntity> findByCandidateId(Long candidateId);
+    //List<SavedEntity> findByCandidateId(Long candidateId);
 }

@@ -2,8 +2,9 @@ package com.Grupo15.BolsaDeTrabajo.Features.Saved.Controller;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.Service.SavedService;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedCandidateRequestDto;
-import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedRequestDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedCandidateResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedOfferRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedOfferResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +33,8 @@ public class SavedController {
     @ApiResponse(responseCode = "400", description = "Business rule constraint broken or offer already saved by this candidate")
     @ApiResponse(responseCode = "403", description = "Access denied. Restricted to Candidate role permissions context")
     @ApiResponse(responseCode = "404", description = "Target candidate or job offer context record not found")
-    public ResponseEntity<SavedResponseDTO> createSaved(@Valid @RequestBody SavedRequestDTO request) {
-        SavedResponseDTO response = savedService.createSaved(request);
+    public ResponseEntity<SavedOfferResponseDTO> createSaved(@Valid @RequestBody SavedOfferRequestDTO request) {
+        SavedOfferResponseDTO response = savedService.createSaved(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -44,9 +45,8 @@ public class SavedController {
     @ApiResponse(responseCode = "400", description = "Business rule validation failure or candidate already saved by this company")
     @ApiResponse(responseCode = "403", description = "Access denied. Restricted to Company role permissions context")
     @ApiResponse(responseCode = "404", description = "Target company or candidate profile context data records not found")
-    public ResponseEntity<SavedResponseDTO> saveCandidate(@Valid @RequestBody SavedCandidateRequestDto request) {
-        SavedResponseDTO response = savedService.saveCandidate(request.companyId(), request.candidateId());
+    public ResponseEntity<SavedCandidateResponseDTO> saveCandidate(@Valid @RequestBody SavedCandidateRequestDto request) {
+        SavedCandidateResponseDTO response = savedService.saveCandidate(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 }

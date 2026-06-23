@@ -11,38 +11,39 @@ import com.Grupo15.BolsaDeTrabajo.Features.Company.CompanyRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.Mapper.SavedMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Saved.SavedRepository;
-import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedRequestDTO;
-import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedOfferRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedOfferResponseDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedCandidateRequestDto;
+import com.Grupo15.BolsaDeTrabajo.Features.Saved.dto.SavedCandidateResponseDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-
 public class SavedService {
 
     private final SavedRepository savedRepository;
     private final CandidateRepository candidateRepository;
     private final OfferRepository offerRepository;
     private final CompanyRepository companyRepository;
+    private final SavedMapper savedMapper;
 
     @Transactional
-    public SavedResponseDTO createSaved(SavedRequestDTO savedRequestDTO) {
+    public SavedOfferResponseDTO createSaved(SavedOfferRequestDTO savedOfferRequestDTO) {
 
-        if (savedRepository.existsByCandidateIdAndOfferId(savedRequestDTO.candidateId(), savedRequestDTO.offerId())) {
+        if (savedRepository.existsByCandidateExternalIdAndOfferExternalId(savedOfferRequestDTO.candidateExternalId(), savedOfferRequestDTO.offerExternalId())) {
             throw new BussinesRulesException("This job offer has already been saved by the candidate.");
         }
 
-        CandidatesEntity candidate = candidateRepository.findById(savedRequestDTO.candidateId())
-                .orElseThrow(() -> new ElementNotFoundException("Candidate not found with ID: " + savedRequestDTO.candidateId()));
+        CandidatesEntity candidate = candidateRepository.findByExternalId(savedOfferRequestDTO.candidateExternalId())
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found with ID: " + savedOfferRequestDTO.candidateExternalId()));
 
-        OfferEntity offer = offerRepository.findById(savedRequestDTO.offerId())
-                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with ID: " + savedRequestDTO.offerId()));
+        OfferEntity offer = offerRepository.findByExternalId(savedOfferRequestDTO.offerExternalId())
+                .orElseThrow(() -> new ElementNotFoundException("Job offer not found with ID: " + savedOfferRequestDTO.offerExternalId()));
 
         SavedEntity savedEntity = SavedEntity.builder()
                 .candidate(candidate)
@@ -52,21 +53,22 @@ public class SavedService {
 
         SavedEntity saved = savedRepository.save(savedEntity);
 
-        return SavedMapper.toDto(saved);
+        return savedMapper.toOfferDto(saved);
     }
 
     @Transactional
-    public SavedResponseDTO saveCandidate(Long companyId, UUID candidateId) {
+    public SavedCandidateResponseDTO saveCandidate(SavedCandidateRequestDto requestDto) {
 
-        CompaniesEntity company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new ElementNotFoundException("Company not found with ID: " + companyId));
+        CompaniesEntity company = companyRepository.findByExternalId(requestDto.companyExternalId())
+                .orElseThrow(() -> new ElementNotFoundException("Company not found with ID: " + requestDto.companyExternalId()));
 
-        CandidatesEntity candidate = candidateRepository.findById(candidateId)
-                .orElseThrow(() -> new ElementNotFoundException("Candidate not found with ID: " + candidateId));
+        CandidatesEntity candidate = candidateRepository.findByExternalId(requestDto.candidateExternalId())
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found with ID: " + requestDto.candidateExternalId()));
 
-        if (savedRepository.existsByCompanyIdAndCandidateId(companyId, candidateId)) {
+        if (savedRepository.existsByCompanyExternalIdAndCandidateExternalId(requestDto.companyExternalId(), requestDto.candidateExternalId())) {
             throw new BussinesRulesException("This candidate has already been saved.");
         }
+
         SavedEntity savedEntity = SavedEntity.builder()
                 .company(company)
                 .candidate(candidate)
@@ -75,6 +77,6 @@ public class SavedService {
 
         SavedEntity saved = savedRepository.save(savedEntity);
 
-        return SavedMapper.toDto(saved);
+        return savedMapper.toCandidateDto(saved);
     }
 }

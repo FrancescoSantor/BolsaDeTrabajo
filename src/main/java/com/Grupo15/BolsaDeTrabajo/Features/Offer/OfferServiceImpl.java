@@ -22,6 +22,8 @@ import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Offer.dto.OfferResponseDTO;
 //import com.Grupo15.BolsaDeTrabajo.Exception.ResourceNotFoundException;
 //import com.Grupo15.BolsaDeTrabajo.Exception.BadRequestException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,12 +80,15 @@ public class OfferServiceImpl implements OfferService {
             entity.setLocation(company.getLocation());
         }
 
+        entity.setPublicationDate(Timestamp.from(Instant.now()));
+
         // Persistencia: Guardamos la entidad con todos sus datos en la base de datos
         OfferEntity savedEntity = offerRepository.save(entity);
 
         //Convertimos la entidad guardada en el DTO seguro que espera recibir el frontend
         return offerMapper.toDto(savedEntity);
     }
+
 
     @Override
     @Transactional // Update/Actualizacion de oferta
