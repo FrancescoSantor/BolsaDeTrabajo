@@ -118,21 +118,33 @@ public class MessageService implements IMessageService{
     }
 
     // no se si funcionara. Antes era mas simple pero cualquier usuario podia vver conversaciones ajenas si conocia los id.
+    @Transactional
     public List<MessageResponseDTO> getChat(UUID userA, UUID userB, String username) {
 
         CredentialsEntity credentials = credentialsRepository.findByUsername(username)
                 .orElseThrow(() -> new ElementNotFoundException("Authenticated user not found"));
 
         UsersEntity loggedUser = credentials.getUsuario();
+        UUID loggedUserId = loggedUser.getExternalId();
 
-        if (!loggedUser.getExternalId().equals(userA) && !loggedUser.getExternalId().equals(userB)) {
+        if (!loggedUserId.equals(userA) && !loggedUserId.equals(userB)) {
             throw new RuntimeException("You do not have permission to view this conversation.");
         }
 
-        return Stream.concat(
-                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB).stream(),
-                        messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA).stream())
+        List<MessageEntity> messagesFromAToB = messageRepository.findByIssuerExternalIdAndReceptorExternalId(userA, userB);
+        List<MessageEntity> messagesFromBToA = messageRepository.findByIssuerExternalIdAndReceptorExternalId(userB, userA);
+
+        List<MessageEntity> allMessages = Stream.concat(messagesFromAToB.stream(), messagesFromBToA.stream())
                 .sorted(Comparator.comparing(MessageEntity::getCreatedAt))
+                .toList();
+
+        allMessages.stream()
+                .filter(message -> message.getReceptor().getExternalId().equals(loggedUserId) && !message.isSeen())
+                .forEach(message -> {
+                    message.setSeen(true);
+                    messageRepository.save(message);
+                });
+        return allMessages.stream()
                 .map(messageMapper::toDto)
                 .toList();
     }
