@@ -9,6 +9,7 @@ import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.CandidateAbility.CandidateAbilityEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.CandidateAbility.CandidateAbilityRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.*;
 import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
@@ -35,6 +36,7 @@ public class CandidateService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepositorySecurity;
     private final AbilityRepository abilityRepository;
+    private final CandidateAbilityRepository candidateAbilityRepository;
 
     @Transactional
     public CandidatesResponseDTO creteCandidate(CandidatesRequestDTO candidatesRequestDTO) {
@@ -225,22 +227,25 @@ public class CandidateService {
         candidateAbility.setCandidate(candidate);
         candidateAbility.setAbility(ability);
 
+        candidateAbilityRepository.save(candidateAbility);
+
         candidate.getAbilityCandidates().add(candidateAbility);
         candidateRepository.save(candidate);
     }
 
     @Transactional
-    public void deleteAbilityFromCandidate(UUID candidateId, AbilityCategory category, Authentication authentication) {
+    public void deleteAbilityFromCandidate(UUID candidateId, UUID externalIdAbility, Authentication authentication) {
         checkCandidateAuthority(candidateId, authentication);
 
         CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
                 .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
 
         CandidateAbilityEntity abilityToRemove = candidate.getAbilityCandidates().stream()
-                .filter(ca -> ca.getAbility() != null && ca.getAbility().getCategory() == category)
+                .filter(ca -> ca.getAbility() != null && externalIdAbility.equals(ca.getAbility().getExternalId()))
                 .findFirst()
-                .orElseThrow(() -> new ElementNotFoundException("The candidate does not have an ability with category: " + category));
+                .orElseThrow(() -> new ElementNotFoundException("The candidate does not have an ability with ID: " + externalIdAbility));
 
+        candidateAbilityRepository.delete(abilityToRemove);
         candidate.getAbilityCandidates().remove(abilityToRemove);
 
         candidateRepository.save(candidate);
