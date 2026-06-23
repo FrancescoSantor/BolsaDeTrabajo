@@ -36,7 +36,7 @@ public class PostLikeServiceImpl implements PostLikeService{
                 .orElseThrow(() -> new ElementNotFoundException("El post no existe."));
 
         // Buscamos al usuario que hace la acción
-        UsersEntity user = usersRepository.findById(requestDto.userId())
+        UsersEntity user = usersRepository.findByExternalId(requestDto.userExternalId())
                                                                 //El usuario no existe.
                 .orElseThrow(() -> new ElementNotFoundException("El usuario no existe."));
 
