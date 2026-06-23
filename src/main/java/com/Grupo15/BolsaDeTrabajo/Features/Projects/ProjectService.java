@@ -6,7 +6,11 @@ import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNot
 import com.Grupo15.BolsaDeTrabajo.Features.Projects.dto.ProjectRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Projects.dto.ProjectResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Projects.dto.ProjectUpdateRequestDTO;
+import com.Grupo15.BolsaDeTrabajo.Features.Users.UsersEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsEntity;
+import com.Grupo15.BolsaDeTrabajo.Features.auth.credentials.CredentialsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -19,12 +23,22 @@ import java.util.concurrent.TimeoutException;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
+    private final CredentialsRepository credentialsRepository;
 
     private final CandidateRepository candidateRepository;
 
-    public ProjectResponseDTO create(ProjectRequestDTO requestDTO) {
+    public ProjectResponseDTO create(ProjectRequestDTO requestDTO, Authentication authentication) {
         CandidatesEntity candidate = candidateRepository.findByExternalId(requestDTO.candidateId())
                 .orElseThrow(() -> new ElementNotFoundException("The candidate has not been found."));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getId().equals(candidate.getId())){
+            throw new RuntimeException("you don't have permissions to create a project for this user ");
+        }
 
         if (requestDTO.initialDate().after(requestDTO.endDate())) {
             throw new RuntimeException("The initial date cannot be earlier than the end date.");
@@ -41,9 +55,19 @@ public class ProjectService {
         return projectMapper.toDto(projectRepository.save(project));
     }
 
-    public ProjectResponseDTO update(UUID projectId, ProjectUpdateRequestDTO updateRequestDTO) {
+    public ProjectResponseDTO update(UUID projectId, ProjectUpdateRequestDTO updateRequestDTO, Authentication authentication) {
         ProjectEntity project = projectRepository.findByExternalId(projectId)
                 .orElseThrow(() -> new ElementNotFoundException("The Project has not been found."));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getId().equals(project.getCandidate().getId())){
+            throw new RuntimeException("you don't have permissions to create a project for this user ");
+        }
+
 
         if(!project.getCandidate().isActive()) {
             throw new RuntimeException("The project cannot be updated because the candidate is not active.");
@@ -68,9 +92,18 @@ public class ProjectService {
         return projectMapper.toDto(projectRepository.save(project));
     }
 
-    public void delete(UUID projectId) {
+    public void delete(UUID projectId, Authentication authentication) {
         ProjectEntity project = projectRepository.findByExternalId(projectId)
                 .orElseThrow(() -> new ElementNotFoundException("The Project has not been found."));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getId().equals(project.getCandidate().getId())){
+            throw new RuntimeException("you don't have permissions to create a project for this user ");
+        }
 
         if(!project.getCandidate().isActive()) {
             throw new RuntimeException("The project cannot be deleted because the candidate is not active.");
@@ -79,9 +112,18 @@ public class ProjectService {
         projectRepository.delete(project);
     }
 
-    public List<ProjectResponseDTO> getAllProjects(UUID candidateId) {
+    public List<ProjectResponseDTO> getAllProjects(UUID candidateId, Authentication authentication) {
         CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
                 .orElseThrow(() -> new ElementNotFoundException("The candidate has not been found."));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getId().equals(candidate.getId())){
+            throw new RuntimeException("you don't have permissions to create a project for this user ");
+        }
 
         return projectRepository.findByCandidate(candidate)
                 .stream()
@@ -89,9 +131,18 @@ public class ProjectService {
                 .toList();
     }
 
-    public ProjectResponseDTO getProject(UUID projectId) {
+    public ProjectResponseDTO getProject(UUID projectId, Authentication authentication) {
         ProjectEntity project = projectRepository.findByExternalId(projectId)
                 .orElseThrow(() -> new ElementNotFoundException("The Project has not been found."));
+
+        CredentialsEntity credentials = credentialsRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("authenticated user not found"));
+
+        UsersEntity loggedUser = credentials.getUsuario();
+
+        if (!loggedUser.getId().equals(project.getCandidate().getId())){
+            throw new RuntimeException("you don't have permissions to create a project for this user ");
+        }
 
         return projectMapper.toDto(project);
     }
