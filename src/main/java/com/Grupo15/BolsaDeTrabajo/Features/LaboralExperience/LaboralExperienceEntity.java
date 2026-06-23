@@ -17,19 +17,15 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class LaboralExperienceEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private UUID externalId;
-
     //CONEXION CON EMPRESA??
     @Column(nullable = false, length = 100)
-    private String company;
+    private String companyReferenceName;
 
     @Column(nullable = false, length = 100)
     private String position; //cargo

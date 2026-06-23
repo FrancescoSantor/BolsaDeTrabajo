@@ -5,8 +5,6 @@ import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.AbilityAlreadyExistsException;
 import com.Grupo15.BolsaDeTrabajo.Features.CommonsFeatures.Exceptions.ElementNotFoundException;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
