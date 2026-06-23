@@ -2,6 +2,7 @@ package com.Grupo15.BolsaDeTrabajo.Features.Candidate.Service;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityRepository;
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidateRepository;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.CandidatesEntity;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Mapper.CandidateMapper;
@@ -22,10 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -214,19 +212,14 @@ public class CandidateService {
     }
 
     @Transactional
-    public void addAbilityToCandidate(UUID candidateId, AbilityCategory category, Authentication authentication) {
+    public void addAbilityToCandidate(UUID candidateId, UUID abilityId, Authentication authentication) {
         checkCandidateAuthority(candidateId, authentication);
 
         CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
                 .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
 
-        List<AbilityEntity> abilities = abilityRepository.findByCategory(category);
-
-        if (abilities.isEmpty()) {
-            throw new ElementNotFoundException("No ability found in the database for category: " + category);
-        }
-
-        AbilityEntity ability = abilities.get(0);
+        AbilityEntity ability = abilityRepository.findByExternalId(abilityId)
+                .orElseThrow(() -> new ElementNotFoundException("Ability not found with the provided ID"));
 
         CandidateAbilityEntity candidateAbility = new CandidateAbilityEntity();
         candidateAbility.setCandidate(candidate);
@@ -251,6 +244,39 @@ public class CandidateService {
         candidate.getAbilityCandidates().remove(abilityToRemove);
 
         candidateRepository.save(candidate);
+    }
+
+    public List<AbilityResponseDTO> getCandidateAbilities(UUID candidateId, Authentication authentication) {
+
+        CandidatesEntity candidate = candidateRepository.findByExternalId(candidateId)
+                .orElseThrow(() -> new ElementNotFoundException("Candidate not found"));
+
+        if (!candidate.isActive()) {
+            throw new InactiveUserException("Profile not available.");
+        }
+
+        boolean isCompanyOrAdmin = authentication.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN") || auth.getAuthority().equals("ROLE_COMPANY"));
+
+        if (!isCompanyOrAdmin) {
+            String username = authentication.getName();
+            CredentialsEntity credentials = credentialsRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+            if (!candidateId.equals(credentials.getUsuario().getExternalId())) {
+                throw new RuntimeException("You do not have permission to view these abilities.");
+            }
+        }
+
+        return candidate.getAbilityCandidates().stream()
+                .map(CandidateAbilityEntity::getAbility)
+                .filter(Objects::nonNull)
+                .map(ability -> new AbilityResponseDTO(
+                        ability.getExternalId(),
+                        ability.getName(),
+                        ability.getCategory()
+                ))
+                .toList();
     }
 
 } 

@@ -1,6 +1,7 @@
 package com.Grupo15.BolsaDeTrabajo.Features.Candidate.Controller;
 
 import com.Grupo15.BolsaDeTrabajo.Features.Ability.AbilityCategory;
+import com.Grupo15.BolsaDeTrabajo.Features.Ability.dto.AbilityResponseDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.Service.CandidateService;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesRequestDTO;
 import com.Grupo15.BolsaDeTrabajo.Features.Candidate.dto.CandidatesResponseDTO;
@@ -85,7 +86,7 @@ public class CandidateController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping("/{id}/abilities")
+    @PostMapping("/{id}/abilities/{externalIdAbility}")
     @PreAuthorize("hasAnyRole('CANDIDATE')")
     @Operation(summary = "Link an ability to candidate", description = "Assigns a specific category ability link to the designated candidate account profile.")
     @ApiResponse(responseCode = "200", description = "Ability mapped successfully to the candidate profile")
@@ -93,10 +94,10 @@ public class CandidateController {
     @ApiResponse(responseCode = "404", description = "Candidate or skill category matching data not found")
     public ResponseEntity<Void> addAbility(
             @Parameter(description = "Unique UUID identifier of the candidate profile") @PathVariable UUID id,
-            @Parameter(description = "Target skill enum category to assign") @RequestParam AbilityCategory category,
+            @Parameter(description = "Unique UUID identifier of the ability") @PathVariable UUID externalIdAbility,
             Authentication authentication) {
 
-        candidateService.addAbilityToCandidate(id, category, authentication);
+        candidateService.addAbilityToCandidate(id, externalIdAbility, authentication);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -113,5 +114,19 @@ public class CandidateController {
 
         candidateService.deleteAbilityFromCandidate(id, category, authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}/abilities")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'COMPANY', 'ADMIN')")
+    @Operation(summary = "Get all abilities linked to a candidate", description = "Retrieves a secure DTO list containing all skills currently mapped to the target candidate.")
+    @ApiResponse(responseCode = "200", description = "Candidate abilities retrieved successfully")
+    @ApiResponse(responseCode = "403", description = "Access denied. Restricted to the owner, companies, or admins")
+    @ApiResponse(responseCode = "404", description = "Candidate profile not found or inactive")
+    public ResponseEntity<List<AbilityResponseDTO>> getCandidateAbilities(
+            @Parameter(description = "Unique UUID identifier of the candidate profile") @PathVariable UUID id,
+            Authentication authentication) {
+
+        List<AbilityResponseDTO> response = candidateService.getCandidateAbilities(id, authentication);
+        return ResponseEntity.ok(response);
     }
 }
