@@ -58,7 +58,7 @@ public class CommentsController {
     public ResponseEntity<Void> deleteComment(
             @Parameter(description = "Unique external UUID of the comment to remove")@PathVariable UUID commentExternalId,
             @AuthenticationPrincipal UserDetails userDetails) {
-        commentsService.DeleteComent(commentExternalId, userDetails.getUsername());
+        commentsService.DeleteComment(commentExternalId, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 
