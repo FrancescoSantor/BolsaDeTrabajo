@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public record PostLikesRequestDTO(
         @NotNull(message = "El ID del usuario es obligatorio.")
-        Long userId,
+        UUID userExternalId,
 
         @NotNull(message = "El externalId del post es obligatorio.")
         //Long postId
