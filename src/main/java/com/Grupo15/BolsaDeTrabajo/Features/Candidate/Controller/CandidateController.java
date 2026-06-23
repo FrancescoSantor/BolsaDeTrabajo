@@ -101,18 +101,18 @@ public class CandidateController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/{id}/abilities")
+    @DeleteMapping("/{id}/abilities/{externalIdAbility}")
     @PreAuthorize("hasAnyRole('CANDIDATE', 'ADMIN')")
-    @Operation(summary = "Remove an ability from candidate", description = "Unlinks a specific category ability mapping from the target candidate's profile.")
+    @Operation(summary = "Remove an ability from candidate", description = "Unlinks a specific ability by its unique identifier from the target candidate's profile.")
     @ApiResponse(responseCode = "204", description = "Ability successfully removed from the candidate account")
     @ApiResponse(responseCode = "403", description = "Action forbidden")
-    @ApiResponse(responseCode = "404", description = "Candidate matching relation or skill group not found")
+    @ApiResponse(responseCode = "404", description = "Candidate or ability matching relation not found")
     public ResponseEntity<Void> deleteAbility(
             @Parameter(description = "Unique UUID identifier of the candidate profile") @PathVariable UUID id,
-            @Parameter(description = "Target skill enum category to unassign") @RequestParam AbilityCategory category,
+            @Parameter(description = "Unique UUID identifier of the ability to unassign") @PathVariable UUID externalIdAbility,
             Authentication authentication) {
 
-        candidateService.deleteAbilityFromCandidate(id, category, authentication);
+        candidateService.deleteAbilityFromCandidate(id, externalIdAbility, authentication);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
